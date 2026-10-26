@@ -175,6 +175,31 @@ update_sparkle_appcast() {
 
     local download_url="https://github.com/${repo_slug}/releases/download/release/${APP_NAME}.zip"
 
+    # Sign archive with Sparkle EdDSA private key if available
+    local sig_attr=""
+    local sign_tool="${DERIVED_DATA_DIR}/SourcePackages/artifacts/sparkle/Sparkle/bin/sign_update"
+    local priv_key_file="${PROJECT_ROOT}/sparkle_priv.key"
+
+    if [[ -x "${sign_tool}" ]]; then
+        if [[ -f "${priv_key_file}" ]]; then
+            local signature
+            signature=$("${sign_tool}" -f "${priv_key_file}" -p "${zip_file}" 2>/dev/null || true)
+            if [[ -n "${signature}" ]]; then
+                sig_attr="sparkle:edSignature=\"${signature}\""
+                print_success "Signed ${APP_NAME}.zip with EdDSA key (${signature:0:20}...)"
+            fi
+        elif [[ -n "${SPARKLE_PRIVATE_KEY:-}" ]]; then
+            local signature
+            signature=$(echo "${SPARKLE_PRIVATE_KEY}" | "${sign_tool}" --ed-key-file - -p "${zip_file}" 2>/dev/null || true)
+            if [[ -n "${signature}" ]]; then
+                sig_attr="sparkle:edSignature=\"${signature}\""
+                print_success "Signed ${APP_NAME}.zip with SPARKLE_PRIVATE_KEY env var"
+            fi
+        else
+            print_warning "No Sparkle private key found (sparkle_priv.key or SPARKLE_PRIVATE_KEY)."
+        fi
+    fi
+
     # Write or update appcast.xml
     cat <<EOF > "${APPCAST_FILE}"
 <?xml version="1.0" encoding="utf-8"?>
@@ -203,7 +228,8 @@ update_sparkle_appcast() {
         sparkle:version="${build_num}"
         sparkle:shortVersionString="${version}"
         length="${file_size}"
-        type="application/octet-stream" />
+        type="application/octet-stream"
+        ${sig_attr} />
     </item>
   </channel>
 </rss>

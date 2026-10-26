@@ -33,7 +33,7 @@
     <key>SUFeedURL</key>
     <string>https://raw.githubusercontent.com/bhooshanb/squishy-macos-app/master/appcast.xml</string>
     <key>SUPublicEDKey</key>
-    <string>+p18Y482E5b+XLuhHUdfN/sOYzyBpdXw7caI7Q/Jo+s=</string>
+    <string>P/8HV0XKC41rHix4lMVoRpUyVRiLHnBsV9FOsyzqhsk=</string>
     <key>SUEnableAutomaticChecks</key>
     <true/>
     <key>SUScheduledCheckInterval</key>
