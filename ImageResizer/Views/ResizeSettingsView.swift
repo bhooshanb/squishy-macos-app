@@ -46,7 +46,7 @@ public struct ResizeSettingsView: View {
             }
             .padding(16)
         }
-        .frame(minWidth: 320, idealWidth: 350, maxWidth: 400)
+        .frame(minWidth: 280, idealWidth: 340, maxWidth: .infinity)
         .background(Color(NSColor.windowBackgroundColor))
         .sheet(isPresented: $showPresetManager) {
             PresetManagerSheet()

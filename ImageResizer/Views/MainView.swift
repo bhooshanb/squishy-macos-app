@@ -23,7 +23,7 @@ public struct MainView: View {
             if items.isEmpty {
                 EmptyDropZoneView(onSelectFiles: openFilePicker)
             } else {
-                HStack(spacing: 0) {
+                HSplitView {
                     // Queue View
                     ImageQueueView(
                         items: $items,
@@ -35,9 +35,7 @@ public struct MainView: View {
                             batchService.lastResult = nil
                         }
                     )
-                    .frame(minWidth: 400, maxWidth: .infinity)
-
-                    Divider()
+                    .frame(minWidth: 350, maxWidth: .infinity)
 
                     // Settings View
                     ResizeSettingsView(
@@ -47,6 +45,7 @@ public struct MainView: View {
                         isProcessing: batchService.isProcessing,
                         onStartResize: startBatchResize
                     )
+                    .frame(minWidth: 280, idealWidth: 340, maxWidth: .infinity)
                 }
             }
 
