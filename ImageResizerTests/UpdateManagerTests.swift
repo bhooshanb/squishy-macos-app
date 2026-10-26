@@ -32,6 +32,7 @@ final class UpdateManagerTests: XCTestCase {
 
         if let feedURLString = info["SUFeedURL"] as? String {
             XCTAssertTrue(feedURLString.hasPrefix("https://"), "SUFeedURL should be secure https URL")
+            XCTAssertTrue(feedURLString.contains("bhooshanb/squishy-macos-app"), "SUFeedURL should point to bhooshanb/squishy-macos-app repository")
         }
 
         if let edKey = info["SUPublicEDKey"] as? String {

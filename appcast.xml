@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Squishy Updates</title>
+    <link>https://raw.githubusercontent.com/bhooshanb/squishy-macos-app/master/appcast.xml</link>
+    <description>Most recent updates for Squishy by Silverstone Labs</description>
+    <language>en</language>
+    <item>
+      <title>Squishy 1.0.0</title>
+      <pubDate>Mon, 26 Oct 2026 19:05:02 +0000</pubDate>
+      <sparkle:version>12</sparkle:version>
+      <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <h2>Squishy 1.0.0</h2>
+        <ul>
+          <li>Fast, non-distorting native macOS image resizing utility.</li>
+          <li>Social media aspect ratio presets, 1-click ratio inversion, and synchronized tabs.</li>
+          <li>Created by Silverstone Labs.</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://github.com/bhooshanb/squishy-macos-app/releases/download/v1.0.0/Squishy.zip"
+        sparkle:version="12"
+        sparkle:shortVersionString="1.0.0"
+        length="2006095"
+        type="application/octet-stream" />
+    </item>
+  </channel>
+</rss>
