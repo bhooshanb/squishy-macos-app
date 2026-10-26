@@ -173,7 +173,7 @@ update_sparkle_appcast() {
     local pub_date
     pub_date=$(date -Ru 2>/dev/null || date)
 
-    local download_url="https://github.com/${repo_slug}/releases/download/v${version}/${APP_NAME}.zip"
+    local download_url="https://github.com/${repo_slug}/releases/download/release/${APP_NAME}.zip"
 
     # Write or update appcast.xml
     cat <<EOF > "${APPCAST_FILE}"
