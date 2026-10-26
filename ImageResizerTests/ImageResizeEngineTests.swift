@@ -277,4 +277,76 @@ final class ImageResizeEngineTests: XCTestCase {
         XCTAssertEqual(result.width, 1)
         XCTAssertEqual(result.height, 1)
     }
+
+    // MARK: - Mode Transition & Consistency
+
+    func testTransitionPresetToFitKeepsConsistentDimensions() {
+        var config = ResizeConfiguration(mode: .preset, selectedPresetId: ResizePreset.small.id)
+        let sample = ImageDimensions(width: 4000, height: 3000) // 4:3
+
+        // Under small preset (854 x 480), 4:3 image becomes 640 x 480
+        ImageResizeEngine.adaptConfigurationOnModeChange(
+            configuration: &config,
+            from: .preset,
+            to: .fit,
+            preset: ResizePreset.small,
+            availablePresets: ResizePreset.defaultPresets,
+            sampleOriginal: sample
+        )
+
+        XCTAssertEqual(config.customWidth, 640)
+        XCTAssertEqual(config.customHeight, 480)
+    }
+
+    func testTransitionWidthToHeightDerivesProportionalHeight() {
+        var config = ResizeConfiguration(mode: .widthOnly, customWidth: 1000)
+        let sample = ImageDimensions(width: 2000, height: 1000) // 2:1
+
+        // When width is 1000, derived height is 500
+        ImageResizeEngine.adaptConfigurationOnModeChange(
+            configuration: &config,
+            from: .widthOnly,
+            to: .heightOnly,
+            preset: nil,
+            availablePresets: ResizePreset.defaultPresets,
+            sampleOriginal: sample
+        )
+
+        XCTAssertEqual(config.customHeight, 500)
+    }
+
+    func testTransitionPercentageToFitMatchesExactScaledDimensions() {
+        var config = ResizeConfiguration(mode: .percentage, percentage: 25.0)
+        let sample = ImageDimensions(width: 4000, height: 2000) // 2:1
+
+        ImageResizeEngine.adaptConfigurationOnModeChange(
+            configuration: &config,
+            from: .percentage,
+            to: .fit,
+            preset: nil,
+            availablePresets: ResizePreset.defaultPresets,
+            sampleOriginal: sample
+        )
+
+        // 25% of 4000 x 2000 is 1000 x 500
+        XCTAssertEqual(config.customWidth, 1000)
+        XCTAssertEqual(config.customHeight, 500)
+    }
+
+    func testTransitionToPercentageDerivesAccurateScaleRatio() {
+        var config = ResizeConfiguration(mode: .widthOnly, customWidth: 2000)
+        let sample = ImageDimensions(width: 4000, height: 3000)
+
+        ImageResizeEngine.adaptConfigurationOnModeChange(
+            configuration: &config,
+            from: .widthOnly,
+            to: .percentage,
+            preset: nil,
+            availablePresets: ResizePreset.defaultPresets,
+            sampleOriginal: sample
+        )
+
+        // 2000 / 4000 = 50%
+        XCTAssertEqual(config.percentage, 50.0)
+    }
 }

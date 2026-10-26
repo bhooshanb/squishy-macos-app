@@ -65,7 +65,22 @@ public struct ResizeSettingsView: View {
                     AspectRatioLockIndicator()
                 }
 
-                Picker("Mode", selection: $configuration.mode) {
+                Picker("Mode", selection: Binding(
+                    get: { configuration.mode },
+                    set: { newMode in
+                        let oldMode = configuration.mode
+                        guard oldMode != newMode else { return }
+                        ImageResizeEngine.adaptConfigurationOnModeChange(
+                            configuration: &configuration,
+                            from: oldMode,
+                            to: newMode,
+                            preset: activePreset,
+                            availablePresets: presetStore.presets,
+                            sampleOriginal: sampleItem?.originalDimensions
+                        )
+                        configuration.mode = newMode
+                    }
+                )) {
                     ForEach(ResizeMode.allCases) { mode in
                         Label(mode.displayName, systemImage: mode.systemImageName).tag(mode)
                     }

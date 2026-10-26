@@ -148,6 +148,100 @@ public final class ImageResizeEngine: @unchecked Sendable {
         return ImageDimensions(width: outW, height: outH)
     }
 
+    // MARK: - Mode Transition & Consistency
+
+    /// Computes the effective target dimensions for a given mode and configuration.
+    public static func effectiveDimensions(
+        for mode: ResizeMode,
+        configuration: ResizeConfiguration,
+        preset: ResizePreset?,
+        sampleOriginal: ImageDimensions?
+    ) -> ImageDimensions {
+        if let original = sampleOriginal, original.width > 0, original.height > 0 {
+            return calculateDimensions(
+                original: original,
+                mode: mode,
+                targetWidth: configuration.customWidth,
+                targetHeight: configuration.customHeight,
+                percentage: configuration.percentage,
+                preset: preset,
+                allowUpscaling: configuration.allowUpscaling
+            )
+        }
+
+        switch mode {
+        case .preset:
+            return preset?.dimensions ?? ResizePreset.medium.dimensions
+        case .fit:
+            return ImageDimensions(width: configuration.customWidth, height: configuration.customHeight)
+        case .widthOnly:
+            let w = configuration.customWidth
+            let h = max(1, Int(round(Double(w) / (16.0 / 9.0))))
+            return ImageDimensions(width: w, height: h)
+        case .heightOnly:
+            let h = configuration.customHeight
+            let w = max(1, Int(round(Double(h) * (16.0 / 9.0))))
+            return ImageDimensions(width: w, height: h)
+        case .percentage:
+            let pct = max(1.0, configuration.percentage) / 100.0
+            let baseW = configuration.customWidth > 0 ? configuration.customWidth : 1920
+            let baseH = configuration.customHeight > 0 ? configuration.customHeight : 1080
+            return ImageDimensions(
+                width: max(1, Int(round(Double(baseW) * pct))),
+                height: max(1, Int(round(Double(baseH) * pct)))
+            )
+        }
+    }
+
+    /// Adapts configuration values when switching from oldMode to newMode so dimensions remain relatively consistent.
+    public static func adaptConfigurationOnModeChange(
+        configuration: inout ResizeConfiguration,
+        from oldMode: ResizeMode,
+        to newMode: ResizeMode,
+        preset: ResizePreset?,
+        availablePresets: [ResizePreset],
+        sampleOriginal: ImageDimensions?
+    ) {
+        guard oldMode != newMode else { return }
+
+        let current = effectiveDimensions(
+            for: oldMode,
+            configuration: configuration,
+            preset: preset,
+            sampleOriginal: sampleOriginal
+        )
+
+        switch newMode {
+        case .fit:
+            configuration.customWidth = current.width
+            configuration.customHeight = current.height
+
+        case .widthOnly:
+            configuration.customWidth = current.width
+
+        case .heightOnly:
+            configuration.customHeight = current.height
+
+        case .percentage:
+            if let original = sampleOriginal, original.width > 0 {
+                let ratio = (Double(current.width) / Double(original.width)) * 100.0
+                configuration.percentage = max(5.0, min(500.0, round(ratio)))
+            } else if configuration.customWidth > 0 && current.width > 0 {
+                let ratio = (Double(current.width) / Double(configuration.customWidth)) * 100.0
+                configuration.percentage = max(5.0, min(500.0, round(ratio)))
+            }
+
+        case .preset:
+            if let bestMatch = availablePresets.min(by: {
+                let dist0 = abs($0.maxWidth - current.width) + abs($0.maxHeight - current.height)
+                let dist1 = abs($1.maxWidth - current.width) + abs($1.maxHeight - current.height)
+                return dist0 < dist1
+            }) {
+                configuration.selectedPresetId = bestMatch.id
+            }
+        }
+    }
+
     // MARK: - Metadata & Reading
 
     /// Reads metadata from an image URL without decoding pixel buffers into memory.
