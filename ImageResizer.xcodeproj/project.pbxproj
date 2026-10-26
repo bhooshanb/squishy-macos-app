@@ -21,6 +21,7 @@
 		6B5E924F512DC8016C608EBA /* OutputFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C8F793D447E3D2807E2B39 /* OutputFormat.swift */; };
 		71BF0130A3AD170A9560C328 /* PresetManagerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A981885A26C05A5981F86C8 /* PresetManagerSheet.swift */; };
 		7BC457F3697310F8E8B1136E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47185DD7426582AE2FA4B4D /* MainView.swift */; };
+		81242A070D83FAE837CF7122 /* AspectRatioPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE8DB9F3442C364391B01E /* AspectRatioPreset.swift */; };
 		878E746C9472938FAECC775A /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D5E0358395ABECEB4CFD78 /* CardContainer.swift */; };
 		AA336B8E03589C595031889F /* PresetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553CF22645E62C9088112757 /* PresetStore.swift */; };
 		BA172C95712D8AC1DE4A7325 /* AspectRatioLockIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8B1A6397871B2DB3877C76 /* AspectRatioLockIndicator.swift */; };
@@ -32,6 +33,7 @@
 		D4A363A482B67E37BA97F2A9 /* ResizeResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40AE1F9FB19061B574316D4 /* ResizeResultsView.swift */; };
 		DB9867B4ECE95AEA96AE572D /* BatchResizeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F47ED27D8C8DB60A19FE9C /* BatchResizeService.swift */; };
 		DDED76223A74A7751E0E9BAB /* EmptyDropZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D765AD452FC38A8E90612B /* EmptyDropZoneView.swift */; };
+		E935151E69DC2CD9D160EB8E /* AspectRatioPresetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1D2E1407AC5D639126723C /* AspectRatioPresetTests.swift */; };
 		EE1FE904A162237412443BCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A0E8FA004D279E5C3BA3136 /* Assets.xcassets */; };
 		F8E227A854829AE0C88FFAFB /* ImageQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F73296448AFDA083A3DE4C /* ImageQueueView.swift */; };
 		F907BF19A4022D51F2A72A69 /* ImageFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5793DA52820B83A808A666 /* ImageFileService.swift */; };
@@ -68,6 +70,7 @@
 		59AA711E64B40C10E024C868 /* BatchProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchProgressView.swift; sourceTree = "<group>"; };
 		5A0E8FA004D279E5C3BA3136 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65074F367DC5A3967D8F96C5 /* ImageDimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDimensions.swift; sourceTree = "<group>"; };
+		7A1D2E1407AC5D639126723C /* AspectRatioPresetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioPresetTests.swift; sourceTree = "<group>"; };
 		7A2C269B6A40FE3D54C96D28 /* ImageProcessingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessingTests.swift; sourceTree = "<group>"; };
 		7A981885A26C05A5981F86C8 /* PresetManagerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManagerSheet.swift; sourceTree = "<group>"; };
 		7E4ED0FB93F08702CD6DAEC4 /* OutputManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputManagerTests.swift; sourceTree = "<group>"; };
@@ -79,6 +82,7 @@
 		A5BCAF3ED64BE14CE230BF47 /* ImageResizerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizerApp.swift; sourceTree = "<group>"; };
 		B47185DD7426582AE2FA4B4D /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D7D765AD452FC38A8E90612B /* EmptyDropZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDropZoneView.swift; sourceTree = "<group>"; };
+		E1AE8DB9F3442C364391B01E /* AspectRatioPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioPreset.swift; sourceTree = "<group>"; };
 		E20694B04B8A7BBEED4679C6 /* ImageResizer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageResizer.entitlements; sourceTree = "<group>"; };
 		F40AE1F9FB19061B574316D4 /* ResizeResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeResultsView.swift; sourceTree = "<group>"; };
 		F7156E53A4C4B997232E37BE /* DropOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropOverlayView.swift; sourceTree = "<group>"; };
@@ -90,6 +94,7 @@
 		019E80D3B1BED5DDAE811B2F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E1AE8DB9F3442C364391B01E /* AspectRatioPreset.swift */,
 				26B59BD9962BFCCEC0CCEF64 /* BatchResizeResult.swift */,
 				65074F367DC5A3967D8F96C5 /* ImageDimensions.swift */,
 				3A2438F8E242EED746A5FB15 /* ImageItem.swift */,
@@ -199,6 +204,7 @@
 		F7F79CBECDAB4CEF28C40CE2 /* ImageResizerTests */ = {
 			isa = PBXGroup;
 			children = (
+				7A1D2E1407AC5D639126723C /* AspectRatioPresetTests.swift */,
 				7A2C269B6A40FE3D54C96D28 /* ImageProcessingTests.swift */,
 				38EB2DE5626FC8D962BB8CA0 /* ImageResizeEngineTests.swift */,
 				7E4ED0FB93F08702CD6DAEC4 /* OutputManagerTests.swift */,
@@ -295,6 +301,7 @@
 			files = (
 				147B550A11F25C506F03887F /* AppSettings.swift in Sources */,
 				BA172C95712D8AC1DE4A7325 /* AspectRatioLockIndicator.swift in Sources */,
+				81242A070D83FAE837CF7122 /* AspectRatioPreset.swift in Sources */,
 				517D88C65856BAC173DF328B /* BatchProgressView.swift in Sources */,
 				CDFED7E244E6B9FE61ED2ECC /* BatchResizeResult.swift in Sources */,
 				DB9867B4ECE95AEA96AE572D /* BatchResizeService.swift in Sources */,
@@ -325,6 +332,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E935151E69DC2CD9D160EB8E /* AspectRatioPresetTests.swift in Sources */,
 				68756059425BBE264F2A0C8D /* ImageProcessingTests.swift in Sources */,
 				FBC88FE66E21E201D2B21EC6 /* ImageResizeEngineTests.swift in Sources */,
 				30083F208D33B50B96D1D0C0 /* OutputManagerTests.swift in Sources */,

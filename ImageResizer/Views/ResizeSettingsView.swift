@@ -10,6 +10,7 @@ public struct ResizeSettingsView: View {
     public let onStartResize: () -> Void
 
     @State private var showPresetManager: Bool = false
+    @State private var areRatiosInverted: Bool = false
 
     public init(
         configuration: Binding<ResizeConfiguration>,
@@ -435,25 +436,52 @@ public struct ResizeSettingsView: View {
     // MARK: - Aspect Ratio Pills Section
 
     private var aspectRatioPillsSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text("Popular & Social Media Ratios")
+        let presets = areRatiosInverted ? AspectRatioPreset.all.map { $0.inverted() } : AspectRatioPreset.all
+
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 8) {
+                Text("Popular & Social Ratios")
                     .font(.caption.weight(.semibold))
                     .foregroundColor(.secondary)
+
                 Spacer()
-                if let active = activeAspectRatioPreset {
-                    Text(active.subtitle)
-                        .font(.caption2)
-                        .foregroundColor(.accentColor)
+
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        areRatiosInverted.toggle()
+                        if configuration.mode == .fit {
+                            swapCustomDimensions()
+                        }
+                    }
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .font(.system(size: 9, weight: .bold))
+                            .rotationEffect(.degrees(areRatiosInverted ? 180 : 0))
+                        Text(areRatiosInverted ? "Inverted (e.g. 3:4)" : "Invert (3:4 ⇄ 4:3)")
+                            .font(.caption2.weight(.medium))
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(areRatiosInverted ? Color.accentColor.opacity(0.18) : Color.primary.opacity(0.06))
+                    .foregroundColor(areRatiosInverted ? .accentColor : .secondary)
+                    .cornerRadius(5)
                 }
+                .buttonStyle(.plain)
+                .help("Invert all aspect ratios between Landscape and Portrait (e.g. 4:3 ⇄ 3:4, 16:9 ⇄ 9:16)")
             }
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 6) {
-                    ForEach(AspectRatioPreset.all) { preset in
+                    ForEach(presets) { preset in
                         let selected = isAspectRatioSelected(preset)
                         Button(action: {
-                            applyAspectRatio(preset)
+                            if selected {
+                                // Already selected: invert this individual ratio!
+                                applyAspectRatio(preset.inverted())
+                            } else {
+                                applyAspectRatio(preset)
+                            }
                         }) {
                             HStack(spacing: 5) {
                                 Image(systemName: preset.icon)
@@ -477,7 +505,7 @@ public struct ResizeSettingsView: View {
                             )
                         }
                         .buttonStyle(.plain)
-                        .help("\(preset.name) (\(preset.ratioLabel)) — \(preset.width) × \(preset.height) px. \(preset.subtitle)")
+                        .help("\(preset.name) (\(preset.ratioLabel)) — \(preset.width) × \(preset.height) px. Click again to invert.")
                     }
                 }
                 .padding(.vertical, 2)

@@ -24,6 +24,63 @@ public struct AspectRatioPreset: Identifiable, Hashable {
         ImageDimensions(width: width, height: height)
     }
 
+    /// Inverts width and height (e.g. 4:3 -> 3:4, 16:9 -> 9:16)
+    public func inverted() -> AspectRatioPreset {
+        guard width != height else { return self }
+
+        let parts = ratioLabel.split(separator: ":")
+        let newRatioLabel: String
+        if parts.count == 2 {
+            newRatioLabel = "\(parts[1]):\(parts[0])"
+        } else {
+            newRatioLabel = ratioLabel
+        }
+
+        let newIcon: String
+        if icon == "rectangle.portrait" {
+            newIcon = "rectangle"
+        } else if icon == "rectangle" {
+            newIcon = "rectangle.portrait"
+        } else if icon == "tv" {
+            newIcon = "iphone"
+        } else if icon == "iphone" {
+            newIcon = "tv"
+        } else {
+            newIcon = icon
+        }
+
+        let newName: String
+        if name == "Standard Photo" && newRatioLabel == "3:4" {
+            newName = "Portrait (3:4)"
+        } else if name == "Widescreen" && newRatioLabel == "9:16" {
+            newName = "Vertical Video"
+        } else if name == "Story / Reels" && newRatioLabel == "16:9" {
+            newName = "Landscape Video"
+        } else if name == "Portrait" && newRatioLabel == "5:4" {
+            newName = "Landscape (5:4)"
+        } else if name == "35mm DSLR" && newRatioLabel == "2:3" {
+            newName = "Portrait (2:3)"
+        } else if name == "Social Post" && newRatioLabel == "1:1.91" {
+            newName = "Vertical Post"
+        } else if name.contains("Portrait") {
+            newName = name.replacingOccurrences(of: "Portrait", with: "Landscape")
+        } else if name.contains("Landscape") {
+            newName = name.replacingOccurrences(of: "Landscape", with: "Portrait")
+        } else {
+            newName = "\(name) (Inverted)"
+        }
+
+        return AspectRatioPreset(
+            id: "\(id)_inv",
+            name: newName,
+            ratioLabel: newRatioLabel,
+            width: height,
+            height: width,
+            icon: newIcon,
+            subtitle: "Inverted \(subtitle)"
+        )
+    }
+
     public static let all: [AspectRatioPreset] = [
         AspectRatioPreset(
             id: "1_1_square",
