@@ -4,6 +4,11 @@ options:
   deploymentTarget:
     macOS: "14.0"
 
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.6.0
+
 settings:
   base:
     MACOSX_DEPLOYMENT_TARGET: "14.0"
@@ -16,6 +21,9 @@ targets:
     platform: macOS
     sources:
       - path: ImageResizer
+    dependencies:
+      - package: Sparkle
+        product: Sparkle
     settings:
       base:
         PRODUCT_NAME: "ImageResizer"

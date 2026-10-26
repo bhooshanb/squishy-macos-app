@@ -1,7 +1,11 @@
 import SwiftUI
 
+import SwiftUI
+
 @main
 struct ImageResizerApp: App {
+    @StateObject private var updateManager = UpdateManager.shared
+
     var body: some Scene {
         WindowGroup {
             MainView()
@@ -10,14 +14,37 @@ struct ImageResizerApp: App {
         .windowStyle(.titleBar)
         .windowToolbarStyle(.unified(showsTitle: true))
         .commands {
+            CommandGroup(after: .appInfo) {
+                Button("Check for Updates…") {
+                    updateManager.checkForUpdates()
+                }
+                .disabled(!updateManager.canCheckForUpdates)
+            }
+
             CommandGroup(replacing: .newItem) {
                 Button("Open Images…") {
                     let urls = ImageFileService.shared.selectFilesWithOpenPanel(allowsMultiple: true)
-                    // Post notification or trigger open if needed
                     NotificationCenter.default.post(name: .openImagesNotification, object: urls)
                 }
                 .keyboardShortcut("o", modifiers: .command)
             }
+
+            CommandGroup(replacing: .help) {
+                Button("Image Resizer Help") {
+                    if let url = URL(string: "https://github.com/microsoft/PowerToys/tree/main/src/modules/imageresizer") {
+                        NSWorkspace.shared.open(url)
+                    }
+                }
+                Divider()
+                Button("Check for Updates…") {
+                    updateManager.checkForUpdates()
+                }
+                .disabled(!updateManager.canCheckForUpdates)
+            }
+        }
+
+        Settings {
+            UpdateSettingsView()
         }
     }
 }
