@@ -285,7 +285,8 @@ public final class ImageResizeEngine: @unchecked Sendable {
         targetDimensions: ImageDimensions,
         outputFormat: OutputFormat,
         quality: Double,
-        preserveMetadata: Bool = true
+        preserveMetadata: Bool = true,
+        preserveFileTimestamps: Bool = true
     ) throws {
         let readOptions: [CFString: Any] = [
             kCGImageSourceShouldCache: false
@@ -355,6 +356,11 @@ public final class ImageResizeEngine: @unchecked Sendable {
         // Finalize writing
         guard CGImageDestinationFinalize(destination) else {
             throw ImageResizeError.failedToFinalizeImage(destinationURL)
+        }
+
+        // Preserve file creation and modification timestamps if enabled
+        if preserveFileTimestamps {
+            copyFileTimestamps(from: sourceURL, to: destinationURL)
         }
     }
 
@@ -463,6 +469,27 @@ public final class ImageResizeEngine: @unchecked Sendable {
         }
 
         return cleanProps
+    }
+
+    /// Preserves file creation and modification timestamps from source file to destination file.
+    public func copyFileTimestamps(from sourceURL: URL, to destinationURL: URL) {
+        do {
+            let attributes = try FileManager.default.attributesOfItem(atPath: sourceURL.path)
+            var targetAttributes: [FileAttributeKey: Any] = [:]
+
+            if let creationDate = attributes[.creationDate] as? Date {
+                targetAttributes[.creationDate] = creationDate
+            }
+            if let modificationDate = attributes[.modificationDate] as? Date {
+                targetAttributes[.modificationDate] = modificationDate
+            }
+
+            if !targetAttributes.isEmpty {
+                try FileManager.default.setAttributes(targetAttributes, ofItemAtPath: destinationURL.path)
+            }
+        } catch {
+            print("Notice: Could not copy file timestamps from \(sourceURL.lastPathComponent): \(error)")
+        }
     }
 
     private func isLossyType(_ identifier: String) -> Bool {

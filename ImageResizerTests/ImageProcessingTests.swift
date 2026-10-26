@@ -160,6 +160,45 @@ final class ImageProcessingTests: XCTestCase {
         }
     }
 
+    func testPreserveFileTimestamps() throws {
+        let sourceURL = tempDirectory.appendingPathComponent("timestamped.jpg")
+        let destinationURL = tempDirectory.appendingPathComponent("timestamped-resized.jpg")
+
+        try createTestImage(url: sourceURL, width: 800, height: 600, hasAlpha: false, utType: .jpeg)
+
+        // Set historical dates on source file: creation = 10 days ago, modification = 5 days ago
+        let tenDaysAgo = Date().addingTimeInterval(-10 * 86400)
+        let fiveDaysAgo = Date().addingTimeInterval(-5 * 86400)
+        try fileManager.setAttributes([
+            .creationDate: tenDaysAgo,
+            .modificationDate: fiveDaysAgo
+        ], ofItemAtPath: sourceURL.path)
+
+        let target = ImageDimensions(width: 400, height: 300)
+        try ImageResizeEngine.shared.resizeImage(
+            from: sourceURL,
+            to: destinationURL,
+            targetDimensions: target,
+            outputFormat: .jpeg,
+            quality: 0.9,
+            preserveMetadata: true,
+            preserveFileTimestamps: true
+        )
+
+        XCTAssertTrue(fileManager.fileExists(atPath: destinationURL.path))
+
+        let outputAttrs = try fileManager.attributesOfItem(atPath: destinationURL.path)
+        guard let outputCreation = outputAttrs[.creationDate] as? Date,
+              let outputMod = outputAttrs[.modificationDate] as? Date else {
+            XCTFail("Missing date attributes on destination file")
+            return
+        }
+
+        // Verify creation and modification dates match within 2-second filesystem tolerance
+        XCTAssertEqual(outputCreation.timeIntervalSince1970, tenDaysAgo.timeIntervalSince1970, accuracy: 2.0)
+        XCTAssertEqual(outputMod.timeIntervalSince1970, fiveDaysAgo.timeIntervalSince1970, accuracy: 2.0)
+    }
+
     // MARK: - Helpers
 
     private func createTestImage(url: URL, width: Int, height: Int, hasAlpha: Bool, utType: UTType) throws {

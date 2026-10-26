@@ -167,7 +167,8 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
                 targetDimensions: targetDimensions,
                 outputFormat: configuration.outputFormat,
                 quality: configuration.quality,
-                preserveMetadata: configuration.preserveMetadata
+                preserveMetadata: configuration.preserveMetadata,
+                preserveFileTimestamps: configuration.preserveFileTimestamps
             )
 
             return .success(destinationURL)

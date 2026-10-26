@@ -288,6 +288,10 @@ public struct ResizeSettingsView: View {
                 Toggle("Preserve metadata (EXIF, color profiles)", isOn: $configuration.preserveMetadata)
                     .font(.caption)
                     .toggleStyle(.checkbox)
+
+                Toggle("Preserve creation & modification dates", isOn: $configuration.preserveFileTimestamps)
+                    .font(.caption)
+                    .toggleStyle(.checkbox)
             }
         }
     }
