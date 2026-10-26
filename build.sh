@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # build.sh - Build Script for Image Resizer for macOS
-# Builds Debug and Release .app bundles, runs tests, and packages outputs.
+# Builds Debug, Release, and Universal (Apple Silicon + Intel) .app bundles.
 # ==============================================================================
 
 set -euo pipefail
@@ -12,6 +12,7 @@ BOLD="\033[1m"
 GREEN="\033[0;32m"
 BLUE="\033[0;34m"
 YELLOW="\033[0;33m"
+CYAN="\033[0;36m"
 RED="\033[0;31m"
 NC="\033[0m"
 
@@ -30,6 +31,10 @@ print_success() {
     echo -e "${BOLD}${GREEN}✔ $1${NC}"
 }
 
+print_info() {
+    echo -e "${CYAN}ℹ $1${NC}"
+}
+
 print_warning() {
     echo -e "${BOLD}${YELLOW}⚠ $1${NC}"
 }
@@ -44,19 +49,23 @@ Usage: ./build.sh [COMMAND] [OPTIONS]
 
 Commands:
   release         Build the optimized Release .app bundle (default)
+  universal       Build a Universal 2 binary (Apple Silicon arm64 + Intel x86_64)
   debug           Build the Debug .app bundle with debug symbols
-  all             Build both Debug and Release .app bundles
+  all             Build Debug, Release, and Universal .app bundles
   test            Run the complete automated unit test suite
   clean           Clean build artifacts and DerivedData
 
 Options:
+  -u, --universal Build as Universal binary (arm64 + x86_64) for any command
   -o, --open      Launch the built .app after successful build
   -h, --help      Show this help message
 
 Examples:
-  ./build.sh                     # Build Release .app
+  ./build.sh                     # Build standard Release .app
+  ./build.sh universal           # Build Universal 2 Release .app (arm64 + x86_64)
+  ./build.sh release --universal # Same as above
   ./build.sh debug               # Build Debug .app
-  ./build.sh release --open      # Build Release .app and launch it
+  ./build.sh universal --open    # Build Universal .app and launch it
   ./build.sh test                # Run unit tests
 EOF
 }
@@ -95,18 +104,31 @@ run_tests() {
 
 build_configuration() {
     local config="$1" # Debug or Release
-    local target_output_dir="${BUILD_DIR}/${config}"
+    local is_universal="$2" # true or false
+    local label="${config}"
+    if [[ "${is_universal}" == true ]]; then
+        label="${config}-Universal"
+    fi
+
+    local target_output_dir="${BUILD_DIR}/${label}"
 
     ensure_xcode_project
-    print_header "Building ${config} .app bundle..."
+    print_header "Building ${label} .app bundle..."
 
     mkdir -p "${target_output_dir}"
+
+    local extra_args=()
+    if [[ "${is_universal}" == true ]]; then
+        print_info "Targeting Universal architectures: arm64 (Apple Silicon) + x86_64 (Intel)"
+        extra_args+=(ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO)
+    fi
 
     xcodebuild \
         -project "${PROJECT_FILE}" \
         -scheme "${PROJECT_NAME}" \
         -configuration "${config}" \
         -derivedDataPath "${DERIVED_DATA_DIR}" \
+        "${extra_args[@]}" \
         build
 
     local built_app="${DERIVED_DATA_DIR}/Build/Products/${config}/${PROJECT_NAME}.app"
@@ -121,11 +143,19 @@ build_configuration() {
     cp -R "${built_app}" "${target_output_dir}/"
 
     local final_app="${target_output_dir}/${PROJECT_NAME}.app"
-    print_success "Built ${config} application at:"
-    echo "   ${final_app}"
+    local binary="${final_app}/Contents/MacOS/${PROJECT_NAME}"
 
     # Sign locally
     codesign --force --deep --sign - "${final_app}" 2>/dev/null || true
+
+    print_success "Built ${label} application at:"
+    echo "   ${final_app}"
+
+    if [[ -f "${binary}" ]]; then
+        local arch_info
+        arch_info=$(lipo -info "${binary}" 2>/dev/null || file "${binary}")
+        print_info "${arch_info}"
+    fi
 
     if [[ "${OPEN_AFTER_BUILD}" == true ]]; then
         print_header "Launching ${final_app}..."
@@ -134,25 +164,33 @@ build_configuration() {
 }
 
 # Parse options and arguments
-CONFIG="release"
+COMMAND="release"
+IS_UNIVERSAL=false
 OPEN_AFTER_BUILD=false
 
 for arg in "$@"; do
     case "${arg}" in
         release|Release)
-            CONFIG="release"
+            COMMAND="release"
+            ;;
+        universal|Universal)
+            COMMAND="universal"
+            IS_UNIVERSAL=true
             ;;
         debug|Debug)
-            CONFIG="debug"
+            COMMAND="debug"
             ;;
         all|All)
-            CONFIG="all"
+            COMMAND="all"
             ;;
         test|Test)
-            CONFIG="test"
+            COMMAND="test"
             ;;
         clean|Clean)
-            CONFIG="clean"
+            COMMAND="clean"
+            ;;
+        -u|--universal)
+            IS_UNIVERSAL=true
             ;;
         -o|--open)
             OPEN_AFTER_BUILD=true
@@ -170,7 +208,7 @@ for arg in "$@"; do
 done
 
 # Main Execution Flow
-case "${CONFIG}" in
+case "${COMMAND}" in
     clean)
         clean_build
         ;;
@@ -178,14 +216,18 @@ case "${CONFIG}" in
         run_tests
         ;;
     debug)
-        build_configuration "Debug"
+        build_configuration "Debug" "${IS_UNIVERSAL}"
         ;;
     release)
-        build_configuration "Release"
+        build_configuration "Release" "${IS_UNIVERSAL}"
+        ;;
+    universal)
+        build_configuration "Release" true
         ;;
     all)
-        build_configuration "Debug"
-        build_configuration "Release"
-        print_success "Both Debug and Release builds completed."
+        build_configuration "Debug" false
+        build_configuration "Release" false
+        build_configuration "Release" true
+        print_success "Debug, Release, and Universal builds completed."
         ;;
 esac

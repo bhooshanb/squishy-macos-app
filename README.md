@@ -104,10 +104,15 @@ ImageResizer/
 - Xcode 15 or later (Xcode 16+ recommended)
 
 ### Build Script (`build.sh`)
-An executable build script is provided to automate compilation and testing:
+An executable build script is provided to automate compilation, testing, and Universal packaging:
 
 ```bash
-# Build optimized Release .app bundle (default)
+# Build Universal 2 binary for both Apple Silicon (arm64) & Intel (x86_64)
+./build.sh universal
+# or:
+./build.sh release --universal
+
+# Build standard Release .app bundle
 ./build.sh
 # or
 ./build.sh release
@@ -116,9 +121,9 @@ An executable build script is provided to automate compilation and testing:
 ./build.sh debug
 
 # Build and launch immediately
-./build.sh release --open
+./build.sh universal --open
 
-# Build both Debug and Release
+# Build Debug, Release, and Universal bundles
 ./build.sh all
 
 # Run unit tests
@@ -129,6 +134,7 @@ An executable build script is provided to automate compilation and testing:
 ```
 
 The resulting applications are placed in:
+- `build/Release-Universal/ImageResizer.app` (Apple Silicon `arm64` + Intel `x86_64`)
 - `build/Release/ImageResizer.app`
 - `build/Debug/ImageResizer.app`
 
