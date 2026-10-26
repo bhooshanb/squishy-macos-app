@@ -117,19 +117,24 @@ build_configuration() {
 
     mkdir -p "${target_output_dir}"
 
-    local extra_args=()
     if [[ "${is_universal}" == true ]]; then
         print_info "Targeting Universal architectures: arm64 (Apple Silicon) + x86_64 (Intel)"
-        extra_args+=(ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO)
+        xcodebuild \
+            -project "${PROJECT_FILE}" \
+            -scheme "${PROJECT_NAME}" \
+            -configuration "${config}" \
+            -derivedDataPath "${DERIVED_DATA_DIR}" \
+            "ARCHS=arm64 x86_64" \
+            ONLY_ACTIVE_ARCH=NO \
+            build
+    else
+        xcodebuild \
+            -project "${PROJECT_FILE}" \
+            -scheme "${PROJECT_NAME}" \
+            -configuration "${config}" \
+            -derivedDataPath "${DERIVED_DATA_DIR}" \
+            build
     fi
-
-    xcodebuild \
-        -project "${PROJECT_FILE}" \
-        -scheme "${PROJECT_NAME}" \
-        -configuration "${config}" \
-        -derivedDataPath "${DERIVED_DATA_DIR}" \
-        "${extra_args[@]}" \
-        build
 
     local built_app="${DERIVED_DATA_DIR}/Build/Products/${config}/${PROJECT_NAME}.app"
 

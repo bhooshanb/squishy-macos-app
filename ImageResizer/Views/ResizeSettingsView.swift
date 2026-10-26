@@ -88,6 +88,9 @@ public struct ResizeSettingsView: View {
                 .pickerStyle(.segmented)
                 .labelsHidden()
 
+                // Common & Social Media Aspect Ratio Quick Selector
+                aspectRatioPillsSection
+
                 switch configuration.mode {
                 case .preset:
                     presetControls
@@ -155,7 +158,7 @@ public struct ResizeSettingsView: View {
                 .font(.caption.weight(.medium))
                 .foregroundColor(.secondary)
 
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Max Width")
                         .font(.caption2)
@@ -164,9 +167,17 @@ public struct ResizeSettingsView: View {
                         .textFieldStyle(.roundedBorder)
                 }
 
-                Text("×")
-                    .foregroundColor(.secondary)
-                    .padding(.top, 14)
+                Button(action: swapCustomDimensions) {
+                    Image(systemName: "arrow.left.and.right")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(.accentColor)
+                        .frame(width: 26, height: 26)
+                        .background(Color.accentColor.opacity(0.12))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+                .help("Swap Width & Height (Landscape ⇄ Portrait)")
+                .padding(.top, 14)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Max Height")
@@ -338,6 +349,10 @@ public struct ResizeSettingsView: View {
                 }
                 .pickerStyle(.menu)
                 .font(.caption)
+
+                Divider()
+
+                liveFilenamePreview
             }
         }
     }
@@ -414,6 +429,131 @@ public struct ResizeSettingsView: View {
 
         if panel.runModal() == .OK, let url = panel.url {
             configuration.customDestinationPath = url.path
+        }
+    }
+
+    // MARK: - Aspect Ratio Pills Section
+
+    private var aspectRatioPillsSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text("Popular & Social Media Ratios")
+                    .font(.caption.weight(.semibold))
+                    .foregroundColor(.secondary)
+                Spacer()
+                if let active = activeAspectRatioPreset {
+                    Text(active.subtitle)
+                        .font(.caption2)
+                        .foregroundColor(.accentColor)
+                }
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    ForEach(AspectRatioPreset.all) { preset in
+                        let selected = isAspectRatioSelected(preset)
+                        Button(action: {
+                            applyAspectRatio(preset)
+                        }) {
+                            HStack(spacing: 5) {
+                                Image(systemName: preset.icon)
+                                    .font(.system(size: 10, weight: .semibold))
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(preset.name)
+                                        .font(.system(size: 11, weight: .medium))
+                                    Text(preset.ratioLabel)
+                                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                                        .foregroundColor(selected ? .white.opacity(0.85) : .secondary)
+                                }
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
+                            .background(selected ? Color.accentColor : Color(NSColor.controlBackgroundColor))
+                            .foregroundColor(selected ? .white : .primary)
+                            .cornerRadius(7)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 7)
+                                    .stroke(selected ? Color.accentColor : Color.primary.opacity(0.12), lineWidth: 1)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .help("\(preset.name) (\(preset.ratioLabel)) — \(preset.width) × \(preset.height) px. \(preset.subtitle)")
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+        }
+    }
+
+    private var activeAspectRatioPreset: AspectRatioPreset? {
+        AspectRatioPreset.all.first(where: { isAspectRatioSelected($0) })
+    }
+
+    private func isAspectRatioSelected(_ preset: AspectRatioPreset) -> Bool {
+        if configuration.mode == .fit {
+            if configuration.customWidth == preset.width && configuration.customHeight == preset.height {
+                return true
+            }
+            let currentRatio = Double(configuration.customWidth) / Double(max(1, configuration.customHeight))
+            let targetRatio = Double(preset.width) / Double(preset.height)
+            return abs(currentRatio - targetRatio) < 0.02
+        }
+        return false
+    }
+
+    private func applyAspectRatio(_ preset: AspectRatioPreset) {
+        configuration.mode = .fit
+        configuration.customWidth = preset.width
+        configuration.customHeight = preset.height
+    }
+
+    private func swapCustomDimensions() {
+        let temp = configuration.customWidth
+        configuration.customWidth = configuration.customHeight
+        configuration.customHeight = temp
+    }
+
+    // MARK: - Live Filename Preview
+
+    private var liveFilenamePreview: some View {
+        let sampleName = sampleItem?.filename ?? "photo.jpg"
+        let base = (sampleName as NSString).deletingPathExtension
+        let ext = configuration.outputFormat == .original
+            ? (sampleItem?.url.pathExtension ?? "jpg")
+            : configuration.outputFormat.fileExtension
+
+        var suffix = configuration.filenameSuffix
+        if configuration.appendPresetNameToFilename, let preset = activePreset {
+            suffix += "_\(preset.name.replacingOccurrences(of: " ", with: "_"))"
+        }
+
+        let folder = configuration.destinationMode == .subfolder
+            ? (configuration.subfolderName.isEmpty ? "Resized/" : "\(configuration.subfolderName)/")
+            : ""
+
+        let previewText = "\(sampleName) ➔ \(folder)\(base)\(suffix).\(ext)"
+
+        return VStack(alignment: .leading, spacing: 3) {
+            Text("Preview Result")
+                .font(.caption2.weight(.medium))
+                .foregroundColor(.secondary)
+
+            HStack(spacing: 6) {
+                Image(systemName: "arrow.turn.down.right")
+                    .font(.caption)
+                    .foregroundColor(.accentColor)
+                Text(previewText)
+                    .font(.system(size: 11, design: .monospaced))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(NSColor.controlBackgroundColor))
+            .cornerRadius(6)
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.primary.opacity(0.08), lineWidth: 1))
         }
     }
 }
