@@ -7,11 +7,13 @@
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
-    <string>com.antigravity.ImageResizer</string>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>Image Resizer</string>
+    <string>Squishy</string>
+    <key>CFBundleDisplayName</key>
+    <string>Squishy</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -21,9 +23,13 @@
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright © 2026. All rights reserved.</string>
+    <string>Copyright © 2026 Silverstone Labs. All rights reserved.</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
+    <key>SilverstoneSupportEmail</key>
+    <string>info@silverstonelabs.in</string>
+    <key>SilverstoneWebsite</key>
+    <string>https://apps.silverstonelabs.in</string>
     <key>SUFeedURL</key>
     <string>https://raw.githubusercontent.com/antigravity/imageresizer/main/appcast.xml</string>
     <key>SUPublicEDKey</key>

@@ -37,5 +37,17 @@ final class UpdateManagerTests: XCTestCase {
         if let edKey = info["SUPublicEDKey"] as? String {
             XCTAssertFalse(edKey.isEmpty, "SUPublicEDKey should be configured")
         }
+
+        if let brandName = info["CFBundleName"] as? String {
+            XCTAssertEqual(brandName, "Squishy", "Brand name should be Squishy")
+        }
+
+        if let supportEmail = info["SilverstoneSupportEmail"] as? String {
+            XCTAssertEqual(supportEmail, "info@silverstonelabs.in")
+        }
+
+        if let website = info["SilverstoneWebsite"] as? String {
+            XCTAssertEqual(website, "https://apps.silverstonelabs.in")
+        }
     }
 }

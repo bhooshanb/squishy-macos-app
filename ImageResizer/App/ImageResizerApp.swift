@@ -1,20 +1,38 @@
 import SwiftUI
-
-import SwiftUI
+import AppKit
 
 @main
 struct ImageResizerApp: App {
     @StateObject private var updateManager = UpdateManager.shared
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup("Squishy") {
             MainView()
                 .frame(minWidth: 800, minHeight: 540)
+                .navigationTitle("Squishy")
         }
         .windowStyle(.titleBar)
         .windowToolbarStyle(.unified(showsTitle: true))
         .commands {
-            CommandGroup(after: .appInfo) {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Squishy") {
+                    NSApplication.shared.orderFrontStandardAboutPanel(
+                        options: [
+                            .applicationName: "Squishy",
+                            .version: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0",
+                            .applicationVersion: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1",
+                            NSApplication.AboutPanelOptionKey(rawValue: "Copyright"): "Copyright © 2026 Silverstone Labs. All rights reserved.",
+                            .credits: NSAttributedString(
+                                string: "Created by Silverstone Labs\nWebsite: apps.silverstonelabs.in\nSupport: info@silverstonelabs.in",
+                                attributes: [
+                                    .foregroundColor: NSColor.secondaryLabelColor,
+                                    .font: NSFont.systemFont(ofSize: 11)
+                                ]
+                            )
+                        ]
+                    )
+                }
+                Divider()
                 Button("Check for Updates…") {
                     updateManager.checkForUpdates()
                 }
@@ -30,8 +48,18 @@ struct ImageResizerApp: App {
             }
 
             CommandGroup(replacing: .help) {
-                Button("Image Resizer Help") {
-                    if let url = URL(string: "https://github.com/microsoft/PowerToys/tree/main/src/modules/imageresizer") {
+                Button("Squishy Help") {
+                    if let url = URL(string: "https://apps.silverstonelabs.in") {
+                        NSWorkspace.shared.open(url)
+                    }
+                }
+                Button("Visit Silverstone Labs") {
+                    if let url = URL(string: "https://apps.silverstonelabs.in") {
+                        NSWorkspace.shared.open(url)
+                    }
+                }
+                Button("Contact Support (info@silverstonelabs.in)") {
+                    if let url = URL(string: "mailto:info@silverstonelabs.in?subject=Squishy%20Support") {
                         NSWorkspace.shared.open(url)
                     }
                 }

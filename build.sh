@@ -19,6 +19,7 @@ NC="\033[0m"
 # Project paths
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_NAME="ImageResizer"
+APP_NAME="Squishy"
 PROJECT_FILE="${PROJECT_ROOT}/${PROJECT_NAME}.xcodeproj"
 BUILD_DIR="${PROJECT_ROOT}/build"
 DERIVED_DATA_DIR="${PROJECT_ROOT}/build/DerivedData"
@@ -136,7 +137,10 @@ build_configuration() {
             build
     fi
 
-    local built_app="${DERIVED_DATA_DIR}/Build/Products/${config}/${PROJECT_NAME}.app"
+    local built_app="${DERIVED_DATA_DIR}/Build/Products/${config}/${APP_NAME}.app"
+    if [[ ! -d "${built_app}" ]]; then
+        built_app="${DERIVED_DATA_DIR}/Build/Products/${config}/${PROJECT_NAME}.app"
+    fi
 
     if [[ ! -d "${built_app}" ]]; then
         print_error "Expected app not found at: ${built_app}"
@@ -144,11 +148,14 @@ build_configuration() {
     fi
 
     # Copy built app to output folder
-    rm -rf "${target_output_dir}/${PROJECT_NAME}.app"
+    rm -rf "${target_output_dir}/${APP_NAME}.app"
     cp -R "${built_app}" "${target_output_dir}/"
 
-    local final_app="${target_output_dir}/${PROJECT_NAME}.app"
-    local binary="${final_app}/Contents/MacOS/${PROJECT_NAME}"
+    local final_app="${target_output_dir}/${APP_NAME}.app"
+    local binary="${final_app}/Contents/MacOS/${APP_NAME}"
+    if [[ ! -f "${binary}" ]]; then
+        binary="${final_app}/Contents/MacOS/${PROJECT_NAME}"
+    fi
 
     # Sign locally
     codesign --force --deep --sign - "${final_app}" 2>/dev/null || true

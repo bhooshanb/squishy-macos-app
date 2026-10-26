@@ -392,9 +392,9 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.antigravity.ImageResizerTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.silverstonelabs.ImageResizerTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImageResizer.app/Contents/MacOS/ImageResizer";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Squishy.app/Contents/MacOS/Squishy";
 			};
 			name = Release;
 		};
@@ -410,9 +410,9 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.antigravity.ImageResizerTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.silverstonelabs.ImageResizerTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImageResizer.app/Contents/MacOS/ImageResizer";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Squishy.app/Contents/MacOS/Squishy";
 			};
 			name = Debug;
 		};
@@ -429,8 +429,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.antigravity.ImageResizer;
-				PRODUCT_NAME = ImageResizer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.silverstonelabs.ImageResizer;
+				PRODUCT_MODULE_NAME = ImageResizer;
+				PRODUCT_NAME = Squishy;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -512,8 +513,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.antigravity.ImageResizer;
-				PRODUCT_NAME = ImageResizer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.silverstonelabs.ImageResizer;
+				PRODUCT_MODULE_NAME = ImageResizer;
+				PRODUCT_NAME = Squishy;
 				SDKROOT = macosx;
 			};
 			name = Release;

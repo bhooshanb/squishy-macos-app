@@ -1,6 +1,6 @@
 name: ImageResizer
 options:
-  bundleIdPrefix: com.antigravity
+  bundleIdPrefix: com.silverstonelabs
   deploymentTarget:
     macOS: "14.0"
 
@@ -26,7 +26,8 @@ targets:
         product: Sparkle
     settings:
       base:
-        PRODUCT_NAME: "ImageResizer"
+        PRODUCT_NAME: "Squishy"
+        PRODUCT_MODULE_NAME: "ImageResizer"
         INFOPLIST_FILE: ImageResizer/Resources/Info.plist
         CODE_SIGN_ENTITLEMENTS: ImageResizer/Entitlements/ImageResizer.entitlements
         CODE_SIGN_IDENTITY: "-"
@@ -42,5 +43,7 @@ targets:
       - target: ImageResizer
     settings:
       base:
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Squishy.app/Contents/MacOS/Squishy
+        BUNDLE_LOADER: $(TEST_HOST)
         CODE_SIGN_IDENTITY: "-"
         GENERATE_INFOPLIST_FILE: true

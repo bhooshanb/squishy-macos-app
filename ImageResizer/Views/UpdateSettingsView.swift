@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Settings view providing update preferences and manual check triggers.
+/// Settings view providing update preferences, branding, and support information.
 public struct UpdateSettingsView: View {
     @ObservedObject private var updateManager = UpdateManager.shared
 
@@ -18,7 +18,7 @@ public struct UpdateSettingsView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("Image Resizer")
+                        Text("Squishy")
                             .font(.headline)
                             .fontWeight(.semibold)
 
@@ -69,9 +69,31 @@ public struct UpdateSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+
+            Section {
+                LabeledContent("Created by") {
+                    Text("Silverstone Labs")
+                        .fontWeight(.medium)
+                }
+
+                LabeledContent("Website") {
+                    Link("apps.silverstonelabs.in", destination: URL(string: "https://apps.silverstonelabs.in")!)
+                }
+
+                LabeledContent("Support") {
+                    Link("info@silverstonelabs.in", destination: URL(string: "mailto:info@silverstonelabs.in?subject=Squishy%20Support")!)
+                }
+
+                LabeledContent("Copyright") {
+                    Text("© 2026 Silverstone Labs")
+                        .foregroundColor(.secondary)
+                }
+            } header: {
+                Text("About Silverstone Labs")
+            }
         }
         .formStyle(.grouped)
-        .frame(width: 480, height: 260)
+        .frame(width: 480, height: 380)
     }
 
     private var appVersionString: String {

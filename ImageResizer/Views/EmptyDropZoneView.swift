@@ -21,12 +21,12 @@ public struct EmptyDropZoneView: View {
                     .foregroundColor(.accentColor)
             }
 
-            VStack(spacing: 8) {
-                Text("Resize images in seconds.")
-                    .font(.title2.weight(.bold))
+            VStack(spacing: 6) {
+                Text("Squishy")
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundColor(.primary)
 
-                Text("Drop images here or choose files to get started.")
+                Text("Resize images in seconds without distortion.")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -53,9 +53,19 @@ public struct EmptyDropZoneView: View {
                 formatBadge("TIFF")
                 formatBadge("GIF")
             }
-            .padding(.top, 8)
+            .padding(.top, 4)
 
             Spacer()
+
+            HStack(spacing: 6) {
+                Text("Created by")
+                    .foregroundColor(.secondary)
+                Link("Silverstone Labs", destination: URL(string: "https://apps.silverstonelabs.in")!)
+                    .foregroundColor(.secondary)
+                    .underline()
+            }
+            .font(.caption2)
+            .padding(.bottom, 8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(32)
