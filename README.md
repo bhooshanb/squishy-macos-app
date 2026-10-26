@@ -103,6 +103,35 @@ ImageResizer/
 - macOS 14.0 Sonoma or later
 - Xcode 15 or later (Xcode 16+ recommended)
 
+### Build Script (`build.sh`)
+An executable build script is provided to automate compilation and testing:
+
+```bash
+# Build optimized Release .app bundle (default)
+./build.sh
+# or
+./build.sh release
+
+# Build Debug .app bundle
+./build.sh debug
+
+# Build and launch immediately
+./build.sh release --open
+
+# Build both Debug and Release
+./build.sh all
+
+# Run unit tests
+./build.sh test
+
+# Clean build artifacts
+./build.sh clean
+```
+
+The resulting applications are placed in:
+- `build/Release/ImageResizer.app`
+- `build/Debug/ImageResizer.app`
+
 ### Open with Xcode
 Open `ImageResizer.xcodeproj` in Xcode and press **⌘R** to run.
 
@@ -113,9 +142,11 @@ xcodebuild -project ImageResizer.xcodeproj -scheme ImageResizer build
 
 ### Run Unit Tests
 ```bash
+./build.sh test
+# or:
 xcodebuild -project ImageResizer.xcodeproj -scheme ImageResizerTests test
 ```
-All 31 unit tests will execute and verify dimension calculations, aspect ratios, image formats, collision safety, and preset handling.
+All unit tests will execute and verify dimension calculations, aspect ratios, image formats, collision safety, and preset handling.
 
 ### Regenerate Xcode Project (Optional)
 If you modify `project.yml`, regenerate the project anytime:
