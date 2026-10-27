@@ -81,7 +81,7 @@ public struct UpdateSettingsView: View {
             } header: {
                 Text("Automatic Updates")
             } footer: {
-                Text("Updates are verified cryptographically via Sparkle before installation.")
+                Text("Squishy updates are verified cryptographically with Ed25519 signatures before installation.")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

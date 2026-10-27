@@ -41,9 +41,9 @@ public final class UpdateManager: NSObject, ObservableObject {
         let isRunningTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
         guard !isRunningTests else { return }
 
-        // Initialize SPUStandardUpdaterController with standard driver
+        // Initialize SPUStandardUpdaterController with startingUpdater: false to manage startup safely
         let controller = SPUStandardUpdaterController(
-            startingUpdater: true,
+            startingUpdater: false,
             updaterDelegate: self,
             userDriverDelegate: nil
         )
@@ -53,6 +53,13 @@ public final class UpdateManager: NSObject, ObservableObject {
         controller.updater.publisher(for: \.canCheckForUpdates)
             .receive(on: DispatchQueue.main)
             .assign(to: &$canCheckForUpdates)
+
+        // Start updater with explicit error handling
+        do {
+            try controller.updater.start()
+        } catch {
+            NSLog("❌ [UpdateManager] SPUUpdater start failed: %@", error.localizedDescription)
+        }
     }
 
     /// Explicitly check for updates using the git-hosted appcast.xml and present the Sparkle UI dialog

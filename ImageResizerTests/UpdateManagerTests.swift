@@ -1,4 +1,5 @@
 import XCTest
+import Sparkle
 @testable import ImageResizer
 
 final class UpdateManagerTests: XCTestCase {
@@ -51,6 +52,27 @@ final class UpdateManagerTests: XCTestCase {
 
         if let website = info["SilverstoneWebsite"] as? String {
             XCTAssertEqual(website, "https://apps.silverstonelabs.in")
+        }
+    }
+
+    @MainActor
+    func testStartUpdaterDiagnostics() {
+        let squishyAppURL = URL(fileURLWithPath: "/Users/bhooshan/Documents/squishy-macos-app/build/Release/Squishy.app")
+        if let hostBundle = Bundle(url: squishyAppURL) {
+            print("🔍 Found hostBundle for Squishy.app at: \(hostBundle.bundlePath)")
+            let controller = SPUStandardUpdaterController(
+                startingUpdater: false,
+                updaterDelegate: nil,
+                userDriverDelegate: nil
+            )
+            do {
+                try controller.updater.start()
+                print("✅ Sparkle updater started successfully for Squishy.app!")
+            } catch {
+                print("❌ Sparkle updater failed for Squishy.app: \(error)")
+                let nsError = error as NSError
+                print("❌ Code: \(nsError.code), Domain: \(nsError.domain), UserInfo: \(nsError.userInfo)")
+            }
         }
     }
 }
