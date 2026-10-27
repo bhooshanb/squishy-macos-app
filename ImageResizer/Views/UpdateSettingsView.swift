@@ -3,6 +3,7 @@ import SwiftUI
 /// Settings view providing update preferences, branding, and support information.
 public struct UpdateSettingsView: View {
     @ObservedObject private var updateManager = UpdateManager.shared
+    @ObservedObject private var appSettings = AppSettings.shared
 
     public init() {}
 
@@ -49,6 +50,21 @@ public struct UpdateSettingsView: View {
                 .padding(.vertical, 4)
             } header: {
                 Text("Application")
+            }
+
+            Section {
+                Picker("Theme", selection: $appSettings.appearance) {
+                    ForEach(AppAppearance.allCases) { mode in
+                        Label(mode.rawValue, systemImage: mode.iconName).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+            } header: {
+                Text("Appearance")
+            } footer: {
+                Text("Choose between system default, light, or dark mode.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
 
             Section {

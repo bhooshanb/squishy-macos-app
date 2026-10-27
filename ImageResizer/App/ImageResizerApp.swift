@@ -4,12 +4,14 @@ import AppKit
 @main
 struct ImageResizerApp: App {
     @StateObject private var updateManager = UpdateManager.shared
+    @StateObject private var appSettings = AppSettings.shared
 
     var body: some Scene {
         WindowGroup("Squishy") {
             MainView()
                 .frame(minWidth: 800, minHeight: 540)
                 .navigationTitle("Squishy")
+                .preferredColorScheme(appSettings.appearance.colorScheme)
         }
         .windowStyle(.titleBar)
         .windowToolbarStyle(.unified(showsTitle: true))
@@ -73,6 +75,7 @@ struct ImageResizerApp: App {
 
         Settings {
             UpdateSettingsView()
+                .preferredColorScheme(appSettings.appearance.colorScheme)
         }
     }
 }

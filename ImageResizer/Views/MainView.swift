@@ -5,7 +5,7 @@ import AppKit
 public enum NavigationTab: String, CaseIterable, Identifiable {
     case queue = "Queue & Resize"
     case presets = "Batch Presets"
-    case outputSettings = "Output Settings"
+    case settings = "Settings"
     case history = "History"
 
     public var id: String { rawValue }
@@ -19,7 +19,6 @@ public struct MainView: View {
     @State private var selectedTab: NavigationTab = .queue
     @State private var items: [ImageItem] = []
     @State private var isTargetedForDrop: Bool = false
-    @State private var sessionID: String = "BatchSession_\(String(format: "%04d", Int.random(in: 1000...9999)))"
 
     private let fileService = ImageFileService.shared
 
@@ -131,7 +130,7 @@ public struct MainView: View {
                 case .presets:
                     PresetManagerView()
 
-                case .outputSettings:
+                case .settings:
                     OutputSettingsView(configuration: $appSettings.configuration)
 
                 case .history:
@@ -170,6 +169,7 @@ public struct MainView: View {
         }
         .frame(minWidth: 840, minHeight: 560)
         .background(PrecisionTheme.background)
+        .preferredColorScheme(appSettings.appearance.colorScheme)
         .onDrop(of: [.fileURL], isTargeted: $isTargetedForDrop) { providers in
             handleDrop(providers: providers)
         }
@@ -243,33 +243,24 @@ public struct MainView: View {
 
             Spacer()
 
-            // Right: Session pill & Quick Actions
+            // Right: Quick Action
             HStack(spacing: 6) {
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(PrecisionTheme.green)
-                        .frame(width: 6, height: 6)
-
-                    Text(sessionID)
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(PrecisionTheme.textSecondary)
-                }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(PrecisionTheme.recessedBackground)
-                .cornerRadius(5)
-
                 Button(action: openFilePicker) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(PrecisionTheme.blue)
-                        .frame(width: 26, height: 26)
-                        .background(PrecisionTheme.cardBackground)
-                        .cornerRadius(6)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(PrecisionTheme.border, lineWidth: 1)
-                        )
+                    HStack(spacing: 4) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 11, weight: .bold))
+                        Text("Add Images")
+                            .font(.system(size: 11.5, weight: .medium))
+                    }
+                    .foregroundColor(PrecisionTheme.blue)
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 4.5)
+                    .background(PrecisionTheme.cardBackground)
+                    .cornerRadius(6)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(PrecisionTheme.border, lineWidth: 1)
+                    )
                 }
                 .buttonStyle(.plain)
                 .help("Add Images (⌘O)")
@@ -324,7 +315,7 @@ public struct MainView: View {
 
             // Output Folder Path
             Button(action: {
-                selectedTab = .outputSettings
+                selectedTab = .settings
             }) {
                 HStack(spacing: 4) {
                     Image(systemName: "folder")
