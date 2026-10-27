@@ -237,6 +237,58 @@ EOF
 
     print_success "Generated ${APPCAST_FILE} with version ${version} (build ${build_num})"
     print_info "Enclosure download URL: ${download_url} (${file_size} bytes)"
+
+    # Automatically synchronize the signed zip to the GitHub release asset
+    upload_release_asset "${zip_file}"
+}
+
+upload_release_asset() {
+    local zip_file="$1"
+    local repo_slug="$(get_repo_slug)"
+    local tag="release"
+
+    local token="${GITHUB_TOKEN:-}"
+    if [[ -z "${token}" ]]; then
+        token=$(printf "protocol=https\nhost=github.com\n\n" | git credential-osxkeychain get 2>/dev/null | grep "^password=" | cut -d= -f2 || true)
+    fi
+
+    if [[ -z "${token}" ]]; then
+        print_warning "No GitHub token found; skipping automated release asset upload."
+        return 0
+    fi
+
+    print_info "Syncing release asset to GitHub (${repo_slug} @ tag: ${tag})..."
+    local release_json
+    release_json=$(curl -s -H "Authorization: token ${token}" "https://api.github.com/repos/${repo_slug}/releases/tags/${tag}" 2>/dev/null || echo "")
+    local release_id
+    release_id=$(echo "${release_json}" | grep -E '^  "id": [0-9]+' | head -1 | tr -dc '0-9')
+
+    if [[ -z "${release_id}" ]]; then
+        print_warning "Release for tag '${tag}' not found on GitHub."
+        return 0
+    fi
+
+    # Check for existing Squishy.zip asset to replace
+    local existing_asset_id
+    existing_asset_id=$(echo "${release_json}" | grep -B 2 -A 5 '"name": "Squishy.zip"' | grep -E '"id": [0-9]+' | head -1 | tr -dc '0-9')
+    if [[ -n "${existing_asset_id}" ]]; then
+        print_info "Replacing existing release asset (ID: ${existing_asset_id})..."
+        curl -s -X DELETE -H "Authorization: token ${token}" "https://api.github.com/repos/${repo_slug}/releases/assets/${existing_asset_id}" >/dev/null 2>&1 || true
+    fi
+
+    # Upload new archive
+    local upload_res
+    upload_res=$(curl -s -X POST \
+        -H "Authorization: token ${token}" \
+        -H "Content-Type: application/zip" \
+        --data-binary "@${zip_file}" \
+        "https://uploads.github.com/repos/${repo_slug}/releases/${release_id}/assets?name=Squishy.zip" 2>/dev/null || echo "")
+
+    if echo "${upload_res}" | grep -q '"state": "uploaded"'; then
+        print_success "Uploaded ${APP_NAME}.zip directly to GitHub Release '${tag}'"
+    else
+        print_warning "Asset upload response: $(echo "${upload_res}" | head -2)"
+    fi
 }
 
 build_configuration() {
