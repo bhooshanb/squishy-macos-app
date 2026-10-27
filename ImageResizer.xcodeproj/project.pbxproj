@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01BB1C7074DF2C79383A33B6 /* PresetManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DFED34BE54C31A7DEBB910 /* PresetManagerView.swift */; };
 		147B550A11F25C506F03887F /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD337D0A77A29173B767EF0 /* AppSettings.swift */; };
 		17828CB11AB0CF4EDFDD11E1 /* ImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2438F8E242EED746A5FB15 /* ImageItem.swift */; };
 		2B4A978FC6E8369A7D455C25 /* ImageResizerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BCAF3ED64BE14CE230BF47 /* ImageResizerApp.swift */; };
@@ -23,6 +24,7 @@
 		7BC457F3697310F8E8B1136E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47185DD7426582AE2FA4B4D /* MainView.swift */; };
 		81242A070D83FAE837CF7122 /* AspectRatioPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE8DB9F3442C364391B01E /* AspectRatioPreset.swift */; };
 		878E746C9472938FAECC775A /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D5E0358395ABECEB4CFD78 /* CardContainer.swift */; };
+		893E9D2979440388ADC632F3 /* OutputSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5819E0F4D39620B6D1F0F /* OutputSettingsView.swift */; };
 		8D8293C389F3E958195569B1 /* UpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E154740932A434BAADF00A68 /* UpdateManagerTests.swift */; };
 		9D2EEFA5C6203DDE05FE6C01 /* UpdateSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E54437F7EDC699F59BA6E1 /* UpdateSettingsView.swift */; };
 		A1C2AFCD577C234BC9167B22 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = F3C4D2B4BBFCA625C0306B91 /* Sparkle */; };
@@ -30,12 +32,14 @@
 		BA172C95712D8AC1DE4A7325 /* AspectRatioLockIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8B1A6397871B2DB3877C76 /* AspectRatioLockIndicator.swift */; };
 		C1DEB12799F9CF436D7C1FD2 /* ImageRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568135CD1282FC80A9753F9F /* ImageRowView.swift */; };
 		C249E2241122022FDF2B9678 /* ImageResizeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BFCDFB273A2532D83288D4 /* ImageResizeEngine.swift */; };
+		C8AF13B63C94A16B18A883B8 /* BatchHistoryResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8855A36DBDEFAF79D7E6C217 /* BatchHistoryResultsView.swift */; };
 		C91A11EAB2B53BF39C285229 /* OutputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD14A36547AA508CBB25F54B /* OutputManager.swift */; };
 		CDFED7E244E6B9FE61ED2ECC /* BatchResizeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B59BD9962BFCCEC0CCEF64 /* BatchResizeResult.swift */; };
 		D3C111D3D7DCE73DC1B806EE /* PresetStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C61EA5C548FBB0E770CB9B /* PresetStoreTests.swift */; };
 		D4A363A482B67E37BA97F2A9 /* ResizeResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40AE1F9FB19061B574316D4 /* ResizeResultsView.swift */; };
 		DB9867B4ECE95AEA96AE572D /* BatchResizeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F47ED27D8C8DB60A19FE9C /* BatchResizeService.swift */; };
 		DDED76223A74A7751E0E9BAB /* EmptyDropZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D765AD452FC38A8E90612B /* EmptyDropZoneView.swift */; };
+		E2257CD5C529FE9B76B77C1F /* StitchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953528C7A4F3FBEB58A37497 /* StitchTheme.swift */; };
 		E935151E69DC2CD9D160EB8E /* AspectRatioPresetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1D2E1407AC5D639126723C /* AspectRatioPresetTests.swift */; };
 		EE1FE904A162237412443BCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A0E8FA004D279E5C3BA3136 /* Assets.xcassets */; };
 		F58D1764D9DA4ADEAEE92205 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BB1BC625CF06E7F5FFE92B /* UpdateManager.swift */; };
@@ -65,6 +69,7 @@
 		38EB2DE5626FC8D962BB8CA0 /* ImageResizeEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizeEngineTests.swift; sourceTree = "<group>"; };
 		3A2438F8E242EED746A5FB15 /* ImageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageItem.swift; sourceTree = "<group>"; };
 		40D5E0358395ABECEB4CFD78 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
+		41DFED34BE54C31A7DEBB910 /* PresetManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManagerView.swift; sourceTree = "<group>"; };
 		51F47ED27D8C8DB60A19FE9C /* BatchResizeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchResizeService.swift; sourceTree = "<group>"; };
 		523B0957E553BECF556A2E94 /* ResizeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeSettingsView.swift; sourceTree = "<group>"; };
 		553CF22645E62C9088112757 /* PresetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetStore.swift; sourceTree = "<group>"; };
@@ -81,10 +86,13 @@
 		7E8B1A6397871B2DB3877C76 /* AspectRatioLockIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioLockIndicator.swift; sourceTree = "<group>"; };
 		81BB1BC625CF06E7F5FFE92B /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
 		8844137782B60A8FDA41D671 /* ResizeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeMode.swift; sourceTree = "<group>"; };
+		8855A36DBDEFAF79D7E6C217 /* BatchHistoryResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchHistoryResultsView.swift; sourceTree = "<group>"; };
 		8BD337D0A77A29173B767EF0 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		90C8F793D447E3D2807E2B39 /* OutputFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputFormat.swift; sourceTree = "<group>"; };
 		94C4BB69E6D2053C0C2FDABF /* ImageResizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageResizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		953528C7A4F3FBEB58A37497 /* StitchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchTheme.swift; sourceTree = "<group>"; };
 		A5BCAF3ED64BE14CE230BF47 /* ImageResizerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizerApp.swift; sourceTree = "<group>"; };
+		ABC5819E0F4D39620B6D1F0F /* OutputSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputSettingsView.swift; sourceTree = "<group>"; };
 		B47185DD7426582AE2FA4B4D /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D7D765AD452FC38A8E90612B /* EmptyDropZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDropZoneView.swift; sourceTree = "<group>"; };
 		E154740932A434BAADF00A68 /* UpdateManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManagerTests.swift; sourceTree = "<group>"; };
@@ -189,14 +197,18 @@
 		B60BAE2FE0AD5DAB7D86177E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8855A36DBDEFAF79D7E6C217 /* BatchHistoryResultsView.swift */,
 				59AA711E64B40C10E024C868 /* BatchProgressView.swift */,
 				D7D765AD452FC38A8E90612B /* EmptyDropZoneView.swift */,
 				26F73296448AFDA083A3DE4C /* ImageQueueView.swift */,
 				568135CD1282FC80A9753F9F /* ImageRowView.swift */,
 				B47185DD7426582AE2FA4B4D /* MainView.swift */,
+				ABC5819E0F4D39620B6D1F0F /* OutputSettingsView.swift */,
 				7A981885A26C05A5981F86C8 /* PresetManagerSheet.swift */,
+				41DFED34BE54C31A7DEBB910 /* PresetManagerView.swift */,
 				F40AE1F9FB19061B574316D4 /* ResizeResultsView.swift */,
 				523B0957E553BECF556A2E94 /* ResizeSettingsView.swift */,
+				953528C7A4F3FBEB58A37497 /* StitchTheme.swift */,
 				E1E54437F7EDC699F59BA6E1 /* UpdateSettingsView.swift */,
 				04EBA10E0CFDD58DB9E712B8 /* Components */,
 			);
@@ -350,6 +362,7 @@
 				147B550A11F25C506F03887F /* AppSettings.swift in Sources */,
 				BA172C95712D8AC1DE4A7325 /* AspectRatioLockIndicator.swift in Sources */,
 				81242A070D83FAE837CF7122 /* AspectRatioPreset.swift in Sources */,
+				C8AF13B63C94A16B18A883B8 /* BatchHistoryResultsView.swift in Sources */,
 				517D88C65856BAC173DF328B /* BatchProgressView.swift in Sources */,
 				CDFED7E244E6B9FE61ED2ECC /* BatchResizeResult.swift in Sources */,
 				DB9867B4ECE95AEA96AE572D /* BatchResizeService.swift in Sources */,
@@ -366,13 +379,16 @@
 				7BC457F3697310F8E8B1136E /* MainView.swift in Sources */,
 				6B5E924F512DC8016C608EBA /* OutputFormat.swift in Sources */,
 				C91A11EAB2B53BF39C285229 /* OutputManager.swift in Sources */,
+				893E9D2979440388ADC632F3 /* OutputSettingsView.swift in Sources */,
 				71BF0130A3AD170A9560C328 /* PresetManagerSheet.swift in Sources */,
+				01BB1C7074DF2C79383A33B6 /* PresetManagerView.swift in Sources */,
 				AA336B8E03589C595031889F /* PresetStore.swift in Sources */,
 				5DCEDC1F8E22B94162E79052 /* ResizeConfiguration.swift in Sources */,
 				4C3A36A5F0CD228169D6E0AF /* ResizeMode.swift in Sources */,
 				3F5DD4B82ED74629D96707C7 /* ResizePreset.swift in Sources */,
 				D4A363A482B67E37BA97F2A9 /* ResizeResultsView.swift in Sources */,
 				3BCF71F055DD3E1ECC7A1810 /* ResizeSettingsView.swift in Sources */,
+				E2257CD5C529FE9B76B77C1F /* StitchTheme.swift in Sources */,
 				F58D1764D9DA4ADEAEE92205 /* UpdateManager.swift in Sources */,
 				9D2EEFA5C6203DDE05FE6C01 /* UpdateSettingsView.swift in Sources */,
 			);

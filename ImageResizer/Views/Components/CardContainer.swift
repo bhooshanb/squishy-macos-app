@@ -10,11 +10,12 @@ public struct CardContainer<Content: View>: View {
     public var body: some View {
         content
             .padding(14)
-            .background(Color(NSColor.controlBackgroundColor).opacity(0.8))
-            .cornerRadius(10)
+            .background(PrecisionTheme.cardBackground)
+            .cornerRadius(12)
             .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.primary.opacity(0.08), lineWidth: 1)
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(PrecisionTheme.border, lineWidth: 1)
             )
+            .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
     }
 }

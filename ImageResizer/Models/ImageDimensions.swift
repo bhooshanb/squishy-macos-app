@@ -27,6 +27,36 @@ public struct ImageDimensions: Equatable, Codable, Hashable, CustomStringConvert
         width == height && width > 0
     }
 
+    public var aspectRatioFraction: (Int, Int) {
+        guard width > 0 && height > 0 else { return (1, 1) }
+        func gcd(_ a: Int, _ b: Int) -> Int {
+            b == 0 ? a : gcd(b, a % b)
+        }
+        let divisor = gcd(width, height)
+        let num = width / divisor
+        let den = height / divisor
+        // If reduced fraction is overly large (e.g. 1921/1081), find closest standard ratio
+        if num > 25 || den > 25 {
+            let ratio = Double(width) / Double(height)
+            let standards: [(Int, Int, Double)] = [
+                (1, 1, 1.0),
+                (4, 3, 4.0/3.0),
+                (3, 4, 3.0/4.0),
+                (16, 9, 16.0/9.0),
+                (9, 16, 9.0/16.0),
+                (3, 2, 3.0/2.0),
+                (2, 3, 2.0/3.0),
+                (5, 4, 5.0/4.0),
+                (4, 5, 4.0/5.0),
+                (21, 9, 21.0/9.0)
+            ]
+            if let closest = standards.first(where: { abs($0.2 - ratio) < 0.05 }) {
+                return (closest.0, closest.1)
+            }
+        }
+        return (num, den)
+    }
+
     public var description: String {
         "\(width) × \(height)"
     }

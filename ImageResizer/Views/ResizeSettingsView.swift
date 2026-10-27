@@ -8,6 +8,7 @@ public struct ResizeSettingsView: View {
     public let queueCount: Int
     public let isProcessing: Bool
     public let onStartResize: () -> Void
+    public var onEditPresets: (() -> Void)? = nil
 
     @State private var showPresetManager: Bool = false
     @State private var areRatiosInverted: Bool = false
@@ -17,13 +18,15 @@ public struct ResizeSettingsView: View {
         sampleItem: ImageItem?,
         queueCount: Int,
         isProcessing: Bool,
-        onStartResize: @escaping () -> Void
+        onStartResize: @escaping () -> Void,
+        onEditPresets: (() -> Void)? = nil
     ) {
         self._configuration = configuration
         self.sampleItem = sampleItem
         self.queueCount = queueCount
         self.isProcessing = isProcessing
         self.onStartResize = onStartResize
+        self.onEditPresets = onEditPresets
     }
 
     private var activePreset: ResizePreset? {
@@ -32,560 +35,538 @@ public struct ResizeSettingsView: View {
 
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                // Section 1: Resize Mode & Dimensions
-                modeAndDimensionsCard
+            VStack(alignment: .leading, spacing: 16) {
+                // Main Configuration Card
+                mainConfigurationCard
 
-                // Section 2: Output Format & Quality
-                formatAndQualityCard
-
-                // Section 3: File Destination & Naming
-                destinationAndNamingCard
-
-                // Section 4: Live Preview & Action
-                actionCard
+                // Format & Output Card
+                formatAndOutputCard
             }
             .padding(16)
         }
-        .frame(minWidth: 280, idealWidth: 340, maxWidth: .infinity)
-        .background(Color(NSColor.windowBackgroundColor))
+        .frame(minWidth: 320, idealWidth: 360, maxWidth: .infinity)
+        .background(PrecisionTheme.background)
         .sheet(isPresented: $showPresetManager) {
             PresetManagerSheet()
         }
     }
 
-    // MARK: - Dimension Settings Card
-
-    private var modeAndDimensionsCard: some View {
-        CardContainer {
-            VStack(alignment: .leading, spacing: 14) {
-                HStack {
-                    Text("Resize Mode")
-                        .font(.headline)
-                    Spacer()
-                    AspectRatioLockIndicator()
-                }
-
-                Picker("Mode", selection: Binding(
-                    get: { configuration.mode },
-                    set: { newMode in
-                        let oldMode = configuration.mode
-                        guard oldMode != newMode else { return }
-                        ImageResizeEngine.adaptConfigurationOnModeChange(
-                            configuration: &configuration,
-                            from: oldMode,
-                            to: newMode,
-                            preset: activePreset,
-                            availablePresets: presetStore.presets,
-                            sampleOriginal: sampleItem?.originalDimensions
-                        )
-                        configuration.mode = newMode
-                    }
-                )) {
-                    ForEach(ResizeMode.allCases) { mode in
-                        Label(mode.displayName, systemImage: mode.systemImageName).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-
-                // Common & Social Media Aspect Ratio Quick Selector
-                aspectRatioPillsSection
-
-                switch configuration.mode {
-                case .preset:
-                    presetControls
-
-                case .fit:
-                    customFitControls
-
-                case .widthOnly:
-                    widthOnlyControls
-
-                case .heightOnly:
-                    heightOnlyControls
-
-                case .percentage:
-                    percentageControls
-                }
-
-                Divider()
-
-                Toggle(isOn: $configuration.allowUpscaling) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Allow upscaling")
-                            .font(.system(size: 13, weight: .medium))
-                        Text("When disabled, images smaller than the target dimensions will not be enlarged.")
-                            .font(.system(size: 11))
-                            .foregroundColor(.secondary)
-                    }
-                }
-                .toggleStyle(.checkbox)
-            }
-        }
-    }
-
-    private var presetControls: some View {
-        VStack(alignment: .leading, spacing: 8) {
+    // MARK: - Main Configuration Card
+    private var mainConfigurationCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            // Scaling Mode Header
             HStack {
-                Picker("Preset", selection: $configuration.selectedPresetId) {
-                    ForEach(presetStore.presets) { preset in
-                        Text("\(preset.name) (\(preset.maxWidth) × \(preset.maxHeight))")
-                            .tag(preset.id)
-                    }
-                }
-                .pickerStyle(.menu)
+                Text("SCALING MODE")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(PrecisionTheme.textTertiary)
 
-                Button(action: {
-                    showPresetManager = true
-                }) {
-                    Image(systemName: "slider.horizontal.3")
+                Spacer()
+
+                Button("Edit Presets…") {
+                    if let onEditPresets = onEditPresets {
+                        onEditPresets()
+                    } else {
+                        showPresetManager = true
+                    }
                 }
                 .buttonStyle(.plain)
-                .help("Manage custom presets")
+                .font(.system(size: 11, weight: .medium))
+                .foregroundColor(PrecisionTheme.blue)
             }
 
-            if let preset = activePreset {
-                Text("Images fit within a maximum \(preset.maxWidth) × \(preset.maxHeight) box without distortion.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+            // Mode Selector Bar
+            HStack(spacing: 2) {
+                modeButton(title: "Presets", mode: .preset)
+                modeButton(title: "Bounds", mode: .fit)
+                modeButton(title: "% Scale", mode: .percentage)
+                modeButton(title: "Width", mode: .widthOnly)
+                modeButton(title: "Height", mode: .heightOnly)
+            }
+            .padding(2)
+            .background(PrecisionTheme.recessedBackground)
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(PrecisionTheme.borderSubtle, lineWidth: 1)
+            )
+
+            // Dynamic Mode Content
+            switch configuration.mode {
+            case .preset:
+                presetRadioCards
+            case .fit:
+                customBoundsControls
+            case .percentage:
+                percentageControls
+            case .widthOnly:
+                widthOnlyControls
+            case .heightOnly:
+                heightOnlyControls
+            }
+
+            // Zero Distortion Guarantee Callout
+            MathematicalGuaranteeCard()
+
+            // Processing Parameters
+            processingParametersSection
+
+            // Active Sample Envelope Pill
+            if let sample = sampleItem {
+                sampleEnvelopeBanner(sample: sample)
+            }
+
+            // Bottom Action Bar
+            bottomActionBar
+        }
+        .padding(16)
+        .background(PrecisionTheme.cardBackground)
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(PrecisionTheme.border, lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
+    }
+
+    private func modeButton(title: String, mode: ResizeMode) -> some View {
+        let isSelected = configuration.mode == mode
+        return Button(action: {
+            let oldMode = configuration.mode
+            guard oldMode != mode else { return }
+            ImageResizeEngine.adaptConfigurationOnModeChange(
+                configuration: &configuration,
+                from: oldMode,
+                to: mode,
+                preset: activePreset,
+                availablePresets: presetStore.presets,
+                sampleOriginal: sampleItem?.originalDimensions
+            )
+            configuration.mode = mode
+        }) {
+            Text(title)
+                .font(.system(size: 12, weight: isSelected ? .semibold : .medium))
+                .foregroundColor(isSelected ? PrecisionTheme.textPrimary : PrecisionTheme.textSecondary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 5)
+                .background(isSelected ? PrecisionTheme.cardBackground : Color.clear)
+                .cornerRadius(6)
+                .shadow(color: isSelected ? Color.black.opacity(0.06) : Color.clear, radius: 1, x: 0, y: 1)
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Presets Radio Cards
+    private var presetRadioCards: some View {
+        VStack(spacing: 6) {
+            ForEach(presetStore.presets) { preset in
+                let isSelected = configuration.selectedPresetId == preset.id
+
+                Button(action: {
+                    configuration.selectedPresetId = preset.id
+                }) {
+                    HStack(spacing: 10) {
+                        // Radio circle
+                        ZStack {
+                            Circle()
+                                .stroke(isSelected ? PrecisionTheme.blue : PrecisionTheme.border, lineWidth: 1.5)
+                                .frame(width: 14, height: 14)
+
+                            if isSelected {
+                                Circle()
+                                    .fill(PrecisionTheme.blue)
+                                    .frame(width: 7, height: 7)
+                            }
+                        }
+
+                        // Preset titles
+                        VStack(alignment: .leading, spacing: 1) {
+                            HStack(spacing: 5) {
+                                Text(preset.name)
+                                    .font(.system(size: 12, weight: isSelected ? .semibold : .medium))
+                                    .foregroundColor(isSelected ? PrecisionTheme.blue : PrecisionTheme.textPrimary)
+
+                                if isSelected {
+                                    Circle()
+                                        .fill(PrecisionTheme.blue)
+                                        .frame(width: 5, height: 5)
+                                }
+                            }
+
+                            Text(presetSubtitle(for: preset))
+                                .font(.system(size: 10))
+                                .foregroundColor(isSelected ? PrecisionTheme.textSecondary : PrecisionTheme.textTertiary)
+                        }
+
+                        Spacer()
+
+                        Text("\(preset.maxWidth) × \(preset.maxHeight) px")
+                            .font(.system(size: 11.5, weight: isSelected ? .semibold : .regular, design: .monospaced))
+                            .foregroundColor(isSelected ? PrecisionTheme.blue : PrecisionTheme.textSecondary)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 8)
+                    .background(isSelected ? PrecisionTheme.blueLight : PrecisionTheme.cardBackground)
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(isSelected ? PrecisionTheme.blue.opacity(0.35) : PrecisionTheme.borderSubtle, lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
             }
         }
     }
 
-    private var customFitControls: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Maximum Bounding Dimensions")
-                .font(.caption.weight(.medium))
-                .foregroundColor(.secondary)
+    private func presetSubtitle(for preset: ResizePreset) -> String {
+        switch preset.name.lowercased() {
+        case "small": return "Thumbnails & preview assets"
+        case "medium": return "Laptops & tablet web display"
+        case "large": return "Monitors & primary web heroes"
+        case "extra large": return "Retina & archival resolution"
+        default: return "Fit within maximum boundary"
+        }
+    }
 
-            HStack(spacing: 10) {
-                VStack(alignment: .leading, spacing: 4) {
+    // MARK: - Bounds Controls
+    private var customBoundsControls: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            aspectRatioPillsSection
+
+            HStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("Max Width")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .font(.system(size: 10.5, weight: .medium))
+                        .foregroundColor(PrecisionTheme.textTertiary)
                     TextField("Width", value: $configuration.customWidth, format: .number)
                         .textFieldStyle(.roundedBorder)
+                        .font(.system(size: 12, design: .monospaced))
                 }
 
                 Button(action: swapCustomDimensions) {
                     Image(systemName: "arrow.left.and.right")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundColor(.accentColor)
-                        .frame(width: 26, height: 26)
-                        .background(Color.accentColor.opacity(0.12))
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(PrecisionTheme.blue)
+                        .frame(width: 24, height: 24)
+                        .background(PrecisionTheme.blueLight)
                         .clipShape(Circle())
                 }
                 .buttonStyle(.plain)
                 .help("Swap Width & Height (Landscape ⇄ Portrait)")
                 .padding(.top, 14)
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("Max Height")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .font(.system(size: 10.5, weight: .medium))
+                        .foregroundColor(PrecisionTheme.textTertiary)
                     TextField("Height", value: $configuration.customHeight, format: .number)
                         .textFieldStyle(.roundedBorder)
+                        .font(.system(size: 12, design: .monospaced))
                 }
             }
-
-            Text("Image will scale to fit inside this box while strictly preserving aspect ratio.")
-                .font(.caption)
-                .foregroundColor(.secondary)
         }
     }
 
-    private var widthOnlyControls: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Target Width (px)")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            TextField("Width", value: $configuration.customWidth, format: .number)
-                .textFieldStyle(.roundedBorder)
-            Text("Height will be calculated automatically to preserve the aspect ratio.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-    }
-
-    private var heightOnlyControls: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Target Height (px)")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            TextField("Height", value: $configuration.customHeight, format: .number)
-                .textFieldStyle(.roundedBorder)
-            Text("Width will be calculated automatically to preserve the aspect ratio.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-    }
-
+    // MARK: - Percentage Controls
     private var percentageControls: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Scale Factor")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(PrecisionTheme.textTertiary)
                 Spacer()
                 Text("\(Int(configuration.percentage))%")
                     .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(PrecisionTheme.blue)
             }
 
             Slider(value: $configuration.percentage, in: 10...300, step: 5)
+                .tint(PrecisionTheme.blue)
 
-            HStack(spacing: 6) {
-                quickPercentButton(25)
-                quickPercentButton(50)
-                quickPercentButton(75)
-                quickPercentButton(100)
-                quickPercentButton(150)
-                quickPercentButton(200)
+            HStack(spacing: 4) {
+                ForEach([25, 50, 75, 100, 150, 200], id: \.self) { val in
+                    Button("\(val)%") {
+                        configuration.percentage = Double(val)
+                    }
+                    .font(.system(size: 10.5, weight: .medium, design: .monospaced))
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 3)
+                    .background(Int(configuration.percentage) == val ? PrecisionTheme.blueLight : PrecisionTheme.recessedBackground)
+                    .foregroundColor(Int(configuration.percentage) == val ? PrecisionTheme.blue : PrecisionTheme.textSecondary)
+                    .cornerRadius(4)
+                }
             }
         }
     }
 
-    private func quickPercentButton(_ value: Double) -> some View {
-        Button("\(Int(value))%") {
-            configuration.percentage = value
+    private var widthOnlyControls: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("Target Width (px)")
+                .font(.system(size: 10.5, weight: .medium))
+                .foregroundColor(PrecisionTheme.textTertiary)
+            TextField("Width", value: $configuration.customWidth, format: .number)
+                .textFieldStyle(.roundedBorder)
+                .font(.system(size: 12, design: .monospaced))
         }
-        .buttonStyle(.bordered)
-        .controlSize(.mini)
     }
 
-    // MARK: - Format & Quality Card
+    private var heightOnlyControls: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("Target Height (px)")
+                .font(.system(size: 10.5, weight: .medium))
+                .foregroundColor(PrecisionTheme.textTertiary)
+            TextField("Height", value: $configuration.customHeight, format: .number)
+                .textFieldStyle(.roundedBorder)
+                .font(.system(size: 12, design: .monospaced))
+        }
+    }
 
-    private var formatAndQualityCard: some View {
-        CardContainer {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Format & Quality")
-                    .font(.headline)
+    // MARK: - Processing Parameters Section
+    private var processingParametersSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("PROCESSING PARAMETERS")
+                .font(.system(size: 10.5, weight: .semibold))
+                .foregroundColor(PrecisionTheme.textTertiary)
+                .padding(.top, 4)
 
-                Picker("Output Format", selection: $configuration.outputFormat) {
+            VStack(spacing: 0) {
+                parameterToggleRow(
+                    title: "Allow upscaling of small images",
+                    icon: "arrow.up.left.and.arrow.down.right",
+                    isOn: $configuration.allowUpscaling
+                )
+
+                Divider().background(PrecisionTheme.borderSubtle)
+
+                parameterToggleRow(
+                    title: "Retain metadata & color profiles",
+                    icon: "paintpalette",
+                    isOn: $configuration.preserveMetadata
+                )
+
+                Divider().background(PrecisionTheme.borderSubtle)
+
+                parameterToggleRow(
+                    title: "Preserve creation & modified dates",
+                    icon: "clock.arrow.circlepath",
+                    isOn: $configuration.preserveFileTimestamps
+                )
+            }
+        }
+    }
+
+    private func parameterToggleRow(title: String, icon: String, isOn: Binding<Bool>) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 12))
+                .foregroundColor(isOn.wrappedValue ? PrecisionTheme.blue : PrecisionTheme.textTertiary)
+                .frame(width: 16)
+
+            Text(title)
+                .font(.system(size: 11.5, weight: .medium))
+                .foregroundColor(PrecisionTheme.textPrimary)
+
+            Spacer()
+
+            Toggle("", isOn: isOn)
+                .toggleStyle(.switch)
+                .controlSize(.mini)
+                .labelsHidden()
+        }
+        .padding(.vertical, 6)
+    }
+
+    // MARK: - Sample Envelope Banner
+    private func sampleEnvelopeBanner(sample: ImageItem) -> some View {
+        let calculated = ImageResizeEngine.calculateDimensions(
+            original: sample.originalDimensions,
+            mode: configuration.mode,
+            targetWidth: configuration.customWidth,
+            targetHeight: configuration.customHeight,
+            percentage: configuration.percentage,
+            preset: activePreset,
+            allowUpscaling: configuration.allowUpscaling
+        )
+
+        return HStack {
+            Text("Active Sample Envelope")
+                .font(.system(size: 10.5, weight: .medium))
+                .foregroundColor(PrecisionTheme.textTertiary)
+
+            Spacer()
+
+            HStack(spacing: 6) {
+                Text(sample.originalDimensions.description)
+                    .font(.system(size: 11, design: .monospaced))
+                    .foregroundColor(PrecisionTheme.textSecondary)
+
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundColor(PrecisionTheme.blue)
+
+                Text(calculated.description)
+                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    .foregroundColor(PrecisionTheme.textPrimary)
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(PrecisionTheme.cardHeaderBackground)
+        .cornerRadius(6)
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(PrecisionTheme.borderSubtle, lineWidth: 1)
+        )
+    }
+
+    // MARK: - Bottom Action Bar
+    private var bottomActionBar: some View {
+        HStack(spacing: 8) {
+            Button(action: onStartResize) {
+                HStack(spacing: 6) {
+                    if isProcessing {
+                        ProgressView()
+                            .controlSize(.small)
+                    } else {
+                        Image(systemName: "bolt.fill")
+                            .font(.system(size: 11))
+                    }
+
+                    Text(queueCount > 0 ? "Resize \(queueCount) \(queueCount == 1 ? "Image" : "Images")" : "Resize Images")
+                        .font(.system(size: 12.5, weight: .semibold))
+
+                    ShortcutBadge("⌘↵")
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(queueCount > 0 && !isProcessing ? PrecisionTheme.blue : PrecisionTheme.blue.opacity(0.4))
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .shadow(color: PrecisionTheme.blue.opacity(0.25), radius: 3, x: 0, y: 1)
+            }
+            .buttonStyle(.plain)
+            .disabled(queueCount == 0 || isProcessing)
+            .keyboardShortcut(.return, modifiers: .command)
+        }
+        .padding(.top, 4)
+    }
+
+    // MARK: - Format & Output Card
+    private var formatAndOutputCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("OUTPUT FORMAT & QUALITY")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundColor(PrecisionTheme.textTertiary)
+
+            HStack {
+                Text("Format")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(PrecisionTheme.textPrimary)
+
+                Spacer()
+
+                Picker("", selection: $configuration.outputFormat) {
                     ForEach(OutputFormat.allCases) { format in
                         Text(format.displayName).tag(format)
                     }
                 }
                 .pickerStyle(.menu)
-
-                if configuration.outputFormat.supportsQuality {
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text("Quality")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                            Spacer()
-                            Text("\(Int(configuration.quality * 100))%")
-                                .font(.system(size: 12, weight: .medium, design: .monospaced))
-                                .foregroundColor(.secondary)
-                        }
-
-                        Slider(value: $configuration.quality, in: 0.1...1.0, step: 0.05)
-                    }
-                }
-
-                Toggle("Preserve metadata (EXIF, color profiles)", isOn: $configuration.preserveMetadata)
-                    .font(.caption)
-                    .toggleStyle(.checkbox)
-
-                Toggle("Preserve creation & modification dates", isOn: $configuration.preserveFileTimestamps)
-                    .font(.caption)
-                    .toggleStyle(.checkbox)
+                .frame(width: 140)
             }
-        }
-    }
 
-    // MARK: - Destination & Naming Card
-
-    private var destinationAndNamingCard: some View {
-        CardContainer {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("File Management")
-                    .font(.headline)
-
-                Picker("Destination", selection: $configuration.destinationMode) {
-                    ForEach(OutputDestinationMode.allCases) { mode in
-                        Text(mode.displayName).tag(mode)
-                    }
-                }
-                .pickerStyle(.menu)
-
-                if configuration.destinationMode == .subfolder {
+            if configuration.outputFormat.supportsQuality {
+                VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text("Subfolder:")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        TextField("Subfolder Name", text: $configuration.subfolderName)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                } else if configuration.destinationMode == .customFolder {
-                    HStack {
-                        Text(configuration.customDestinationPath ?? "No folder selected")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                            .truncationMode(.middle)
+                        Text("Compression Quality")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(PrecisionTheme.textTertiary)
                         Spacer()
-                        Button("Browse…") {
-                            chooseCustomFolder()
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
+                        Text("\(Int(configuration.quality * 100))%")
+                            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                            .foregroundColor(PrecisionTheme.blue)
                     }
+
+                    Slider(value: $configuration.quality, in: 0.1...1.0, step: 0.05)
+                        .tint(PrecisionTheme.blue)
                 }
-
-                HStack {
-                    Text("Filename Suffix:")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    TextField("Suffix", text: $configuration.filenameSuffix)
-                        .textFieldStyle(.roundedBorder)
-                }
-
-                Toggle("Append preset name to filename", isOn: $configuration.appendPresetNameToFilename)
-                    .font(.caption)
-                    .toggleStyle(.checkbox)
-
-                Picker("If file exists", selection: $configuration.collisionHandling) {
-                    ForEach(CollisionHandling.allCases) { option in
-                        Text(option.displayName).tag(option)
-                    }
-                }
-                .pickerStyle(.menu)
-                .font(.caption)
-
-                Divider()
-
-                liveFilenamePreview
             }
         }
+        .padding(14)
+        .background(PrecisionTheme.cardBackground)
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(PrecisionTheme.border, lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
     }
 
-    // MARK: - Action Card
-
-    private var actionCard: some View {
-        CardContainer {
-            VStack(alignment: .leading, spacing: 12) {
-                if let sample = sampleItem {
-                    let calculated = ImageResizeEngine.calculateDimensions(
-                        original: sample.originalDimensions,
-                        mode: configuration.mode,
-                        targetWidth: configuration.customWidth,
-                        targetHeight: configuration.customHeight,
-                        percentage: configuration.percentage,
-                        preset: activePreset,
-                        allowUpscaling: configuration.allowUpscaling
-                    )
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Dimension Preview")
-                            .font(.caption.weight(.semibold))
-                            .foregroundColor(.secondary)
-
-                        HStack {
-                            Text(sample.originalDimensions.description)
-                                .font(.system(size: 12, design: .monospaced))
-                                .foregroundColor(.secondary)
-
-                            Image(systemName: "arrow.right")
-                                .font(.caption.weight(.bold))
-                                .foregroundColor(.secondary)
-
-                            Text(calculated.description)
-                                .font(.system(size: 13, weight: .bold, design: .monospaced))
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-
-                    Divider()
-                }
-
-                Button(action: onStartResize) {
-                    HStack(spacing: 8) {
-                        if isProcessing {
-                            ProgressView()
-                                .controlSize(.small)
-                        } else {
-                            Image(systemName: "arrow.down.forward.and.arrow.up.backward")
-                        }
-
-                        Text(queueCount > 0 ? "Resize \(queueCount) \(queueCount == 1 ? "Image" : "Images")" : "Resize Images")
-                            .font(.system(size: 14, weight: .semibold))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .disabled(queueCount == 0 || isProcessing)
-                .keyboardShortcut(.return, modifiers: .command)
-            }
-        }
-    }
-
-    private func chooseCustomFolder() {
-        let panel = NSOpenPanel()
-        panel.title = "Choose Destination Folder"
-        panel.canChooseFiles = false
-        panel.canChooseDirectories = true
-        panel.canCreateDirectories = true
-        panel.allowsMultipleSelection = false
-
-        if panel.runModal() == .OK, let url = panel.url {
-            configuration.customDestinationPath = url.path
-        }
-    }
-
-    // MARK: - Aspect Ratio Pills Section
-
+    // MARK: - Aspect Ratio Helper
     private var aspectRatioPillsSection: some View {
         let presets = areRatiosInverted ? AspectRatioPreset.all.map { $0.inverted() } : AspectRatioPreset.all
 
         return VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 8) {
-                Text("Popular & Social Ratios")
-                    .font(.caption.weight(.semibold))
-                    .foregroundColor(.secondary)
+            HStack(spacing: 6) {
+                Text("Aspect Ratio:")
+                    .font(.system(size: 10.5, weight: .medium))
+                    .foregroundColor(PrecisionTheme.textTertiary)
 
                 Spacer()
 
                 Button(action: {
-                    withAnimation(.easeInOut(duration: 0.15)) {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                         areRatiosInverted.toggle()
-                        if configuration.mode == .fit {
-                            swapCustomDimensions()
-                        }
                     }
                 }) {
-                    HStack(spacing: 4) {
+                    HStack(spacing: 3) {
                         Image(systemName: "arrow.triangle.2.circlepath")
-                            .font(.system(size: 9, weight: .bold))
-                            .rotationEffect(.degrees(areRatiosInverted ? 180 : 0))
-                        Text(areRatiosInverted ? "Inverted (e.g. 3:4)" : "Invert (3:4 ⇄ 4:3)")
-                            .font(.caption2.weight(.medium))
+                            .font(.system(size: 9))
+                        Text(areRatiosInverted ? "Portrait" : "Landscape")
+                            .font(.system(size: 10, weight: .medium))
                     }
+                    .foregroundColor(PrecisionTheme.blue)
                     .padding(.horizontal, 6)
-                    .padding(.vertical, 3)
-                    .background(areRatiosInverted ? Color.accentColor.opacity(0.18) : Color.primary.opacity(0.06))
-                    .foregroundColor(areRatiosInverted ? .accentColor : .secondary)
-                    .cornerRadius(5)
+                    .padding(.vertical, 2)
+                    .background(PrecisionTheme.blueLight)
+                    .cornerRadius(4)
                 }
                 .buttonStyle(.plain)
-                .help("Invert all aspect ratios between Landscape and Portrait (e.g. 4:3 ⇄ 3:4, 16:9 ⇄ 9:16)")
             }
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 6) {
+                HStack(spacing: 5) {
                     ForEach(presets) { preset in
-                        let selected = isAspectRatioSelected(preset)
                         Button(action: {
-                            if selected {
-                                // Already selected: invert this individual ratio!
-                                applyAspectRatio(preset.inverted())
-                            } else {
-                                applyAspectRatio(preset)
-                            }
+                            applyAspectRatio(preset)
                         }) {
-                            HStack(spacing: 5) {
-                                Image(systemName: preset.icon)
-                                    .font(.system(size: 10, weight: .semibold))
-                                VStack(alignment: .leading, spacing: 1) {
-                                    Text(preset.name)
-                                        .font(.system(size: 11, weight: .medium))
-                                    Text(preset.ratioLabel)
-                                        .font(.system(size: 9, weight: .bold, design: .monospaced))
-                                        .foregroundColor(selected ? .white.opacity(0.85) : .secondary)
-                                }
-                            }
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 5)
-                            .background(selected ? Color.accentColor : Color(NSColor.controlBackgroundColor))
-                            .foregroundColor(selected ? .white : .primary)
-                            .cornerRadius(7)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 7)
-                                    .stroke(selected ? Color.accentColor : Color.primary.opacity(0.12), lineWidth: 1)
-                            )
+                            Text(preset.ratioLabel)
+                                .font(.system(size: 10.5, weight: .medium, design: .monospaced))
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 3)
+                                .background(PrecisionTheme.recessedBackground)
+                                .foregroundColor(PrecisionTheme.textPrimary)
+                                .cornerRadius(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .stroke(PrecisionTheme.borderSubtle, lineWidth: 1)
+                                )
                         }
                         .buttonStyle(.plain)
-                        .help("\(preset.name) (\(preset.ratioLabel)) — \(preset.width) × \(preset.height) px. Click again to invert.")
+                        .help("\(preset.name) (\(preset.width) × \(preset.height) px)")
                     }
                 }
-                .padding(.vertical, 2)
             }
         }
-    }
-
-    private var activeAspectRatioPreset: AspectRatioPreset? {
-        AspectRatioPreset.all.first(where: { isAspectRatioSelected($0) })
-    }
-
-    private func isAspectRatioSelected(_ preset: AspectRatioPreset) -> Bool {
-        if configuration.mode == .fit {
-            if configuration.customWidth == preset.width && configuration.customHeight == preset.height {
-                return true
-            }
-            let currentRatio = Double(configuration.customWidth) / Double(max(1, configuration.customHeight))
-            let targetRatio = Double(preset.width) / Double(preset.height)
-            return abs(currentRatio - targetRatio) < 0.02
-        }
-        return false
     }
 
     private func applyAspectRatio(_ preset: AspectRatioPreset) {
-        configuration.mode = .fit
         configuration.customWidth = preset.width
         configuration.customHeight = preset.height
     }
 
     private func swapCustomDimensions() {
-        let temp = configuration.customWidth
+        let oldWidth = configuration.customWidth
         configuration.customWidth = configuration.customHeight
-        configuration.customHeight = temp
-    }
-
-    // MARK: - Live Filename Preview
-
-    private var liveFilenamePreview: some View {
-        let sampleName = sampleItem?.filename ?? "photo.jpg"
-        let base = (sampleName as NSString).deletingPathExtension
-        let ext = configuration.outputFormat == .original
-            ? (sampleItem?.url.pathExtension ?? "jpg")
-            : configuration.outputFormat.fileExtension
-
-        var suffix = configuration.filenameSuffix
-        if configuration.appendPresetNameToFilename, let preset = activePreset {
-            suffix += "_\(preset.name.replacingOccurrences(of: " ", with: "_"))"
-        }
-
-        let folder = configuration.destinationMode == .subfolder
-            ? (configuration.subfolderName.isEmpty ? "Resized/" : "\(configuration.subfolderName)/")
-            : ""
-
-        let previewText = "\(sampleName) ➔ \(folder)\(base)\(suffix).\(ext)"
-
-        return VStack(alignment: .leading, spacing: 3) {
-            Text("Preview Result")
-                .font(.caption2.weight(.medium))
-                .foregroundColor(.secondary)
-
-            HStack(spacing: 6) {
-                Image(systemName: "arrow.turn.down.right")
-                    .font(.caption)
-                    .foregroundColor(.accentColor)
-                Text(previewText)
-                    .font(.system(size: 11, design: .monospaced))
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
-            }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 5)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(NSColor.controlBackgroundColor))
-            .cornerRadius(6)
-            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.primary.opacity(0.08), lineWidth: 1))
-        }
+        configuration.customHeight = oldWidth
     }
 }

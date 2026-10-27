@@ -7,8 +7,8 @@
     <language>en</language>
     <item>
       <title>Squishy 1.0.0</title>
-      <pubDate>Mon, 26 Oct 2026 19:32:26 +0000</pubDate>
-      <sparkle:version>17</sparkle:version>
+      <pubDate>Tue, 27 Oct 2026 08:57:15 +0000</pubDate>
+      <sparkle:version>18</sparkle:version>
       <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <description><![CDATA[
@@ -21,11 +21,11 @@
       ]]></description>
       <enclosure
         url="https://github.com/bhooshanb/squishy-macos-app/releases/download/release/Squishy.zip"
-        sparkle:version="17"
+        sparkle:version="18"
         sparkle:shortVersionString="1.0.0"
-        length="2006093"
+        length="3089875"
         type="application/octet-stream"
-        sparkle:edSignature="8mKI+goP3dbNEIPBc/1KGrPs/kXZeA3MxnW3lZu5y5lyRQwEhMpTU8zwodCBVvFYUXkJHve/HJjkjUR58wq6Cg==" />
+        sparkle:edSignature="5K2VXFud+XqS45Mv9B1XcHRGjZHN1ovEWW94WiQ0WUnpDgyFqEZCxK/xLtjXbd7J6ufuyP19Hz3R8ZMhKqToCw==" />
     </item>
   </channel>
 </rss>
