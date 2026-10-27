@@ -272,7 +272,7 @@
 			buildConfigurationList = 6E612C9C95E4A5852F340AF6 /* Build configuration list for PBXNativeTarget "ImageResizer" */;
 			buildPhases = (
 				356E4EF7682C6EF7FF8CF2F5 /* Sources */,
-				05D04B02CDA693B2B09E7B14 /* Stamp Auto Version to Plist */,
+				F58E3FBE89AB33E2EE0E8354 /* Stamp Auto Version and Git Feed to Plist */,
 				835BA78575A8CEEEB369A247 /* Resources */,
 				E09218E4459CB8CE450CC2B0 /* Frameworks */,
 			);
@@ -334,7 +334,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		05D04B02CDA693B2B09E7B14 /* Stamp Auto Version to Plist */ = {
+		F58E3FBE89AB33E2EE0E8354 /* Stamp Auto Version and Git Feed to Plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -343,14 +343,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Stamp Auto Version to Plist";
+			name = "Stamp Auto Version and Git Feed to Plist";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "build_number=$(git -C \"${SRCROOT}\" rev-list --count HEAD 2>/dev/null || echo \"1\")\nif [ -f \"${SRCROOT}/VERSION\" ]; then\n  version=$(cat \"${SRCROOT}/VERSION\" | tr -d '[:space:]')\nelse\n  version=\"1.0.0\"\nfi\nplist_path=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nif [ -f \"${plist_path}\" ]; then\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion ${build_number}\" \"${plist_path}\" 2>/dev/null || \\\n  /usr/libexec/PlistBuddy -c \"Add :CFBundleVersion string ${build_number}\" \"${plist_path}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${version}\" \"${plist_path}\" 2>/dev/null || \\\n  /usr/libexec/PlistBuddy -c \"Add :CFBundleShortVersionString string ${version}\" \"${plist_path}\" 2>/dev/null || true\nfi\n";
+			shellScript = "build_number=$(git -C \"${SRCROOT}\" rev-list --count HEAD 2>/dev/null || echo \"1\")\nif [ -f \"${SRCROOT}/VERSION\" ]; then\n  version=$(cat \"${SRCROOT}/VERSION\" | tr -d '[:space:]')\nelse\n  version=\"1.0.0\"\nfi\nremote_url=$(git -C \"${SRCROOT}\" config --get remote.origin.url 2>/dev/null || echo \"\")\nif [[ \"${remote_url}\" =~ github\\.com[:/]([^/]+)/([^/.]+)(\\.git)? ]]; then\n  owner=\"${BASH_REMATCH[1]}\"\n  repo=\"${BASH_REMATCH[2]}\"\n  branch=$(git -C \"${SRCROOT}\" branch --show-current 2>/dev/null || echo \"master\")\n  feed_url=\"https://raw.githubusercontent.com/${owner}/${repo}/${branch}/appcast.xml\"\nelse\n  feed_url=\"https://raw.githubusercontent.com/bhooshanb/squishy-macos-app/master/appcast.xml\"\nfi\nplist_path=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nif [ -f \"${plist_path}\" ]; then\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion ${build_number}\" \"${plist_path}\" 2>/dev/null || \\\n  /usr/libexec/PlistBuddy -c \"Add :CFBundleVersion string ${build_number}\" \"${plist_path}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${version}\" \"${plist_path}\" 2>/dev/null || \\\n  /usr/libexec/PlistBuddy -c \"Add :CFBundleShortVersionString string ${version}\" \"${plist_path}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Set :SUFeedURL ${feed_url}\" \"${plist_path}\" 2>/dev/null || \\\n  /usr/libexec/PlistBuddy -c \"Add :SUFeedURL string ${feed_url}\" \"${plist_path}\" 2>/dev/null || true\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

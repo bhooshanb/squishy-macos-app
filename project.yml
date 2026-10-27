@@ -27,7 +27,7 @@ targets:
       - package: Sparkle
         product: Sparkle
     postCompileScripts:
-      - name: "Stamp Auto Version to Plist"
+      - name: "Stamp Auto Version and Git Feed to Plist"
         script: |
           build_number=$(git -C "${SRCROOT}" rev-list --count HEAD 2>/dev/null || echo "1")
           if [ -f "${SRCROOT}/VERSION" ]; then
@@ -35,12 +35,23 @@ targets:
           else
             version="1.0.0"
           fi
+          remote_url=$(git -C "${SRCROOT}" config --get remote.origin.url 2>/dev/null || echo "")
+          if [[ "${remote_url}" =~ github\.com[:/]([^/]+)/([^/.]+)(\.git)? ]]; then
+            owner="${BASH_REMATCH[1]}"
+            repo="${BASH_REMATCH[2]}"
+            branch=$(git -C "${SRCROOT}" branch --show-current 2>/dev/null || echo "master")
+            feed_url="https://raw.githubusercontent.com/${owner}/${repo}/${branch}/appcast.xml"
+          else
+            feed_url="https://raw.githubusercontent.com/bhooshanb/squishy-macos-app/master/appcast.xml"
+          fi
           plist_path="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
           if [ -f "${plist_path}" ]; then
             /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${build_number}" "${plist_path}" 2>/dev/null || \
             /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string ${build_number}" "${plist_path}" 2>/dev/null || true
             /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${version}" "${plist_path}" 2>/dev/null || \
             /usr/libexec/PlistBuddy -c "Add :CFBundleShortVersionString string ${version}" "${plist_path}" 2>/dev/null || true
+            /usr/libexec/PlistBuddy -c "Set :SUFeedURL ${feed_url}" "${plist_path}" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Add :SUFeedURL string ${feed_url}" "${plist_path}" 2>/dev/null || true
           fi
     settings:
       base:

@@ -4,6 +4,7 @@ import AppKit
 public struct OutputSettingsView: View {
     @Binding public var configuration: ResizeConfiguration
     @ObservedObject private var appSettings = AppSettings.shared
+    @ObservedObject private var updateManager = UpdateManager.shared
 
     public init(configuration: Binding<ResizeConfiguration>) {
         self._configuration = configuration
@@ -50,6 +51,9 @@ public struct OutputSettingsView: View {
 
                 // Group 4: Metadata & Timestamps
                 metadataAndTimestampsCard
+
+                // Group 5: Software Updates (Git Feed)
+                updatesCard
             }
             .padding(20)
         }
@@ -424,5 +428,90 @@ public struct OutputSettingsView: View {
         if panel.runModal() == .OK, let url = panel.url {
             configuration.customDestinationPath = url.path
         }
+    }
+
+    // MARK: - Software Updates Card
+    private var updatesCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                    .foregroundColor(PrecisionTheme.blue)
+                Text("Software Updates (Git Feed)")
+                    .font(.system(size: 13, weight: .semibold))
+                Spacer()
+
+                StatusPill(title: "Git appcast.xml", isPositive: true)
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(alignment: .center) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Installed Version: v\(appVersionString) (Build \(appBuildString))")
+                            .font(.system(size: 12.5, weight: .medium))
+                            .foregroundColor(PrecisionTheme.textPrimary)
+
+                        HStack(spacing: 4) {
+                            Text("Feed:")
+                                .font(.system(size: 10.5))
+                                .foregroundColor(PrecisionTheme.textTertiary)
+
+                            Text(updateManager.activeFeedURLString)
+                                .font(.system(size: 10.5, design: .monospaced))
+                                .foregroundColor(PrecisionTheme.textSecondary)
+                                .lineLimit(1)
+                                .truncationMode(.middle)
+                        }
+                    }
+
+                    Spacer()
+
+                    Button(action: {
+                        updateManager.checkForUpdates()
+                    }) {
+                        HStack(spacing: 5) {
+                            if updateManager.isCheckingForUpdates {
+                                ProgressView()
+                                    .controlSize(.small)
+                            } else {
+                                Image(systemName: "arrow.clockwise")
+                                    .font(.system(size: 11, weight: .bold))
+                            }
+                            Text("Check for Updates")
+                                .font(.system(size: 12, weight: .semibold))
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(PrecisionTheme.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(6)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(updateManager.isCheckingForUpdates)
+                }
+
+                Divider().background(PrecisionTheme.borderSubtle)
+
+                Toggle("Automatically check for updates via GitHub appcast.xml", isOn: Binding(
+                    get: { updateManager.automaticallyChecksForUpdates },
+                    set: { updateManager.automaticallyChecksForUpdates = $0 }
+                ))
+                .font(.system(size: 12))
+            }
+        }
+        .padding(16)
+        .background(PrecisionTheme.cardBackground)
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(PrecisionTheme.border, lineWidth: 1)
+        )
+    }
+
+    private var appVersionString: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+    }
+
+    private var appBuildString: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
     }
 }

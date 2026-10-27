@@ -20,6 +20,8 @@ final class UpdateManagerTests: XCTestCase {
         _ = manager.automaticallyDownloadsUpdates
         _ = manager.lastUpdateCheckDate
         _ = manager.feedURL
+        XCTAssertTrue(manager.activeFeedURLString.contains("appcast.xml"), "Feed URL should reference appcast.xml")
+        XCTAssertTrue(manager.activeFeedURLString.contains("bhooshanb/squishy-macos-app"), "Feed URL should reference the git repo")
     }
 
     func testBundleContainsSparkleConfiguration() {

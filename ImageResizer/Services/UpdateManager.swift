@@ -7,8 +7,17 @@ import Sparkle
 public final class UpdateManager: NSObject, ObservableObject {
     public static let shared = UpdateManager()
 
+    /// Default git repository raw appcast.xml URL
+    public static let defaultGitFeedURL = "https://raw.githubusercontent.com/bhooshanb/squishy-macos-app/master/appcast.xml"
+
     /// Indicates whether an update check can currently be triggered
     @Published public private(set) var canCheckForUpdates: Bool = false
+
+    /// Indicates whether an update check is currently in progress
+    @Published public private(set) var isCheckingForUpdates: Bool = false
+
+    /// The active feed URL string
+    @Published public private(set) var activeFeedURLString: String = UpdateManager.defaultGitFeedURL
 
     /// The underlying Sparkle standard updater controller
     public private(set) var updaterController: SPUStandardUpdaterController?
@@ -21,6 +30,13 @@ public final class UpdateManager: NSObject, ObservableObject {
     }
 
     private func setupSparkle() {
+        // Resolve feed URL from Info.plist or default git raw url
+        if let bundleFeed = Bundle.main.infoDictionary?["SUFeedURL"] as? String, !bundleFeed.isEmpty {
+            self.activeFeedURLString = bundleFeed
+        } else {
+            self.activeFeedURLString = Self.defaultGitFeedURL
+        }
+
         // Avoid starting updater in unit test environments
         let isRunningTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
         guard !isRunningTests else { return }
@@ -39,10 +55,16 @@ public final class UpdateManager: NSObject, ObservableObject {
             .assign(to: &$canCheckForUpdates)
     }
 
-    /// Explicitly check for updates and present the Sparkle UI dialog
+    /// Explicitly check for updates using the git-hosted appcast.xml and present the Sparkle UI dialog
     public func checkForUpdates() {
         guard let updaterController = updaterController else { return }
+        isCheckingForUpdates = true
         updaterController.checkForUpdates(nil)
+        
+        // Reset checking indicator after a brief delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.isCheckingForUpdates = false
+        }
     }
 
     /// Whether automatic update checks are enabled
@@ -70,13 +92,26 @@ public final class UpdateManager: NSObject, ObservableObject {
 
     /// The update feed URL from Info.plist
     public var feedURL: URL? {
-        updaterController?.updater.feedURL
+        updaterController?.updater.feedURL ?? URL(string: activeFeedURLString)
     }
 }
 
 // MARK: - SPUUpdaterDelegate
 extension UpdateManager: SPUUpdaterDelegate {
+    /// Return the git-hosted appcast.xml feed URL to Sparkle
+    public func feedURLString(for updater: SPUUpdater) -> String? {
+        return activeFeedURLString
+    }
+
     public func updater(_ updater: SPUUpdater, didFinishLoading appcast: SUAppcast) {
-        // Appcast loaded successfully
+        Task { @MainActor in
+            self.isCheckingForUpdates = false
+        }
+    }
+
+    public func updaterDidNotFindUpdate(_ updater: SPUUpdater, error: Error) {
+        Task { @MainActor in
+            self.isCheckingForUpdates = false
+        }
     }
 }
