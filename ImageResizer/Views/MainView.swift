@@ -11,14 +11,25 @@ public enum NavigationTab: String, CaseIterable, Identifiable {
     public var id: String { rawValue }
 }
 
+private enum MediaQueueFilter: String, CaseIterable, Identifiable {
+    case all = "All"
+    case images = "Images"
+    case videos = "Videos"
+    var id: String { rawValue }
+}
+
 public struct MainView: View {
     @StateObject private var appSettings = AppSettings.shared
     @StateObject private var presetStore = PresetStore.shared
-    @StateObject private var batchService = BatchResizeService.shared
+    @StateObject private var imageBatchService = BatchResizeService()
+    @StateObject private var videoBatchService = BatchResizeService()
 
     @State private var selectedTab: NavigationTab = .queue
-    @State private var items: [ImageItem] = []
+    @State private var imageItems: [ImageItem] = []
+    @State private var videoItems: [ImageItem] = []
     @State private var isTargetedForDrop: Bool = false
+    @State private var queueFilter: MediaQueueFilter = .all
+    @State private var clearedQueueSnapshot: ([ImageItem], [ImageItem])?
 
     private let fileService = ImageFileService.shared
 
@@ -34,14 +45,21 @@ public struct MainView: View {
     }
 
     private var queueStats: (count: Int, formattedOrig: String, formattedSaving: String, percentSaving: Double) {
-        let count = items.count
-        let origBytes = items.reduce(0) { $0 + $1.fileSize }
+        let allItems = imageItems + videoItems
+        let count = allItems.count
+        let origBytes = allItems.reduce(0) { $0 + $1.fileSize }
         guard count > 0, origBytes > 0 else {
             return (0, "0 B", "0 B", 0.0)
         }
 
         var estTotal: Int64 = 0
-        for item in items {
+        for item in allItems {
+            if item.mediaKind == .video {
+                let outputBitrate = min(appSettings.configuration.videoBitratePreset.bitsPerSecond, item.sourceVideoBitrate ?? appSettings.configuration.videoBitratePreset.bitsPerSecond)
+                let inputBitrate = max(1, item.sourceVideoBitrate ?? outputBitrate)
+                estTotal += Int64(Double(item.fileSize) * Double(outputBitrate) / Double(inputBitrate))
+                continue
+            }
             let target = ImageResizeEngine.calculateDimensions(
                 original: item.originalDimensions,
                 mode: appSettings.configuration.mode,
@@ -95,37 +113,7 @@ public struct MainView: View {
             ZStack {
                 switch selectedTab {
                 case .queue:
-                    if items.isEmpty {
-                        EmptyDropZoneView(onSelectFiles: openFilePicker)
-                    } else {
-                        HSplitView {
-                            // Queue View (7-col weight)
-                            ImageQueueView(
-                                items: $items,
-                                configuration: appSettings.configuration,
-                                selectedPreset: selectedPreset,
-                                onAddMore: openFilePicker,
-                                onClearAll: {
-                                    items.removeAll()
-                                    batchService.lastResult = nil
-                                }
-                            )
-                            .frame(minWidth: 420, maxWidth: .infinity)
-
-                            // Resize Settings Inspector (5-col weight)
-                            ResizeSettingsView(
-                                configuration: $appSettings.configuration,
-                                sampleItem: items.first,
-                                queueCount: items.count,
-                                isProcessing: batchService.isProcessing,
-                                onStartResize: startBatchResize,
-                                onEditPresets: {
-                                    selectedTab = .presets
-                                }
-                            )
-                            .frame(minWidth: 320, idealWidth: 360, maxWidth: 440)
-                        }
-                    }
+                    mediaQueuesView
 
                 case .presets:
                     PresetManagerView()
@@ -135,7 +123,7 @@ public struct MainView: View {
 
                 case .history:
                     BatchHistoryResultsView(
-                        result: batchService.lastResult,
+                        result: imageBatchService.lastResult ?? videoBatchService.lastResult,
                         onResizeAnother: {
                             selectedTab = .queue
                         }
@@ -147,17 +135,6 @@ public struct MainView: View {
                     DropOverlayView()
                 }
 
-                // Floating progress banner during processing
-                if batchService.isProcessing {
-                    VStack {
-                        Spacer()
-                        BatchProgressView(batchService: batchService)
-                            .padding(20)
-                            .frame(maxWidth: 550)
-                            .padding(.bottom, 24)
-                    }
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -178,6 +155,184 @@ public struct MainView: View {
                 self.addURLs(urls)
             }
         }
+    }
+
+    private var mediaQueuesView: some View {
+        HSplitView {
+            VStack(spacing: 10) {
+                HStack {
+                    Text("Processing Queue · \(imageItems.count + videoItems.count)")
+                        .font(.system(size: 14, weight: .semibold))
+                    Spacer()
+                    Picker("Queue filter", selection: $queueFilter) {
+                        ForEach(MediaQueueFilter.allCases) { filter in Text(filter.rawValue).tag(filter) }
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(width: 210)
+                    Menu {
+                        Button("Add Images…", action: openImagePicker)
+                        Button("Add Videos…", action: openVideoPicker)
+                    } label: {
+                        Label("Add", systemImage: "plus")
+                    }
+                    .menuStyle(.borderlessButton)
+                    Button("Clear", action: clearAllQueues)
+                        .disabled(imageItems.isEmpty && videoItems.isEmpty)
+                    if clearedQueueSnapshot != nil {
+                        Button("Undo") { undoClearQueues() }
+                    }
+                }
+                .padding(.horizontal, 4)
+
+                if imageItems.isEmpty && videoItems.isEmpty {
+                    VStack(spacing: 10) {
+                        Image(systemName: "square.and.arrow.down")
+                            .font(.system(size: 28))
+                            .foregroundStyle(PrecisionTheme.blue)
+                        Text("Drop images or videos here")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Or use Add to choose files. Images and videos stay in their own processing workflows.")
+                            .font(.system(size: 12))
+                            .foregroundStyle(PrecisionTheme.textSecondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(PrecisionTheme.cardBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                } else {
+                    ImageQueueView(
+                        items: filteredQueueBinding,
+                        configuration: appSettings.configuration,
+                        selectedPreset: selectedPreset,
+                        isProcessing: imageBatchService.isProcessing || videoBatchService.isProcessing,
+                        onAddMore: openImagePicker,
+                        onClearAll: clearAllQueues
+                    )
+                }
+            }
+            .padding(12)
+            .frame(minWidth: 420, maxWidth: .infinity)
+
+            VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Image settings")
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 12)
+                        .padding(.top, 10)
+                    ResizeSettingsView(configuration: $appSettings.configuration, sampleItem: imageItems.first, queueCount: imageItems.count, isProcessing: imageBatchService.isProcessing, onStartResize: startImageBatch, showsActionBar: false)
+                }
+                .frame(maxHeight: .infinity)
+                if !videoItems.isEmpty || videoBatchService.isProcessing {
+                    Divider()
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Video settings")
+                            .font(.system(size: 13, weight: .semibold))
+                            .padding(.horizontal, 12)
+                            .padding(.top, 10)
+                        ResizeSettingsView(configuration: $appSettings.configuration, sampleItem: videoItems.first, queueCount: videoItems.count, isProcessing: videoBatchService.isProcessing, onStartResize: startVideoBatch, showsActionBar: false, videoBitratePreset: $appSettings.configuration.videoBitratePreset)
+                    }
+                    .frame(maxHeight: .infinity)
+                }
+                Divider()
+                unifiedActionFooter
+            }
+            .frame(minWidth: 320, idealWidth: 360, maxWidth: 440)
+        }
+    }
+
+    private var filteredQueueBinding: Binding<[ImageItem]> {
+        Binding(
+            get: {
+                switch queueFilter {
+                case .all: imageItems + videoItems
+                case .images: imageItems
+                case .videos: videoItems
+                }
+            },
+            set: { updated in
+                switch queueFilter {
+                case .all:
+                    imageItems = updated.filter { $0.mediaKind == .image }
+                    videoItems = updated.filter { $0.mediaKind == .video }
+                case .images: imageItems = updated
+                case .videos: videoItems = updated
+                }
+            }
+        )
+    }
+
+    private var unifiedActionFooter: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Estimated savings · \(queueStats.formattedSaving) (\(queueStats.percentSaving, specifier: "%.0f")%)")
+                        .font(.system(size: 11, weight: .medium))
+                    Button {
+                        selectedTab = .settings
+                    } label: {
+                        Label("Save to \(destinationDisplayPath) · Originals are never modified", systemImage: "folder")
+                            .font(.system(size: 11))
+                            .foregroundStyle(PrecisionTheme.textSecondary)
+                            .lineLimit(1)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Change the destination folder in Settings")
+                }
+                Spacer(minLength: 0)
+            }
+            Button(action: startAllBatches) {
+                Label("Compress \(imageItems.count + videoItems.count) Files", systemImage: "bolt.fill")
+                    .font(.system(size: 13, weight: .semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 9)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled((imageItems.isEmpty && videoItems.isEmpty) || imageBatchService.isProcessing || videoBatchService.isProcessing)
+            .keyboardShortcut(.return, modifiers: .command)
+
+            queueControlRow(title: "Images", service: imageBatchService)
+            if !videoItems.isEmpty || videoBatchService.isProcessing {
+                queueControlRow(title: "Videos", service: videoBatchService)
+            }
+        }
+        .padding(12)
+        .background(PrecisionTheme.cardBackground)
+    }
+
+    @ViewBuilder
+    private func queueControlRow(title: String, service: BatchResizeService) -> some View {
+        if service.isProcessing {
+            HStack {
+                Text("\(title) · \(service.isPaused ? "Paused" : service.currentFilename)")
+                    .font(.system(size: 10.5))
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+                Spacer()
+                Button(service.isPaused ? "Resume" : "Pause", systemImage: service.isPaused ? "play.fill" : "pause.fill", action: service.isPaused ? service.resume : service.pause)
+                Button("Stop", systemImage: "stop.fill", action: service.stop)
+                    .tint(.red)
+            }
+        }
+    }
+
+    private func startAllBatches() {
+        startImageBatch()
+        startVideoBatch()
+    }
+
+    private func clearAllQueues() {
+        guard !imageItems.isEmpty || !videoItems.isEmpty else { return }
+        clearedQueueSnapshot = (imageItems, videoItems)
+        clearImageQueue()
+        clearVideoQueue()
+    }
+
+    private func undoClearQueues() {
+        guard let snapshot = clearedQueueSnapshot else { return }
+        imageItems = snapshot.0
+        videoItems = snapshot.1
+        for item in imageItems + videoItems { item.status = .idle }
+        clearedQueueSnapshot = nil
     }
 
     // MARK: - Header Bar
@@ -249,7 +404,7 @@ public struct MainView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "plus")
                             .font(.system(size: 11, weight: .bold))
-                        Text("Add Images")
+                        Text("Add Files")
                             .font(.system(size: 11.5, weight: .medium))
                     }
                     .foregroundColor(PrecisionTheme.blue)
@@ -277,10 +432,10 @@ public struct MainView: View {
             // Status Dot & Label
             HStack(spacing: 6) {
                 Circle()
-                    .fill(batchService.isProcessing ? PrecisionTheme.blue : PrecisionTheme.green)
+                    .fill((imageBatchService.isProcessing || videoBatchService.isProcessing) ? PrecisionTheme.blue : PrecisionTheme.green)
                     .frame(width: 7, height: 7)
 
-                Text(batchService.isProcessing ? "Processing…" : "Ready")
+                Text((imageBatchService.isProcessing || videoBatchService.isProcessing) ? "Processing…" : "Ready")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(PrecisionTheme.textPrimary)
             }
@@ -293,7 +448,7 @@ public struct MainView: View {
             HStack(spacing: 4) {
                 Text("Selected:")
                     .foregroundColor(PrecisionTheme.textTertiary)
-                Text("\(queueStats.count) images (\(queueStats.formattedOrig))")
+                Text("\(queueStats.count) files (\(queueStats.formattedOrig))")
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
                     .foregroundColor(PrecisionTheme.textPrimary)
             }
@@ -332,16 +487,6 @@ public struct MainView: View {
                 .fill(PrecisionTheme.border)
                 .frame(width: 1, height: 12)
 
-            // Acceleration Indicator
-            HStack(spacing: 5) {
-                Circle()
-                    .fill(PrecisionTheme.blue)
-                    .frame(width: 5, height: 5)
-
-                Text("Metal vImage GPU")
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(PrecisionTheme.textSecondary)
-            }
         }
         .font(.system(size: 11))
         .padding(.horizontal, 16)
@@ -351,10 +496,10 @@ public struct MainView: View {
 
     // MARK: - Actions
 
-    private func openFilePicker() {
-        let urls = fileService.selectFilesWithOpenPanel(allowsMultiple: true)
-        addURLs(urls)
-    }
+    private func openImagePicker() { addURLs(fileService.selectFilesWithOpenPanel(allowsMultiple: true, kind: .image)) }
+    private func openVideoPicker() { addURLs(fileService.selectFilesWithOpenPanel(allowsMultiple: true, kind: .video)) }
+
+    private func openFilePicker() { openImagePicker() }
 
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
         var foundURLs: [URL] = []
@@ -378,11 +523,15 @@ public struct MainView: View {
         return true
     }
 
+    @MainActor
     private func addURLs(_ urls: [URL]) {
         for url in urls {
-            if !items.contains(where: { $0.url.path == url.path }) {
-                if let newItem = fileService.createImageItem(from: url) {
-                    items.append(newItem)
+            if fileService.isSupportedImage(url), !imageItems.contains(where: { $0.url.path == url.path }), let newItem = fileService.createMediaItem(from: url, kind: .image) { imageItems.append(newItem) }
+            if fileService.isSupportedVideo(url), !videoItems.contains(where: { $0.url.path == url.path }) {
+                Task { @MainActor in
+                    guard let newItem = await fileService.createVideoItem(from: url),
+                          !videoItems.contains(where: { $0.url.path == url.path }) else { return }
+                    videoItems.append(newItem)
                 }
             }
         }
@@ -392,17 +541,38 @@ public struct MainView: View {
     }
 
     private func startBatchResize() {
-        guard !items.isEmpty else { return }
+        startImageBatch()
+    }
 
-        batchService.resizeBatch(
-            items: items,
+    private func startImageBatch() {
+        guard !imageItems.isEmpty else { return }
+
+        imageBatchService.resizeBatch(
+            items: imageItems,
             configuration: appSettings.configuration,
             preset: selectedPreset
         ) { result in
             // When complete, switch to History tab to see results!
-            DispatchQueue.main.async {
-                self.selectedTab = .history
-            }
+            if !imageBatchService.wasStopped { self.selectedTab = .history }
         }
+    }
+
+    private func startVideoBatch() {
+        guard !videoItems.isEmpty else { return }
+        videoBatchService.resizeBatch(items: videoItems, configuration: appSettings.configuration, preset: nil) { _ in
+            if !videoBatchService.wasStopped { self.selectedTab = .history }
+        }
+    }
+
+    private func clearImageQueue() {
+        if imageBatchService.isProcessing { imageBatchService.stop() }
+        imageItems.removeAll()
+        imageBatchService.lastResult = nil
+    }
+
+    private func clearVideoQueue() {
+        if videoBatchService.isProcessing { videoBatchService.stop() }
+        videoItems.removeAll()
+        videoBatchService.lastResult = nil
     }
 }

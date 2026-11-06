@@ -190,31 +190,14 @@ public struct MathematicalGuaranteeCard: View {
                 .padding(.top, 1)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Zero-Distortion Guarantee")
+                Text("Proportional image scaling")
                     .font(.system(size: 11.5, weight: .semibold))
                     .foregroundColor(PrecisionTheme.textPrimary)
 
-                HStack(spacing: 4) {
-                    Text("Scaled proportionally via")
-                        .font(.system(size: 11))
-                        .foregroundColor(PrecisionTheme.textSecondary)
-
-                    Text("min(TW/W, TH/H)")
-                        .font(.system(size: 10.5, weight: .medium, design: .monospaced))
-                        .foregroundColor(PrecisionTheme.blue)
-                        .padding(.horizontal, 4)
-                        .padding(.vertical, 1)
-                        .background(PrecisionTheme.cardBackground)
-                        .cornerRadius(3)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 3)
-                                .stroke(PrecisionTheme.borderSubtle, lineWidth: 1)
-                        )
-
-                    Text(". Strict ratio.")
-                        .font(.system(size: 11))
-                        .foregroundColor(PrecisionTheme.textSecondary)
-                }
+                Text("Images are scaled proportionally and never stretched.")
+                    .font(.system(size: 11.5))
+                    .foregroundColor(PrecisionTheme.textSecondary)
+                    .help("Scale = min(target width ÷ source width, target height ÷ source height)")
             }
         }
         .padding(10)

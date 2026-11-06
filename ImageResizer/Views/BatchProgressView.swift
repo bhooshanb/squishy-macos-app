@@ -6,7 +6,7 @@ public struct BatchProgressView: View {
     public var body: some View {
         VStack(spacing: 16) {
             HStack {
-                Text("Resizing Images…")
+                Text(batchService.isPaused ? "Paused" : "Compressing Files…")
                     .font(.headline)
                 Spacer()
                 Text("\(batchService.processedItems) of \(batchService.totalItems)")
@@ -28,8 +28,8 @@ public struct BatchProgressView: View {
 
                 Spacer()
 
-                Button("Cancel") {
-                    batchService.cancel()
+                Button("Stop") {
+                    batchService.stop()
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)

@@ -4,20 +4,31 @@ public struct ImageRowView: View {
     @ObservedObject public var item: ImageItem
     public let calculatedDimensions: ImageDimensions?
     public let onRemove: () -> Void
+    public let canRemove: Bool
+    public let videoBitratePreset: VideoBitratePreset?
 
     @State private var isHovering: Bool = false
 
     public init(
         item: ImageItem,
         calculatedDimensions: ImageDimensions?,
-        onRemove: @escaping () -> Void
+        onRemove: @escaping () -> Void,
+        canRemove: Bool = true,
+        videoBitratePreset: VideoBitratePreset? = nil
     ) {
         self.item = item
         self.calculatedDimensions = calculatedDimensions
         self.onRemove = onRemove
+        self.canRemove = canRemove
+        self.videoBitratePreset = videoBitratePreset
     }
 
     private var reductionPercentage: Double {
+        if item.mediaKind == .video {
+            guard let source = item.sourceVideoBitrate, source > 0 else { return 0 }
+            let ratio = Double(targetVideoBitrate(sourceBitrate: source)) / Double(source)
+            return (1 - ratio) * 100
+        }
         guard let target = calculatedDimensions,
               item.originalDimensions.width > 0,
               item.originalDimensions.height > 0 else {
@@ -29,7 +40,15 @@ public struct ImageRowView: View {
         return (diff / origArea) * 100.0
     }
 
+    private func targetVideoBitrate(sourceBitrate: Int) -> Int {
+        min(videoBitratePreset?.bitsPerSecond ?? 5_000_000, sourceBitrate)
+    }
+
     private var estimatedSizeString: String {
+        if item.mediaKind == .video, let source = item.sourceVideoBitrate, source > 0 {
+            let ratio = Double(targetVideoBitrate(sourceBitrate: source)) / Double(source)
+            return "~\(ByteCountFormatter.string(fromByteCount: Int64(Double(item.fileSize) * ratio), countStyle: .file))"
+        }
         guard let target = calculatedDimensions,
               item.originalDimensions.width > 0,
               item.originalDimensions.height > 0 else {
@@ -73,7 +92,7 @@ public struct ImageRowView: View {
                     .truncationMode(.middle)
 
                 HStack(spacing: 5) {
-                    Text(item.originalDimensions.description)
+                    Text(item.mediaKind == .video ? "Video · \(item.originalDimensions.description)" : item.originalDimensions.description)
                         .font(.system(size: 11, weight: .regular, design: .monospaced))
                         .foregroundColor(PrecisionTheme.textTertiary)
 
@@ -84,6 +103,12 @@ public struct ImageRowView: View {
                     Text(item.formattedFileSize)
                         .font(.system(size: 11, design: .monospaced))
                         .foregroundColor(PrecisionTheme.textTertiary)
+                }
+
+                if item.mediaKind == .video {
+                    Text("Source bitrate · \(sourceVideoBitrateLabel)")
+                        .font(.system(size: 10, weight: .medium, design: .monospaced))
+                        .foregroundColor(PrecisionTheme.textSecondary)
                 }
             }
 
@@ -129,6 +154,31 @@ public struct ImageRowView: View {
                         .foregroundColor(PrecisionTheme.textTertiary)
                 }
                 .frame(minWidth: 70, alignment: .trailing)
+            } else if item.mediaKind == .video {
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("Resolution kept")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(PrecisionTheme.textPrimary)
+                    let target = item.sourceVideoBitrate.map { targetVideoBitrate(sourceBitrate: $0) } ?? (videoBitratePreset?.bitsPerSecond ?? 5_000_000)
+                    Text("~\(String(format: "%.1f", Double(target) / 1_000_000)) Mbps")
+                        .font(.system(size: 10.5, weight: .medium, design: .monospaced))
+                        .foregroundColor(PrecisionTheme.textSecondary)
+                }
+                .frame(minWidth: 90, alignment: .trailing)
+
+                VStack(alignment: .trailing, spacing: 2) {
+                    if reductionPercentage > 1 {
+                        ReductionPill(percentage: reductionPercentage)
+                    } else {
+                        Text("No estimated reduction")
+                            .font(.system(size: 9.5))
+                            .foregroundColor(PrecisionTheme.textTertiary)
+                    }
+                    Text(estimatedSizeString)
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(PrecisionTheme.textTertiary)
+                }
+                .frame(minWidth: 90, alignment: .trailing)
             }
 
             // Status or Remove Button
@@ -146,6 +196,11 @@ public struct ImageRowView: View {
         }
     }
 
+    private var sourceVideoBitrateLabel: String {
+        guard let bitrate = item.sourceVideoBitrate, bitrate > 0 else { return "Unavailable" }
+        return String(format: "%.2f Mbps", Double(bitrate) / 1_000_000)
+    }
+
     @ViewBuilder
     private var thumbnailView: some View {
         if let thumb = item.thumbnail {
@@ -155,7 +210,7 @@ public struct ImageRowView: View {
         } else {
             ZStack {
                 PrecisionTheme.recessedBackground
-                Image(systemName: "photo")
+                Image(systemName: item.mediaKind == .video ? "video.fill" : "photo")
                     .foregroundColor(PrecisionTheme.textTertiary)
                     .font(.system(size: 14))
             }
@@ -175,6 +230,7 @@ public struct ImageRowView: View {
                     .foregroundColor(isHovering ? PrecisionTheme.danger : PrecisionTheme.textTertiary.opacity(0.5))
             }
             .buttonStyle(.plain)
+            .disabled(!canRemove)
             .help("Remove image from queue")
 
         case .processing:

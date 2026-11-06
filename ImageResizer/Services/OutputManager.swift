@@ -10,7 +10,8 @@ public final class OutputManager: @unchecked Sendable {
         for sourceURL: URL,
         configuration: ResizeConfiguration,
         presetName: String? = nil,
-        fileManager: FileManager = .default
+        fileManager: FileManager = .default,
+        forceExtension: String? = nil
     ) throws -> URL {
         // 1. Resolve destination directory
         let destinationDir: URL
@@ -51,7 +52,9 @@ public final class OutputManager: @unchecked Sendable {
 
         // 3. Resolve target extension
         let targetExtension: String
-        if configuration.outputFormat == .original {
+        if let forceExtension {
+            targetExtension = forceExtension
+        } else if configuration.outputFormat == .original {
             targetExtension = sourceURL.pathExtension
         } else {
             targetExtension = configuration.outputFormat.fileExtension

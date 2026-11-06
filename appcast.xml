@@ -6,13 +6,13 @@
     <description>Most recent updates for Squishy by Silverstone Labs</description>
     <language>en</language>
     <item>
-      <title>Squishy 1.0.0</title>
-      <pubDate>Tue, 27 Oct 2026 11:08:33 +0000</pubDate>
-      <sparkle:version>22</sparkle:version>
-      <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+      <title>Squishy 1.0.22</title>
+      <pubDate>Fri, 06 Nov 2026 16:32:31 +0000</pubDate>
+      <sparkle:version>23</sparkle:version>
+      <sparkle:shortVersionString>1.0.22</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <description><![CDATA[
-        <h2>Squishy 1.0.0</h2>
+        <h2>Squishy 1.0.22</h2>
         <ul>
           <li>Fast, non-distorting native macOS image resizing utility.</li>
           <li>Social media aspect ratio presets, 1-click ratio inversion, and synchronized tabs.</li>
@@ -21,11 +21,11 @@
       ]]></description>
       <enclosure
         url="https://github.com/bhooshanb/squishy-macos-app/releases/download/release/Squishy.zip"
-        sparkle:version="22"
-        sparkle:shortVersionString="1.0.0"
-        length="3198075"
+        sparkle:version="23"
+        sparkle:shortVersionString="1.0.22"
+        length="3043240"
         type="application/octet-stream"
-        sparkle:edSignature="DykXPqxGGa/2QnezNIOVMFJ4i7k8nMpy0OMNFgMARmwSIdXXjIuO/EC0z4Gl7Y6zOkM6ChzavaBGWm6CHIZjBQ==" />
+        sparkle:edSignature="Dxk6t+0VtxDLxvm5Tz314tIiKaJlDHkW8YNgw2tQB0Iaz9UW5/1v4IyeSAohhzkmazY/p4f9bbUqBjl5tuL5CA==" />
     </item>
   </channel>
 </rss>

@@ -5,6 +5,8 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
     public static let shared = BatchResizeService()
 
     @Published public var isProcessing: Bool = false
+    @Published public var isPaused: Bool = false
+    @Published public private(set) var wasStopped: Bool = false
     @Published public var totalItems: Int = 0
     @Published public var processedItems: Int = 0
     @Published public var currentFilename: String = ""
@@ -12,18 +14,43 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
     @Published public var lastResult: BatchResizeResult?
 
     private var activeTask: Task<Void, Never>?
+    private let processingControl = BatchProcessingControl()
     private let engine = ImageResizeEngine.shared
     private let outputManager = OutputManager.shared
+    private let videoEngine = VideoCompressionEngine.shared
 
     public init() {}
 
     /// Cancels any currently executing batch resize
     public func cancel() {
-        activeTask?.cancel()
-        activeTask = nil
-        DispatchQueue.main.async {
-            self.isProcessing = false
-        }
+        stop()
+    }
+
+    public func pause() {
+        guard isProcessing else { return }
+        processingControl.pause()
+        isPaused = true
+    }
+
+    public func resume() {
+        guard isProcessing, isPaused else { return }
+        processingControl.resume()
+        isPaused = false
+    }
+
+    /// Stops after currently running files finish, leaving not-yet-started files idle in the queue.
+    public func stop() {
+        processingControl.stop()
+        isPaused = false
+        wasStopped = true
+    }
+
+    private func waitWhilePaused() -> Bool {
+        processingControl.waitUntilRunning()
+    }
+
+    private func canScheduleMore() -> Bool {
+        !processingControl.isStopped()
     }
 
     /// Resizes an array of ImageItems concurrently with memory-controlled concurrency
@@ -33,11 +60,13 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
         preset: ResizePreset?,
         onComplete: @escaping @MainActor (BatchResizeResult) -> Void
     ) {
-        guard !items.isEmpty else { return }
-
-        cancel()
+        let items = items.filter { !$0.status.isSuccess }
+        guard !items.isEmpty, !isProcessing else { return }
 
         isProcessing = true
+        isPaused = false
+        wasStopped = false
+        processingControl.reset()
         totalItems = items.count
         processedItems = 0
         progressFraction = 0.0
@@ -45,7 +74,9 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
         lastResult = nil
 
         let startTime = Date()
-        let concurrencyLimit = max(1, min(ProcessInfo.processInfo.activeProcessorCount, 4))
+        // One active item makes Pause/Stop deterministic: no additional file starts while the
+        // current item is being paused or stopped.
+        let concurrencyLimit = 1
 
         activeTask = Task.detached(priority: .userInitiated) { [weak self] in
             guard let self = self else { return }
@@ -60,6 +91,7 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
 
                 // Seed initial workers up to concurrency limit
                 while itemIndex < items.count && itemIndex < concurrencyLimit {
+                    if !self.waitWhilePaused() { break }
                     let item = items[itemIndex]
                     itemIndex += 1
 
@@ -71,7 +103,7 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
 
                 // Process completions and feed remaining items
                 for await (item, result) in group {
-                    if Task.isCancelled { break }
+                    if Task.isCancelled { group.cancelAll(); break }
 
                     switch result {
                     case .success(let outputURL):
@@ -86,18 +118,24 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
                         }
 
                     case .failure(let error):
-                        errors.append((filename: item.filename, message: error.localizedDescription))
-
-                        await MainActor.run {
-                            self.processedItems += 1
-                            self.progressFraction = Double(self.processedItems) / Double(self.totalItems)
-                            self.currentFilename = item.filename
-                            item.status = .failed(errorDescription: error.localizedDescription)
+                        if error is CancellationError, self.processingControl.isStopped() {
+                            await MainActor.run { item.status = .idle }
+                        } else {
+                            errors.append((filename: item.filename, message: error.localizedDescription))
+                            await MainActor.run {
+                                self.processedItems += 1
+                                self.progressFraction = Double(self.processedItems) / Double(self.totalItems)
+                                self.currentFilename = item.filename
+                                item.status = .failed(errorDescription: error.localizedDescription)
+                            }
                         }
                     }
 
+
                     // Feed next task if available
-                    if itemIndex < items.count && !Task.isCancelled {
+                    _ = self.waitWhilePaused()
+                    let shouldScheduleNext = self.canScheduleMore()
+                    if itemIndex < items.count && !Task.isCancelled && shouldScheduleNext {
                         let nextItem = items[itemIndex]
                         itemIndex += 1
 
@@ -122,6 +160,7 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
 
             await MainActor.run {
                 self.isProcessing = false
+                self.isPaused = false
                 self.lastResult = finalResult
                 onComplete(finalResult)
             }
@@ -139,6 +178,12 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
 
         do {
             // 1. Calculate dimensions for this individual image
+            if item.mediaKind == .video {
+                let destinationURL = try outputManager.resolveDestinationURL(for: item.url, configuration: configuration, presetName: preset?.name, forceExtension: "mp4")
+                try await videoEngine.compress(from: item.url, to: destinationURL, outputBitrate: configuration.videoBitratePreset.bitsPerSecond, control: processingControl)
+                return .success(destinationURL)
+            }
+
             let targetDimensions = ImageResizeEngine.calculateDimensions(
                 original: item.originalDimensions,
                 mode: configuration.mode,

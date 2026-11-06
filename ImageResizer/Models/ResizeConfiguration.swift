@@ -32,6 +32,24 @@ public enum CollisionHandling: String, CaseIterable, Identifiable, Codable {
     }
 }
 
+public enum VideoBitratePreset: Int, CaseIterable, Identifiable, Codable {
+    case low = 3_000_000
+    case medium = 5_000_000
+    case high = 8_000_000
+    case superQuality = 10_000_000
+
+    public var id: Int { rawValue }
+    public var bitsPerSecond: Int { rawValue }
+    public var displayName: String {
+        switch self {
+        case .low: return "Low · 3 Mbps"
+        case .medium: return "Medium · 5 Mbps"
+        case .high: return "High · 8 Mbps"
+        case .superQuality: return "Super · 10 Mbps"
+        }
+    }
+}
+
 /// Complete configuration for a resize operation.
 public struct ResizeConfiguration: Codable, Equatable {
     public var mode: ResizeMode
@@ -50,6 +68,7 @@ public struct ResizeConfiguration: Codable, Equatable {
     public var collisionHandling: CollisionHandling
     public var preserveMetadata: Bool
     public var preserveFileTimestamps: Bool
+    public var videoBitratePreset: VideoBitratePreset
 
     public init(
         mode: ResizeMode = .preset,
@@ -67,7 +86,8 @@ public struct ResizeConfiguration: Codable, Equatable {
         appendPresetNameToFilename: Bool = false,
         collisionHandling: CollisionHandling = .renameWithNumber,
         preserveMetadata: Bool = true,
-        preserveFileTimestamps: Bool = true
+        preserveFileTimestamps: Bool = true,
+        videoBitratePreset: VideoBitratePreset = .medium
     ) {
         self.mode = mode
         self.selectedPresetId = selectedPresetId
@@ -85,6 +105,7 @@ public struct ResizeConfiguration: Codable, Equatable {
         self.collisionHandling = collisionHandling
         self.preserveMetadata = preserveMetadata
         self.preserveFileTimestamps = preserveFileTimestamps
+        self.videoBitratePreset = videoBitratePreset
     }
 
     public init(from decoder: Decoder) throws {
@@ -105,6 +126,7 @@ public struct ResizeConfiguration: Codable, Equatable {
         self.collisionHandling = try container.decodeIfPresent(CollisionHandling.self, forKey: .collisionHandling) ?? .renameWithNumber
         self.preserveMetadata = try container.decodeIfPresent(Bool.self, forKey: .preserveMetadata) ?? true
         self.preserveFileTimestamps = try container.decodeIfPresent(Bool.self, forKey: .preserveFileTimestamps) ?? true
+        self.videoBitratePreset = try container.decodeIfPresent(VideoBitratePreset.self, forKey: .videoBitratePreset) ?? .medium
     }
 
     public static let `default` = ResizeConfiguration()

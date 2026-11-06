@@ -1,6 +1,11 @@
 import Foundation
 import AppKit
 
+public enum MediaKind: String, Codable {
+    case image
+    case video
+}
+
 public enum ResizeItemStatus: Equatable {
     case idle
     case processing
@@ -32,6 +37,8 @@ public final class ImageItem: Identifiable, ObservableObject, @unchecked Sendabl
     public let originalDimensions: ImageDimensions
     public let utiString: String?
     public let formatName: String
+    public let mediaKind: MediaKind
+    public let sourceVideoBitrate: Int?
 
     @Published public var thumbnail: NSImage?
     @Published public var status: ResizeItemStatus = .idle
@@ -45,7 +52,9 @@ public final class ImageItem: Identifiable, ObservableObject, @unchecked Sendabl
         originalDimensions: ImageDimensions,
         utiString: String? = nil,
         formatName: String = "Image",
-        thumbnail: NSImage? = nil
+        thumbnail: NSImage? = nil,
+        mediaKind: MediaKind = .image,
+        sourceVideoBitrate: Int? = nil
     ) {
         self.id = id
         self.url = url
@@ -54,6 +63,8 @@ public final class ImageItem: Identifiable, ObservableObject, @unchecked Sendabl
         self.originalDimensions = originalDimensions
         self.utiString = utiString
         self.formatName = formatName
+        self.mediaKind = mediaKind
+        self.sourceVideoBitrate = sourceVideoBitrate
         self.thumbnail = thumbnail
         self.status = .idle
     }

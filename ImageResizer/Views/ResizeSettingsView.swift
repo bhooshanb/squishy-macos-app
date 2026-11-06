@@ -7,11 +7,17 @@ public struct ResizeSettingsView: View {
     public let sampleItem: ImageItem?
     public let queueCount: Int
     public let isProcessing: Bool
+    public let isPaused: Bool
+    public let progressFraction: Double
+    public let currentFilename: String
     public let onStartResize: () -> Void
-    public var onEditPresets: (() -> Void)? = nil
-
-    @State private var showPresetManager: Bool = false
+    public let showsActionBar: Bool
+    public let onPause: () -> Void
+    public let onResume: () -> Void
+    public let onStop: () -> Void
+    public let videoBitratePreset: Binding<VideoBitratePreset>?
     @State private var areRatiosInverted: Bool = false
+    private var hasVideo: Bool { sampleItem?.mediaKind == .video }
 
     public init(
         configuration: Binding<ResizeConfiguration>,
@@ -19,14 +25,28 @@ public struct ResizeSettingsView: View {
         queueCount: Int,
         isProcessing: Bool,
         onStartResize: @escaping () -> Void,
-        onEditPresets: (() -> Void)? = nil
+        showsActionBar: Bool = true,
+        videoBitratePreset: Binding<VideoBitratePreset>? = nil,
+        isPaused: Bool = false,
+        progressFraction: Double = 0,
+        currentFilename: String = "",
+        onPause: @escaping () -> Void = {},
+        onResume: @escaping () -> Void = {},
+        onStop: @escaping () -> Void = {}
     ) {
         self._configuration = configuration
         self.sampleItem = sampleItem
         self.queueCount = queueCount
         self.isProcessing = isProcessing
+        self.isPaused = isPaused
+        self.progressFraction = progressFraction
+        self.currentFilename = currentFilename
         self.onStartResize = onStartResize
-        self.onEditPresets = onEditPresets
+        self.showsActionBar = showsActionBar
+        self.onPause = onPause
+        self.onResume = onResume
+        self.onStop = onStop
+        self.videoBitratePreset = videoBitratePreset
     }
 
     private var activePreset: ResizePreset? {
@@ -36,51 +56,64 @@ public struct ResizeSettingsView: View {
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                // Main Configuration Card
-                mainConfigurationCard
+                if !hasVideo { mainConfigurationCard }
+                else { videoExportSettingsCard }
 
                 // Format & Output Card
-                formatAndOutputCard
+                if !hasVideo { formatAndOutputCard }
             }
             .padding(16)
         }
         .frame(minWidth: 320, idealWidth: 360, maxWidth: .infinity)
         .background(PrecisionTheme.background)
-        .sheet(isPresented: $showPresetManager) {
-            PresetManagerSheet()
+    }
+
+    private var videoExportSettingsCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("VIDEO EXPORT · MP4 / H.264")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundColor(PrecisionTheme.textTertiary)
+            HStack {
+                Text("Output bitrate").font(.system(size: 12, weight: .medium))
+                Spacer()
+                if let videoBitratePreset {
+                    Picker("", selection: videoBitratePreset) {
+                        ForEach(VideoBitratePreset.allCases) { preset in Text(preset.displayName).tag(preset) }
+                    }
+                    .pickerStyle(.menu)
+                }
+            }
+            if showsActionBar { bottomActionBar }
         }
+        .padding(14)
+        .background(PrecisionTheme.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     // MARK: - Main Configuration Card
     private var mainConfigurationCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             // Scaling Mode Header
-            HStack {
-                Text("SCALING MODE")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundColor(PrecisionTheme.textTertiary)
-
-                Spacer()
-
-                Button("Edit Presets…") {
-                    if let onEditPresets = onEditPresets {
-                        onEditPresets()
-                    } else {
-                        showPresetManager = true
-                    }
-                }
-                .buttonStyle(.plain)
-                .font(.system(size: 11, weight: .medium))
-                .foregroundColor(PrecisionTheme.blue)
-            }
+            Text("IMAGE SIZE")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundColor(PrecisionTheme.textTertiary)
 
             // Mode Selector Bar
             HStack(spacing: 2) {
                 modeButton(title: "Presets", mode: .preset)
                 modeButton(title: "Bounds", mode: .fit)
-                modeButton(title: "% Scale", mode: .percentage)
-                modeButton(title: "Width", mode: .widthOnly)
-                modeButton(title: "Height", mode: .heightOnly)
+                Menu {
+                    Button("% Scale") { selectMode(.percentage) }
+                    Button("Width only") { selectMode(.widthOnly) }
+                    Button("Height only") { selectMode(.heightOnly) }
+                } label: {
+                    Text([ResizeMode.percentage, .widthOnly, .heightOnly].contains(configuration.mode) ? modeTitle(configuration.mode) : "More")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(PrecisionTheme.textSecondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 5)
+                }
+                .menuStyle(.borderlessButton)
             }
             .padding(2)
             .background(PrecisionTheme.recessedBackground)
@@ -116,7 +149,7 @@ public struct ResizeSettingsView: View {
             }
 
             // Bottom Action Bar
-            bottomActionBar
+            if showsActionBar { bottomActionBar }
         }
         .padding(16)
         .background(PrecisionTheme.cardBackground)
@@ -131,17 +164,7 @@ public struct ResizeSettingsView: View {
     private func modeButton(title: String, mode: ResizeMode) -> some View {
         let isSelected = configuration.mode == mode
         return Button(action: {
-            let oldMode = configuration.mode
-            guard oldMode != mode else { return }
-            ImageResizeEngine.adaptConfigurationOnModeChange(
-                configuration: &configuration,
-                from: oldMode,
-                to: mode,
-                preset: activePreset,
-                availablePresets: presetStore.presets,
-                sampleOriginal: sampleItem?.originalDimensions
-            )
-            configuration.mode = mode
+            selectMode(mode)
         }) {
             Text(title)
                 .font(.system(size: 12, weight: isSelected ? .semibold : .medium))
@@ -153,6 +176,29 @@ public struct ResizeSettingsView: View {
                 .shadow(color: isSelected ? Color.black.opacity(0.06) : Color.clear, radius: 1, x: 0, y: 1)
         }
         .buttonStyle(.plain)
+    }
+
+    private func modeTitle(_ mode: ResizeMode) -> String {
+        switch mode {
+        case .percentage: "% Scale"
+        case .widthOnly: "Width"
+        case .heightOnly: "Height"
+        default: "More"
+        }
+    }
+
+    private func selectMode(_ mode: ResizeMode) {
+        let oldMode = configuration.mode
+        guard oldMode != mode else { return }
+        ImageResizeEngine.adaptConfigurationOnModeChange(
+            configuration: &configuration,
+            from: oldMode,
+            to: mode,
+            preset: activePreset,
+            availablePresets: presetStore.presets,
+            sampleOriginal: sampleItem?.originalDimensions
+        )
+        configuration.mode = mode
     }
 
     // MARK: - Presets Radio Cards
@@ -421,7 +467,17 @@ public struct ResizeSettingsView: View {
 
     // MARK: - Bottom Action Bar
     private var bottomActionBar: some View {
-        HStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 8) {
+            if isProcessing {
+                ProgressView(value: progressFraction)
+                    .progressViewStyle(.linear)
+                Text(currentFilename.isEmpty ? (isPaused ? "Paused" : "Processing…") : "Processing: \(currentFilename)")
+                    .font(.system(size: 10))
+                    .foregroundColor(PrecisionTheme.textTertiary)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+            }
+            HStack(spacing: 8) {
             Button(action: onStartResize) {
                 HStack(spacing: 6) {
                     if isProcessing {
@@ -432,7 +488,7 @@ public struct ResizeSettingsView: View {
                             .font(.system(size: 11))
                     }
 
-                    Text(queueCount > 0 ? "Resize \(queueCount) \(queueCount == 1 ? "Image" : "Images")" : "Resize Images")
+                    Text(queueCount > 0 ? "Compress \(queueCount) \(queueCount == 1 ? "File" : "Files")" : "Compress Files")
                         .font(.system(size: 12.5, weight: .semibold))
 
                     ShortcutBadge("⌘↵")
@@ -447,6 +503,21 @@ public struct ResizeSettingsView: View {
             .buttonStyle(.plain)
             .disabled(queueCount == 0 || isProcessing)
             .keyboardShortcut(.return, modifiers: .command)
+
+            if isProcessing {
+                Button(action: isPaused ? onResume : onPause) {
+                    Label(isPaused ? "Resume" : "Pause", systemImage: isPaused ? "play.fill" : "pause.fill")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                Button(action: onStop) {
+                    Label("Stop", systemImage: "stop.fill")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .tint(.red)
+            }
+            }
         }
         .padding(.top, 4)
     }
@@ -454,24 +525,24 @@ public struct ResizeSettingsView: View {
     // MARK: - Format & Output Card
     private var formatAndOutputCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("OUTPUT FORMAT & QUALITY")
+            Text(hasVideo ? "VIDEO EXPORT · MP4" : "OUTPUT FORMAT & QUALITY")
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundColor(PrecisionTheme.textTertiary)
 
             HStack {
-                Text("Format")
+                Text(hasVideo ? "Output" : "Format")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(PrecisionTheme.textPrimary)
 
                 Spacer()
 
-                Picker("", selection: $configuration.outputFormat) {
+                if !hasVideo { Picker("", selection: $configuration.outputFormat) {
                     ForEach(OutputFormat.allCases) { format in
                         Text(format.displayName).tag(format)
                     }
                 }
                 .pickerStyle(.menu)
-                .frame(width: 140)
+                .frame(width: 140) }
             }
 
             if configuration.outputFormat.supportsQuality {
@@ -507,9 +578,10 @@ public struct ResizeSettingsView: View {
 
         return VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 6) {
-                Text("Aspect Ratio:")
+                Text("Fit within bounds · preserve ratio")
                     .font(.system(size: 10.5, weight: .medium))
                     .foregroundColor(PrecisionTheme.textTertiary)
+                    .help("These dimensions set a maximum bounding box. Images are fitted inside it without cropping or stretching.")
 
                 Spacer()
 

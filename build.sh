@@ -23,7 +23,12 @@ PROJECT_NAME="ImageResizer"
 APP_NAME="Squishy"
 PROJECT_FILE="${PROJECT_ROOT}/${PROJECT_NAME}.xcodeproj"
 BUILD_DIR="${PROJECT_ROOT}/build"
-DERIVED_DATA_DIR="${PROJECT_ROOT}/build/DerivedData"
+# Keep this checkout's DerivedData separate from caches copied from an older
+# project location, since SwiftPM records absolute artifact paths in that cache.
+DERIVED_DATA_DIR="${PROJECT_ROOT}/build/DerivedData-local"
+# Use a fresh SwiftPM checkout each run. This also avoids copied read-only
+# SourcePackages checkouts and stale absolute artifact paths from old clones.
+CLONED_SOURCE_PACKAGES_DIR="$(mktemp -d "${TMPDIR:-/tmp}/squishy-source-packages.XXXXXX")"
 VERSION_FILE="${PROJECT_ROOT}/VERSION"
 APPCAST_FILE="${PROJECT_ROOT}/appcast.xml"
 
@@ -122,6 +127,24 @@ ensure_xcode_project() {
     fi
 }
 
+resolve_package_dependencies() {
+    # SwiftPM stores absolute artifact paths in workspace-state.json. If this
+    # checkout moved, discard only the path-bound package state so Xcode can
+    # resolve the artifacts at the current DerivedData location.
+    local package_state="${DERIVED_DATA_DIR}/SourcePackages/workspace-state.json"
+    if [[ -f "${package_state}" ]] && grep -q -F '"path" : "/' "${package_state}"; then
+        rm -f "${package_state}"
+    fi
+
+    print_header "Resolving Swift package dependencies for this checkout..."
+    xcodebuild \
+        -project "${PROJECT_FILE}" \
+        -scheme "${PROJECT_NAME}" \
+        -derivedDataPath "${DERIVED_DATA_DIR}" \
+        -clonedSourcePackagesDirPath "${CLONED_SOURCE_PACKAGES_DIR}" \
+        -resolvePackageDependencies
+}
+
 clean_build() {
     print_header "Cleaning build directory..."
     rm -rf "${BUILD_DIR}"
@@ -130,6 +153,7 @@ clean_build() {
 
 run_tests() {
     ensure_xcode_project
+    resolve_package_dependencies
     print_header "Running automated unit tests..."
 
     local version="$(get_version)"
@@ -304,6 +328,7 @@ build_configuration() {
     local build_num="$(get_build_number)"
 
     ensure_xcode_project
+    resolve_package_dependencies
     print_header "Building ${label} ${APP_NAME}.app bundle (v${version}, build ${build_num})..."
 
     mkdir -p "${target_output_dir}"
@@ -315,6 +340,7 @@ build_configuration() {
             -scheme "${PROJECT_NAME}" \
             -configuration "${config}" \
             -derivedDataPath "${DERIVED_DATA_DIR}" \
+            -clonedSourcePackagesDirPath "${CLONED_SOURCE_PACKAGES_DIR}" \
             MARKETING_VERSION="${version}" \
             CURRENT_PROJECT_VERSION="${build_num}" \
             "ARCHS=arm64 x86_64" \
@@ -326,6 +352,7 @@ build_configuration() {
             -scheme "${PROJECT_NAME}" \
             -configuration "${config}" \
             -derivedDataPath "${DERIVED_DATA_DIR}" \
+            -clonedSourcePackagesDirPath "${CLONED_SOURCE_PACKAGES_DIR}" \
             MARKETING_VERSION="${version}" \
             CURRENT_PROJECT_VERSION="${build_num}" \
             build

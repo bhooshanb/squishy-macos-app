@@ -26,15 +26,17 @@ targets:
     dependencies:
       - package: Sparkle
         product: Sparkle
+    preBuildScripts:
+      - name: "Bump Marketing Version"
+        script: |
+          "${SRCROOT}/scripts/bump-version.sh"
+          version=$(cat "${SRCROOT}/VERSION" | tr -d '[:space:]')
     postCompileScripts:
       - name: "Stamp Auto Version and Git Feed to Plist"
         script: |
-          build_number=$(git -C "${SRCROOT}" rev-list --count HEAD 2>/dev/null || echo "1")
-          if [ -f "${SRCROOT}/VERSION" ]; then
-            version=$(cat "${SRCROOT}/VERSION" | tr -d '[:space:]')
-          else
-            version="1.0.0"
-          fi
+          major=${version%%.*}; rest=${version#*.}; minor=${rest%%.*}; patch=${rest#*.}
+          build_number=$((major * 1000000 + minor * 1000 + patch))
+          version=$(cat "${SRCROOT}/VERSION" | tr -d '[:space:]')
           remote_url=$(git -C "${SRCROOT}" config --get remote.origin.url 2>/dev/null || echo "")
           if [[ "${remote_url}" =~ github\.com[:/]([^/]+)/([^/.]+)(\.git)? ]]; then
             owner="${BASH_REMATCH[1]}"

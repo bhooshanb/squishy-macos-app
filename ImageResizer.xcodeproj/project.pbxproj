@@ -1,674 +1,1698 @@
-// !$*UTF8*$!
-{
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 77;
-	objects = {
-
-/* Begin PBXBuildFile section */
-		01BB1C7074DF2C79383A33B6 /* PresetManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DFED34BE54C31A7DEBB910 /* PresetManagerView.swift */; };
-		147B550A11F25C506F03887F /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD337D0A77A29173B767EF0 /* AppSettings.swift */; };
-		17828CB11AB0CF4EDFDD11E1 /* ImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2438F8E242EED746A5FB15 /* ImageItem.swift */; };
-		2B4A978FC6E8369A7D455C25 /* ImageResizerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BCAF3ED64BE14CE230BF47 /* ImageResizerApp.swift */; };
-		30083F208D33B50B96D1D0C0 /* OutputManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4ED0FB93F08702CD6DAEC4 /* OutputManagerTests.swift */; };
-		3BCF71F055DD3E1ECC7A1810 /* ResizeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523B0957E553BECF556A2E94 /* ResizeSettingsView.swift */; };
-		3F5DD4B82ED74629D96707C7 /* ResizePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24589BAF7B2BAEE4C6D94AC8 /* ResizePreset.swift */; };
-		4C3A36A5F0CD228169D6E0AF /* ResizeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8844137782B60A8FDA41D671 /* ResizeMode.swift */; };
-		517D88C65856BAC173DF328B /* BatchProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA711E64B40C10E024C868 /* BatchProgressView.swift */; };
-		5DCEDC1F8E22B94162E79052 /* ResizeConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EDFDFF95227C57B58350C7 /* ResizeConfiguration.swift */; };
-		678CEC85132860387675FF20 /* ImageDimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65074F367DC5A3967D8F96C5 /* ImageDimensions.swift */; };
-		68756059425BBE264F2A0C8D /* ImageProcessingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2C269B6A40FE3D54C96D28 /* ImageProcessingTests.swift */; };
-		6B5E924F512DC8016C608EBA /* OutputFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C8F793D447E3D2807E2B39 /* OutputFormat.swift */; };
-		71BF0130A3AD170A9560C328 /* PresetManagerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A981885A26C05A5981F86C8 /* PresetManagerSheet.swift */; };
-		7BC457F3697310F8E8B1136E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47185DD7426582AE2FA4B4D /* MainView.swift */; };
-		81242A070D83FAE837CF7122 /* AspectRatioPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE8DB9F3442C364391B01E /* AspectRatioPreset.swift */; };
-		878E746C9472938FAECC775A /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D5E0358395ABECEB4CFD78 /* CardContainer.swift */; };
-		893E9D2979440388ADC632F3 /* OutputSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5819E0F4D39620B6D1F0F /* OutputSettingsView.swift */; };
-		8D8293C389F3E958195569B1 /* UpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E154740932A434BAADF00A68 /* UpdateManagerTests.swift */; };
-		9D2EEFA5C6203DDE05FE6C01 /* UpdateSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E54437F7EDC699F59BA6E1 /* UpdateSettingsView.swift */; };
-		A1C2AFCD577C234BC9167B22 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = F3C4D2B4BBFCA625C0306B91 /* Sparkle */; };
-		AA336B8E03589C595031889F /* PresetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553CF22645E62C9088112757 /* PresetStore.swift */; };
-		BA172C95712D8AC1DE4A7325 /* AspectRatioLockIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8B1A6397871B2DB3877C76 /* AspectRatioLockIndicator.swift */; };
-		C1DEB12799F9CF436D7C1FD2 /* ImageRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568135CD1282FC80A9753F9F /* ImageRowView.swift */; };
-		C249E2241122022FDF2B9678 /* ImageResizeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BFCDFB273A2532D83288D4 /* ImageResizeEngine.swift */; };
-		C8AF13B63C94A16B18A883B8 /* BatchHistoryResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8855A36DBDEFAF79D7E6C217 /* BatchHistoryResultsView.swift */; };
-		C91A11EAB2B53BF39C285229 /* OutputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD14A36547AA508CBB25F54B /* OutputManager.swift */; };
-		CDFED7E244E6B9FE61ED2ECC /* BatchResizeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B59BD9962BFCCEC0CCEF64 /* BatchResizeResult.swift */; };
-		D3C111D3D7DCE73DC1B806EE /* PresetStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C61EA5C548FBB0E770CB9B /* PresetStoreTests.swift */; };
-		D4A363A482B67E37BA97F2A9 /* ResizeResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40AE1F9FB19061B574316D4 /* ResizeResultsView.swift */; };
-		DB9867B4ECE95AEA96AE572D /* BatchResizeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F47ED27D8C8DB60A19FE9C /* BatchResizeService.swift */; };
-		DDED76223A74A7751E0E9BAB /* EmptyDropZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D765AD452FC38A8E90612B /* EmptyDropZoneView.swift */; };
-		E2257CD5C529FE9B76B77C1F /* StitchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953528C7A4F3FBEB58A37497 /* StitchTheme.swift */; };
-		E935151E69DC2CD9D160EB8E /* AspectRatioPresetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1D2E1407AC5D639126723C /* AspectRatioPresetTests.swift */; };
-		EE1FE904A162237412443BCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A0E8FA004D279E5C3BA3136 /* Assets.xcassets */; };
-		F58D1764D9DA4ADEAEE92205 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BB1BC625CF06E7F5FFE92B /* UpdateManager.swift */; };
-		F8E227A854829AE0C88FFAFB /* ImageQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F73296448AFDA083A3DE4C /* ImageQueueView.swift */; };
-		F907BF19A4022D51F2A72A69 /* ImageFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5793DA52820B83A808A666 /* ImageFileService.swift */; };
-		FA6063864D902ECE5D8A0114 /* DropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7156E53A4C4B997232E37BE /* DropOverlayView.swift */; };
-		FBC88FE66E21E201D2B21EC6 /* ImageResizeEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EB2DE5626FC8D962BB8CA0 /* ImageResizeEngineTests.swift */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		A888F4E4F5F468CE4606A47F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 174B0EF765EC9972B479D72D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = EA179E15EE389B92D1AAE3E2;
-			remoteInfo = ImageResizer;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXFileReference section */
-		09EDFDFF95227C57B58350C7 /* ResizeConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeConfiguration.swift; sourceTree = "<group>"; };
-		16B0FB1DC6164429DCF3191E /* ImageResizerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageResizerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1E7FA2804DB748ADB0A10103 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		24589BAF7B2BAEE4C6D94AC8 /* ResizePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizePreset.swift; sourceTree = "<group>"; };
-		26B59BD9962BFCCEC0CCEF64 /* BatchResizeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchResizeResult.swift; sourceTree = "<group>"; };
-		26F73296448AFDA083A3DE4C /* ImageQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQueueView.swift; sourceTree = "<group>"; };
-		38EB2DE5626FC8D962BB8CA0 /* ImageResizeEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizeEngineTests.swift; sourceTree = "<group>"; };
-		3A2438F8E242EED746A5FB15 /* ImageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageItem.swift; sourceTree = "<group>"; };
-		40D5E0358395ABECEB4CFD78 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
-		41DFED34BE54C31A7DEBB910 /* PresetManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManagerView.swift; sourceTree = "<group>"; };
-		51F47ED27D8C8DB60A19FE9C /* BatchResizeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchResizeService.swift; sourceTree = "<group>"; };
-		523B0957E553BECF556A2E94 /* ResizeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeSettingsView.swift; sourceTree = "<group>"; };
-		553CF22645E62C9088112757 /* PresetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetStore.swift; sourceTree = "<group>"; };
-		568135CD1282FC80A9753F9F /* ImageRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRowView.swift; sourceTree = "<group>"; };
-		56BFCDFB273A2532D83288D4 /* ImageResizeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizeEngine.swift; sourceTree = "<group>"; };
-		57C61EA5C548FBB0E770CB9B /* PresetStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetStoreTests.swift; sourceTree = "<group>"; };
-		59AA711E64B40C10E024C868 /* BatchProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchProgressView.swift; sourceTree = "<group>"; };
-		5A0E8FA004D279E5C3BA3136 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		65074F367DC5A3967D8F96C5 /* ImageDimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDimensions.swift; sourceTree = "<group>"; };
-		7A1D2E1407AC5D639126723C /* AspectRatioPresetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioPresetTests.swift; sourceTree = "<group>"; };
-		7A2C269B6A40FE3D54C96D28 /* ImageProcessingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessingTests.swift; sourceTree = "<group>"; };
-		7A981885A26C05A5981F86C8 /* PresetManagerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManagerSheet.swift; sourceTree = "<group>"; };
-		7E4ED0FB93F08702CD6DAEC4 /* OutputManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputManagerTests.swift; sourceTree = "<group>"; };
-		7E8B1A6397871B2DB3877C76 /* AspectRatioLockIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioLockIndicator.swift; sourceTree = "<group>"; };
-		81BB1BC625CF06E7F5FFE92B /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
-		8844137782B60A8FDA41D671 /* ResizeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeMode.swift; sourceTree = "<group>"; };
-		8855A36DBDEFAF79D7E6C217 /* BatchHistoryResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchHistoryResultsView.swift; sourceTree = "<group>"; };
-		8BD337D0A77A29173B767EF0 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
-		90C8F793D447E3D2807E2B39 /* OutputFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputFormat.swift; sourceTree = "<group>"; };
-		94C4BB69E6D2053C0C2FDABF /* ImageResizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageResizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		953528C7A4F3FBEB58A37497 /* StitchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchTheme.swift; sourceTree = "<group>"; };
-		A5BCAF3ED64BE14CE230BF47 /* ImageResizerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizerApp.swift; sourceTree = "<group>"; };
-		ABC5819E0F4D39620B6D1F0F /* OutputSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputSettingsView.swift; sourceTree = "<group>"; };
-		B47185DD7426582AE2FA4B4D /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		D7D765AD452FC38A8E90612B /* EmptyDropZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDropZoneView.swift; sourceTree = "<group>"; };
-		E154740932A434BAADF00A68 /* UpdateManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManagerTests.swift; sourceTree = "<group>"; };
-		E1AE8DB9F3442C364391B01E /* AspectRatioPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioPreset.swift; sourceTree = "<group>"; };
-		E1E54437F7EDC699F59BA6E1 /* UpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSettingsView.swift; sourceTree = "<group>"; };
-		E20694B04B8A7BBEED4679C6 /* ImageResizer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageResizer.entitlements; sourceTree = "<group>"; };
-		F40AE1F9FB19061B574316D4 /* ResizeResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeResultsView.swift; sourceTree = "<group>"; };
-		F7156E53A4C4B997232E37BE /* DropOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropOverlayView.swift; sourceTree = "<group>"; };
-		FC5793DA52820B83A808A666 /* ImageFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileService.swift; sourceTree = "<group>"; };
-		FD14A36547AA508CBB25F54B /* OutputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputManager.swift; sourceTree = "<group>"; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		E09218E4459CB8CE450CC2B0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A1C2AFCD577C234BC9167B22 /* Sparkle in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		019E80D3B1BED5DDAE811B2F /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				E1AE8DB9F3442C364391B01E /* AspectRatioPreset.swift */,
-				26B59BD9962BFCCEC0CCEF64 /* BatchResizeResult.swift */,
-				65074F367DC5A3967D8F96C5 /* ImageDimensions.swift */,
-				3A2438F8E242EED746A5FB15 /* ImageItem.swift */,
-				90C8F793D447E3D2807E2B39 /* OutputFormat.swift */,
-				09EDFDFF95227C57B58350C7 /* ResizeConfiguration.swift */,
-				8844137782B60A8FDA41D671 /* ResizeMode.swift */,
-				24589BAF7B2BAEE4C6D94AC8 /* ResizePreset.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		04EBA10E0CFDD58DB9E712B8 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				7E8B1A6397871B2DB3877C76 /* AspectRatioLockIndicator.swift */,
-				40D5E0358395ABECEB4CFD78 /* CardContainer.swift */,
-				F7156E53A4C4B997232E37BE /* DropOverlayView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		0944CAAD24F0AED078FED9AF /* Entitlements */ = {
-			isa = PBXGroup;
-			children = (
-				E20694B04B8A7BBEED4679C6 /* ImageResizer.entitlements */,
-			);
-			path = Entitlements;
-			sourceTree = "<group>";
-		};
-		0C7D46E204E9172F9567FA90 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				51F47ED27D8C8DB60A19FE9C /* BatchResizeService.swift */,
-				FC5793DA52820B83A808A666 /* ImageFileService.swift */,
-				56BFCDFB273A2532D83288D4 /* ImageResizeEngine.swift */,
-				FD14A36547AA508CBB25F54B /* OutputManager.swift */,
-				553CF22645E62C9088112757 /* PresetStore.swift */,
-				81BB1BC625CF06E7F5FFE92B /* UpdateManager.swift */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		3121268921290407C9CA106E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				94C4BB69E6D2053C0C2FDABF /* ImageResizer.app */,
-				16B0FB1DC6164429DCF3191E /* ImageResizerTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		441E83A6A6B81462DEB20FA8 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				8BD337D0A77A29173B767EF0 /* AppSettings.swift */,
-				A5BCAF3ED64BE14CE230BF47 /* ImageResizerApp.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		A2F6FBE3E90C04CE9781F76B /* ImageResizer */ = {
-			isa = PBXGroup;
-			children = (
-				441E83A6A6B81462DEB20FA8 /* App */,
-				0944CAAD24F0AED078FED9AF /* Entitlements */,
-				019E80D3B1BED5DDAE811B2F /* Models */,
-				CDD098C4ADF4B1F0598DBBC9 /* Resources */,
-				0C7D46E204E9172F9567FA90 /* Services */,
-				B60BAE2FE0AD5DAB7D86177E /* Views */,
-			);
-			path = ImageResizer;
-			sourceTree = "<group>";
-		};
-		B60BAE2FE0AD5DAB7D86177E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				8855A36DBDEFAF79D7E6C217 /* BatchHistoryResultsView.swift */,
-				59AA711E64B40C10E024C868 /* BatchProgressView.swift */,
-				D7D765AD452FC38A8E90612B /* EmptyDropZoneView.swift */,
-				26F73296448AFDA083A3DE4C /* ImageQueueView.swift */,
-				568135CD1282FC80A9753F9F /* ImageRowView.swift */,
-				B47185DD7426582AE2FA4B4D /* MainView.swift */,
-				ABC5819E0F4D39620B6D1F0F /* OutputSettingsView.swift */,
-				7A981885A26C05A5981F86C8 /* PresetManagerSheet.swift */,
-				41DFED34BE54C31A7DEBB910 /* PresetManagerView.swift */,
-				F40AE1F9FB19061B574316D4 /* ResizeResultsView.swift */,
-				523B0957E553BECF556A2E94 /* ResizeSettingsView.swift */,
-				953528C7A4F3FBEB58A37497 /* StitchTheme.swift */,
-				E1E54437F7EDC699F59BA6E1 /* UpdateSettingsView.swift */,
-				04EBA10E0CFDD58DB9E712B8 /* Components */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		CCB22035EBEB1888E9BA95FB = {
-			isa = PBXGroup;
-			children = (
-				A2F6FBE3E90C04CE9781F76B /* ImageResizer */,
-				F7F79CBECDAB4CEF28C40CE2 /* ImageResizerTests */,
-				3121268921290407C9CA106E /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		CDD098C4ADF4B1F0598DBBC9 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				5A0E8FA004D279E5C3BA3136 /* Assets.xcassets */,
-				1E7FA2804DB748ADB0A10103 /* Info.plist */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		F7F79CBECDAB4CEF28C40CE2 /* ImageResizerTests */ = {
-			isa = PBXGroup;
-			children = (
-				7A1D2E1407AC5D639126723C /* AspectRatioPresetTests.swift */,
-				7A2C269B6A40FE3D54C96D28 /* ImageProcessingTests.swift */,
-				38EB2DE5626FC8D962BB8CA0 /* ImageResizeEngineTests.swift */,
-				7E4ED0FB93F08702CD6DAEC4 /* OutputManagerTests.swift */,
-				57C61EA5C548FBB0E770CB9B /* PresetStoreTests.swift */,
-				E154740932A434BAADF00A68 /* UpdateManagerTests.swift */,
-			);
-			path = ImageResizerTests;
-			sourceTree = "<group>";
-		};
-/* End PBXGroup section */
-
-/* Begin PBXNativeTarget section */
-		348C3B285ECEEF2F4474D00F /* ImageResizerTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9D894CEF0441161FE0DE05F4 /* Build configuration list for PBXNativeTarget "ImageResizerTests" */;
-			buildPhases = (
-				5EF15238B25E7A74AA59DA6F /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				0ABA0CB6778D01770732D702 /* PBXTargetDependency */,
-			);
-			name = ImageResizerTests;
-			packageProductDependencies = (
-			);
-			productName = ImageResizerTests;
-			productReference = 16B0FB1DC6164429DCF3191E /* ImageResizerTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		EA179E15EE389B92D1AAE3E2 /* ImageResizer */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6E612C9C95E4A5852F340AF6 /* Build configuration list for PBXNativeTarget "ImageResizer" */;
-			buildPhases = (
-				356E4EF7682C6EF7FF8CF2F5 /* Sources */,
-				F58E3FBE89AB33E2EE0E8354 /* Stamp Auto Version and Git Feed to Plist */,
-				835BA78575A8CEEEB369A247 /* Resources */,
-				E09218E4459CB8CE450CC2B0 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ImageResizer;
-			packageProductDependencies = (
-				F3C4D2B4BBFCA625C0306B91 /* Sparkle */,
-			);
-			productName = ImageResizer;
-			productReference = 94C4BB69E6D2053C0C2FDABF /* ImageResizer.app */;
-			productType = "com.apple.product-type.application";
-		};
-/* End PBXNativeTarget section */
-
-/* Begin PBXProject section */
-		174B0EF765EC9972B479D72D /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
-			};
-			buildConfigurationList = F004DCAA669B996AAFC5F81E /* Build configuration list for PBXProject "ImageResizer" */;
-			developmentRegion = en;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				Base,
-				en,
-			);
-			mainGroup = CCB22035EBEB1888E9BA95FB;
-			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				710631FA6AE9DF696C16782E /* XCRemoteSwiftPackageReference "Sparkle" */,
-			);
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 3121268921290407C9CA106E /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				EA179E15EE389B92D1AAE3E2 /* ImageResizer */,
-				348C3B285ECEEF2F4474D00F /* ImageResizerTests */,
-			);
-		};
-/* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		835BA78575A8CEEEB369A247 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EE1FE904A162237412443BCF /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		F58E3FBE89AB33E2EE0E8354 /* Stamp Auto Version and Git Feed to Plist */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Stamp Auto Version and Git Feed to Plist";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "build_number=$(git -C \"${SRCROOT}\" rev-list --count HEAD 2>/dev/null || echo \"1\")\nif [ -f \"${SRCROOT}/VERSION\" ]; then\n  version=$(cat \"${SRCROOT}/VERSION\" | tr -d '[:space:]')\nelse\n  version=\"1.0.0\"\nfi\nremote_url=$(git -C \"${SRCROOT}\" config --get remote.origin.url 2>/dev/null || echo \"\")\nif [[ \"${remote_url}\" =~ github\\.com[:/]([^/]+)/([^/.]+)(\\.git)? ]]; then\n  owner=\"${BASH_REMATCH[1]}\"\n  repo=\"${BASH_REMATCH[2]}\"\n  branch=$(git -C \"${SRCROOT}\" branch --show-current 2>/dev/null || echo \"master\")\n  feed_url=\"https://raw.githubusercontent.com/${owner}/${repo}/${branch}/appcast.xml\"\nelse\n  feed_url=\"https://raw.githubusercontent.com/bhooshanb/squishy-macos-app/master/appcast.xml\"\nfi\nplist_path=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nif [ -f \"${plist_path}\" ]; then\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion ${build_number}\" \"${plist_path}\" 2>/dev/null || \\\n  /usr/libexec/PlistBuddy -c \"Add :CFBundleVersion string ${build_number}\" \"${plist_path}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${version}\" \"${plist_path}\" 2>/dev/null || \\\n  /usr/libexec/PlistBuddy -c \"Add :CFBundleShortVersionString string ${version}\" \"${plist_path}\" 2>/dev/null || true\n  /usr/libexec/PlistBuddy -c \"Set :SUFeedURL ${feed_url}\" \"${plist_path}\" 2>/dev/null || \\\n  /usr/libexec/PlistBuddy -c \"Add :SUFeedURL string ${feed_url}\" \"${plist_path}\" 2>/dev/null || true\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		356E4EF7682C6EF7FF8CF2F5 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				147B550A11F25C506F03887F /* AppSettings.swift in Sources */,
-				BA172C95712D8AC1DE4A7325 /* AspectRatioLockIndicator.swift in Sources */,
-				81242A070D83FAE837CF7122 /* AspectRatioPreset.swift in Sources */,
-				C8AF13B63C94A16B18A883B8 /* BatchHistoryResultsView.swift in Sources */,
-				517D88C65856BAC173DF328B /* BatchProgressView.swift in Sources */,
-				CDFED7E244E6B9FE61ED2ECC /* BatchResizeResult.swift in Sources */,
-				DB9867B4ECE95AEA96AE572D /* BatchResizeService.swift in Sources */,
-				878E746C9472938FAECC775A /* CardContainer.swift in Sources */,
-				FA6063864D902ECE5D8A0114 /* DropOverlayView.swift in Sources */,
-				DDED76223A74A7751E0E9BAB /* EmptyDropZoneView.swift in Sources */,
-				678CEC85132860387675FF20 /* ImageDimensions.swift in Sources */,
-				F907BF19A4022D51F2A72A69 /* ImageFileService.swift in Sources */,
-				17828CB11AB0CF4EDFDD11E1 /* ImageItem.swift in Sources */,
-				F8E227A854829AE0C88FFAFB /* ImageQueueView.swift in Sources */,
-				C249E2241122022FDF2B9678 /* ImageResizeEngine.swift in Sources */,
-				2B4A978FC6E8369A7D455C25 /* ImageResizerApp.swift in Sources */,
-				C1DEB12799F9CF436D7C1FD2 /* ImageRowView.swift in Sources */,
-				7BC457F3697310F8E8B1136E /* MainView.swift in Sources */,
-				6B5E924F512DC8016C608EBA /* OutputFormat.swift in Sources */,
-				C91A11EAB2B53BF39C285229 /* OutputManager.swift in Sources */,
-				893E9D2979440388ADC632F3 /* OutputSettingsView.swift in Sources */,
-				71BF0130A3AD170A9560C328 /* PresetManagerSheet.swift in Sources */,
-				01BB1C7074DF2C79383A33B6 /* PresetManagerView.swift in Sources */,
-				AA336B8E03589C595031889F /* PresetStore.swift in Sources */,
-				5DCEDC1F8E22B94162E79052 /* ResizeConfiguration.swift in Sources */,
-				4C3A36A5F0CD228169D6E0AF /* ResizeMode.swift in Sources */,
-				3F5DD4B82ED74629D96707C7 /* ResizePreset.swift in Sources */,
-				D4A363A482B67E37BA97F2A9 /* ResizeResultsView.swift in Sources */,
-				3BCF71F055DD3E1ECC7A1810 /* ResizeSettingsView.swift in Sources */,
-				E2257CD5C529FE9B76B77C1F /* StitchTheme.swift in Sources */,
-				F58D1764D9DA4ADEAEE92205 /* UpdateManager.swift in Sources */,
-				9D2EEFA5C6203DDE05FE6C01 /* UpdateSettingsView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5EF15238B25E7A74AA59DA6F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E935151E69DC2CD9D160EB8E /* AspectRatioPresetTests.swift in Sources */,
-				68756059425BBE264F2A0C8D /* ImageProcessingTests.swift in Sources */,
-				FBC88FE66E21E201D2B21EC6 /* ImageResizeEngineTests.swift in Sources */,
-				30083F208D33B50B96D1D0C0 /* OutputManagerTests.swift in Sources */,
-				D3C111D3D7DCE73DC1B806EE /* PresetStoreTests.swift in Sources */,
-				8D8293C389F3E958195569B1 /* UpdateManagerTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		0ABA0CB6778D01770732D702 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = EA179E15EE389B92D1AAE3E2 /* ImageResizer */;
-			targetProxy = A888F4E4F5F468CE4606A47F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin XCBuildConfiguration section */
-		27B088B06D5F5C4F68684FDA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.silverstonelabs.ImageResizerTests;
-				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Squishy.app/Contents/MacOS/Squishy";
-			};
-			name = Release;
-		};
-		38B0ACD7BD1ABDB40537D2FD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.silverstonelabs.ImageResizerTests;
-				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Squishy.app/Contents/MacOS/Squishy";
-			};
-			name = Debug;
-		};
-		417EF2FD9E125E96A4C1977A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ImageResizer/Entitlements/ImageResizer.entitlements;
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				ENABLE_HARDENED_RUNTIME = NO;
-				INFOPLIST_FILE = ImageResizer/Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.silverstonelabs.ImageResizer;
-				PRODUCT_MODULE_NAME = ImageResizer;
-				PRODUCT_NAME = Squishy;
-				SDKROOT = macosx;
-			};
-			name = Debug;
-		};
-		8E33F974480664802F8DC558 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.9;
-			};
-			name = Debug;
-		};
-		F0954331B7E6E2E67DBE96FF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ImageResizer/Entitlements/ImageResizer.entitlements;
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				ENABLE_HARDENED_RUNTIME = NO;
-				INFOPLIST_FILE = ImageResizer/Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.silverstonelabs.ImageResizer;
-				PRODUCT_MODULE_NAME = ImageResizer;
-				PRODUCT_NAME = Squishy;
-				SDKROOT = macosx;
-			};
-			name = Release;
-		};
-		F65986758217508076FEE39C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.9;
-			};
-			name = Release;
-		};
-/* End XCBuildConfiguration section */
-
-/* Begin XCConfigurationList section */
-		6E612C9C95E4A5852F340AF6 /* Build configuration list for PBXNativeTarget "ImageResizer" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				417EF2FD9E125E96A4C1977A /* Debug */,
-				F0954331B7E6E2E67DBE96FF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		9D894CEF0441161FE0DE05F4 /* Build configuration list for PBXNativeTarget "ImageResizerTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				38B0ACD7BD1ABDB40537D2FD /* Debug */,
-				27B088B06D5F5C4F68684FDA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		F004DCAA669B996AAFC5F81E /* Build configuration list for PBXProject "ImageResizer" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8E33F974480664802F8DC558 /* Debug */,
-				F65986758217508076FEE39C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-/* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		710631FA6AE9DF696C16782E /* XCRemoteSwiftPackageReference "Sparkle" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sparkle-project/Sparkle";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.6.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		F3C4D2B4BBFCA625C0306B91 /* Sparkle */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 710631FA6AE9DF696C16782E /* XCRemoteSwiftPackageReference "Sparkle" */;
-			productName = Sparkle;
-		};
-/* End XCSwiftPackageProductDependency section */
-	};
-	rootObject = 174B0EF765EC9972B479D72D /* Project object */;
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>archiveVersion</key>
+	<string>1</string>
+	<key>classes</key>
+	<dict/>
+	<key>objectVersion</key>
+	<string>77</string>
+	<key>objects</key>
+	<dict>
+		<key>019E80D3B1BED5DDAE811B2F</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>E1AE8DB9F3442C364391B01E</string>
+				<string>26B59BD9962BFCCEC0CCEF64</string>
+				<string>65074F367DC5A3967D8F96C5</string>
+				<string>3A2438F8E242EED746A5FB15</string>
+				<string>90C8F793D447E3D2807E2B39</string>
+				<string>09EDFDFF95227C57B58350C7</string>
+				<string>8844137782B60A8FDA41D671</string>
+				<string>24589BAF7B2BAEE4C6D94AC8</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>Models</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>01BB1C7074DF2C79383A33B6</key>
+		<dict>
+			<key>fileRef</key>
+			<string>41DFED34BE54C31A7DEBB910</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>04EBA10E0CFDD58DB9E712B8</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>7E8B1A6397871B2DB3877C76</string>
+				<string>40D5E0358395ABECEB4CFD78</string>
+				<string>F7156E53A4C4B997232E37BE</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>Components</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0944CAAD24F0AED078FED9AF</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>E20694B04B8A7BBEED4679C6</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>Entitlements</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>09EDFDFF95227C57B58350C7</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ResizeConfiguration.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0ABA0CB6778D01770732D702</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXTargetDependency</string>
+			<key>target</key>
+			<string>EA179E15EE389B92D1AAE3E2</string>
+			<key>targetProxy</key>
+			<string>A888F4E4F5F468CE4606A47F</string>
+		</dict>
+		<key>0C7D46E204E9172F9567FA90</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>51F47ED27D8C8DB60A19FE9C</string>
+				<string>FC5793DA52820B83A808A666</string>
+				<string>FC5793DA52820B83A808A667</string>
+				<string>56BFCDFB273A2532D83288D4</string>
+				<string>FD14A36547AA508CBB25F54B</string>
+				<string>553CF22645E62C9088112757</string>
+				<string>81BB1BC625CF06E7F5FFE92B</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>Services</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>147B550A11F25C506F03887F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>8BD337D0A77A29173B767EF0</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>16B0FB1DC6164429DCF3191E</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.cfbundle</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>ImageResizerTests.xctest</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>174B0EF765EC9972B479D72D</key>
+		<dict>
+			<key>attributes</key>
+			<dict>
+				<key>BuildIndependentTargetsInParallel</key>
+				<string>YES</string>
+				<key>LastUpgradeCheck</key>
+				<string>1430</string>
+				<key>TargetAttributes</key>
+				<dict/>
+			</dict>
+			<key>buildConfigurationList</key>
+			<string>F004DCAA669B996AAFC5F81E</string>
+			<key>developmentRegion</key>
+			<string>en</string>
+			<key>hasScannedForEncodings</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXProject</string>
+			<key>knownRegions</key>
+			<array>
+				<string>Base</string>
+				<string>en</string>
+			</array>
+			<key>mainGroup</key>
+			<string>CCB22035EBEB1888E9BA95FB</string>
+			<key>minimizedProjectReferenceProxies</key>
+			<string>1</string>
+			<key>packageReferences</key>
+			<array>
+				<string>710631FA6AE9DF696C16782E</string>
+			</array>
+			<key>preferredProjectObjectVersion</key>
+			<string>77</string>
+			<key>productRefGroup</key>
+			<string>3121268921290407C9CA106E</string>
+			<key>projectDirPath</key>
+			<string></string>
+			<key>projectRoot</key>
+			<string></string>
+			<key>targets</key>
+			<array>
+				<string>EA179E15EE389B92D1AAE3E2</string>
+				<string>348C3B285ECEEF2F4474D00F</string>
+			</array>
+		</dict>
+		<key>17828CB11AB0CF4EDFDD11E1</key>
+		<dict>
+			<key>fileRef</key>
+			<string>3A2438F8E242EED746A5FB15</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>1E7FA2804DB748ADB0A10103</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist</string>
+			<key>path</key>
+			<string>Info.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>24589BAF7B2BAEE4C6D94AC8</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ResizePreset.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>26B59BD9962BFCCEC0CCEF64</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>BatchResizeResult.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>26F73296448AFDA083A3DE4C</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageQueueView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>27B088B06D5F5C4F68684FDA</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>BUNDLE_LOADER</key>
+				<string>$(TEST_HOST)</string>
+				<key>CODE_SIGN_IDENTITY</key>
+				<string>-</string>
+				<key>COMBINE_HIDPI_IMAGES</key>
+				<string>YES</string>
+				<key>GENERATE_INFOPLIST_FILE</key>
+				<string>YES</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>@executable_path/../Frameworks</string>
+					<string>@loader_path/../Frameworks</string>
+				</array>
+				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
+				<string>com.silverstonelabs.ImageResizerTests</string>
+				<key>SDKROOT</key>
+				<string>macosx</string>
+				<key>TEST_HOST</key>
+				<string>$(BUILT_PRODUCTS_DIR)/Squishy.app/Contents/MacOS/Squishy</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>2B4A978FC6E8369A7D455C25</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A5BCAF3ED64BE14CE230BF47</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>30083F208D33B50B96D1D0C0</key>
+		<dict>
+			<key>fileRef</key>
+			<string>7E4ED0FB93F08702CD6DAEC4</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>3121268921290407C9CA106E</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>94C4BB69E6D2053C0C2FDABF</string>
+				<string>16B0FB1DC6164429DCF3191E</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Products</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>348C3B285ECEEF2F4474D00F</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>9D894CEF0441161FE0DE05F4</string>
+			<key>buildPhases</key>
+			<array>
+				<string>5EF15238B25E7A74AA59DA6F</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array>
+				<string>0ABA0CB6778D01770732D702</string>
+			</array>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>ImageResizerTests</string>
+			<key>packageProductDependencies</key>
+			<array/>
+			<key>productName</key>
+			<string>ImageResizerTests</string>
+			<key>productReference</key>
+			<string>16B0FB1DC6164429DCF3191E</string>
+			<key>productType</key>
+			<string>com.apple.product-type.bundle.unit-test</string>
+		</dict>
+		<key>356E4EF7682C6EF7FF8CF2F5</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>147B550A11F25C506F03887F</string>
+				<string>BA172C95712D8AC1DE4A7325</string>
+				<string>81242A070D83FAE837CF7122</string>
+				<string>C8AF13B63C94A16B18A883B8</string>
+				<string>517D88C65856BAC173DF328B</string>
+				<string>CDFED7E244E6B9FE61ED2ECC</string>
+				<string>DB9867B4ECE95AEA96AE572D</string>
+				<string>878E746C9472938FAECC775A</string>
+				<string>FA6063864D902ECE5D8A0114</string>
+				<string>DDED76223A74A7751E0E9BAB</string>
+				<string>678CEC85132860387675FF20</string>
+				<string>F907BF19A4022D51F2A72A69</string>
+				<string>F907BF19A4022D51F2A72A70</string>
+				<string>17828CB11AB0CF4EDFDD11E1</string>
+				<string>F8E227A854829AE0C88FFAFB</string>
+				<string>C249E2241122022FDF2B9678</string>
+				<string>2B4A978FC6E8369A7D455C25</string>
+				<string>C1DEB12799F9CF436D7C1FD2</string>
+				<string>7BC457F3697310F8E8B1136E</string>
+				<string>6B5E924F512DC8016C608EBA</string>
+				<string>C91A11EAB2B53BF39C285229</string>
+				<string>893E9D2979440388ADC632F3</string>
+				<string>71BF0130A3AD170A9560C328</string>
+				<string>01BB1C7074DF2C79383A33B6</string>
+				<string>AA336B8E03589C595031889F</string>
+				<string>5DCEDC1F8E22B94162E79052</string>
+				<string>4C3A36A5F0CD228169D6E0AF</string>
+				<string>3F5DD4B82ED74629D96707C7</string>
+				<string>D4A363A482B67E37BA97F2A9</string>
+				<string>3BCF71F055DD3E1ECC7A1810</string>
+				<string>E2257CD5C529FE9B76B77C1F</string>
+				<string>F58D1764D9DA4ADEAEE92205</string>
+				<string>9D2EEFA5C6203DDE05FE6C01</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>38B0ACD7BD1ABDB40537D2FD</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>BUNDLE_LOADER</key>
+				<string>$(TEST_HOST)</string>
+				<key>CODE_SIGN_IDENTITY</key>
+				<string>-</string>
+				<key>COMBINE_HIDPI_IMAGES</key>
+				<string>YES</string>
+				<key>GENERATE_INFOPLIST_FILE</key>
+				<string>YES</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>@executable_path/../Frameworks</string>
+					<string>@loader_path/../Frameworks</string>
+				</array>
+				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
+				<string>com.silverstonelabs.ImageResizerTests</string>
+				<key>SDKROOT</key>
+				<string>macosx</string>
+				<key>TEST_HOST</key>
+				<string>$(BUILT_PRODUCTS_DIR)/Squishy.app/Contents/MacOS/Squishy</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>38EB2DE5626FC8D962BB8CA0</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageResizeEngineTests.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3A2438F8E242EED746A5FB15</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageItem.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3BCF71F055DD3E1ECC7A1810</key>
+		<dict>
+			<key>fileRef</key>
+			<string>523B0957E553BECF556A2E94</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>3F5DD4B82ED74629D96707C7</key>
+		<dict>
+			<key>fileRef</key>
+			<string>24589BAF7B2BAEE4C6D94AC8</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>40D5E0358395ABECEB4CFD78</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>CardContainer.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>417EF2FD9E125E96A4C1977A</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
+				<string>AppIcon</string>
+				<key>CODE_SIGN_ENTITLEMENTS</key>
+				<string>ImageResizer/Entitlements/ImageResizer.entitlements</string>
+				<key>CODE_SIGN_IDENTITY</key>
+				<string>-</string>
+				<key>COMBINE_HIDPI_IMAGES</key>
+				<string>YES</string>
+				<key>ENABLE_HARDENED_RUNTIME</key>
+				<string>NO</string>
+				<key>INFOPLIST_FILE</key>
+				<string>ImageResizer/Resources/Info.plist</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>@executable_path/../Frameworks</string>
+				</array>
+				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
+				<string>com.silverstonelabs.ImageResizer</string>
+				<key>PRODUCT_MODULE_NAME</key>
+				<string>ImageResizer</string>
+				<key>PRODUCT_NAME</key>
+				<string>Squishy</string>
+				<key>SDKROOT</key>
+				<string>macosx</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>41DFED34BE54C31A7DEBB910</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>PresetManagerView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>441E83A6A6B81462DEB20FA8</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>8BD337D0A77A29173B767EF0</string>
+				<string>A5BCAF3ED64BE14CE230BF47</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>App</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4C3A36A5F0CD228169D6E0AF</key>
+		<dict>
+			<key>fileRef</key>
+			<string>8844137782B60A8FDA41D671</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>517D88C65856BAC173DF328B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>59AA711E64B40C10E024C868</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>51F47ED27D8C8DB60A19FE9C</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>BatchResizeService.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>523B0957E553BECF556A2E94</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ResizeSettingsView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>553CF22645E62C9088112757</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>PresetStore.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>568135CD1282FC80A9753F9F</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageRowView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>56BFCDFB273A2532D83288D4</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageResizeEngine.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>57C61EA5C548FBB0E770CB9B</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>PresetStoreTests.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>59AA711E64B40C10E024C868</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>BatchProgressView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5A0E8FA004D279E5C3BA3136</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>folder.assetcatalog</string>
+			<key>path</key>
+			<string>Assets.xcassets</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5DCEDC1F8E22B94162E79052</key>
+		<dict>
+			<key>fileRef</key>
+			<string>09EDFDFF95227C57B58350C7</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>5EF15238B25E7A74AA59DA6F</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>E935151E69DC2CD9D160EB8E</string>
+				<string>68756059425BBE264F2A0C8D</string>
+				<string>FBC88FE66E21E201D2B21EC6</string>
+				<string>30083F208D33B50B96D1D0C0</string>
+				<string>D3C111D3D7DCE73DC1B806EE</string>
+				<string>8D8293C389F3E958195569B1</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>65074F367DC5A3967D8F96C5</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageDimensions.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>678CEC85132860387675FF20</key>
+		<dict>
+			<key>fileRef</key>
+			<string>65074F367DC5A3967D8F96C5</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>68756059425BBE264F2A0C8D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>7A2C269B6A40FE3D54C96D28</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>6B5E924F512DC8016C608EBA</key>
+		<dict>
+			<key>fileRef</key>
+			<string>90C8F793D447E3D2807E2B39</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>6E612C9C95E4A5852F340AF6</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>417EF2FD9E125E96A4C1977A</string>
+				<string>F0954331B7E6E2E67DBE96FF</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Debug</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>710631FA6AE9DF696C16782E</key>
+		<dict>
+			<key>isa</key>
+			<string>XCRemoteSwiftPackageReference</string>
+			<key>repositoryURL</key>
+			<string>https://github.com/sparkle-project/Sparkle</string>
+			<key>requirement</key>
+			<dict>
+				<key>kind</key>
+				<string>upToNextMajorVersion</string>
+				<key>minimumVersion</key>
+				<string>2.6.0</string>
+			</dict>
+		</dict>
+		<key>71BF0130A3AD170A9560C328</key>
+		<dict>
+			<key>fileRef</key>
+			<string>7A981885A26C05A5981F86C8</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>7A1D2E1407AC5D639126723C</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>AspectRatioPresetTests.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7A2C269B6A40FE3D54C96D28</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageProcessingTests.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7A981885A26C05A5981F86C8</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>PresetManagerSheet.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7BC457F3697310F8E8B1136E</key>
+		<dict>
+			<key>fileRef</key>
+			<string>B47185DD7426582AE2FA4B4D</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>7E4ED0FB93F08702CD6DAEC4</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>OutputManagerTests.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7E8B1A6397871B2DB3877C76</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>AspectRatioLockIndicator.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>81242A070D83FAE837CF7122</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E1AE8DB9F3442C364391B01E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>81BB1BC625CF06E7F5FFE92B</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>UpdateManager.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>835BA78575A8CEEEB369A247</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>EE1FE904A162237412443BCF</string>
+			</array>
+			<key>isa</key>
+			<string>PBXResourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>878E746C9472938FAECC775A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>40D5E0358395ABECEB4CFD78</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>8844137782B60A8FDA41D671</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ResizeMode.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>8855A36DBDEFAF79D7E6C217</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>BatchHistoryResultsView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>893E9D2979440388ADC632F3</key>
+		<dict>
+			<key>fileRef</key>
+			<string>ABC5819E0F4D39620B6D1F0F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>8BD337D0A77A29173B767EF0</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>AppSettings.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>8D8293C389F3E958195569B1</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E154740932A434BAADF00A68</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>8E33F974480664802F8DC558</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>CLANG_ANALYZER_NONNULL</key>
+				<string>YES</string>
+				<key>CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION</key>
+				<string>YES_AGGRESSIVE</string>
+				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
+				<string>gnu++14</string>
+				<key>CLANG_CXX_LIBRARY</key>
+				<string>libc++</string>
+				<key>CLANG_ENABLE_MODULES</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_WEAK</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BOOL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_COMMA</key>
+				<string>YES</string>
+				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
+				<string>YES_ERROR</string>
+				<key>CLANG_WARN_DOCUMENTATION_COMMENTS</key>
+				<string>YES</string>
+				<key>CLANG_WARN_EMPTY_BODY</key>
+				<string>YES</string>
+				<key>CLANG_WARN_ENUM_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INFINITE_RECURSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_NON_LITERAL_NULL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_LITERAL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
+				<string>YES_ERROR</string>
+				<key>CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER</key>
+				<string>YES</string>
+				<key>CLANG_WARN_RANGE_LOOP_ANALYSIS</key>
+				<string>YES</string>
+				<key>CLANG_WARN_STRICT_PROTOTYPES</key>
+				<string>YES</string>
+				<key>CLANG_WARN_SUSPICIOUS_MOVE</key>
+				<string>YES</string>
+				<key>CLANG_WARN_UNGUARDED_AVAILABILITY</key>
+				<string>YES_AGGRESSIVE</string>
+				<key>CLANG_WARN_UNREACHABLE_CODE</key>
+				<string>YES</string>
+				<key>CLANG_WARN__DUPLICATE_METHOD_MATCH</key>
+				<string>YES</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>CURRENT_PROJECT_VERSION</key>
+				<string>1</string>
+				<key>DEBUG_INFORMATION_FORMAT</key>
+				<string>dwarf</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>ENABLE_TESTABILITY</key>
+				<string>YES</string>
+				<key>GCC_C_LANGUAGE_STANDARD</key>
+				<string>gnu11</string>
+				<key>GCC_DYNAMIC_NO_PIC</key>
+				<string>NO</string>
+				<key>GCC_NO_COMMON_BLOCKS</key>
+				<string>YES</string>
+				<key>GCC_OPTIMIZATION_LEVEL</key>
+				<string>0</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>DEBUG=1</string>
+				</array>
+				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
+				<string>YES</string>
+				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
+				<string>YES_ERROR</string>
+				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
+				<string>YES_AGGRESSIVE</string>
+				<key>GCC_WARN_UNUSED_FUNCTION</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_VARIABLE</key>
+				<string>YES</string>
+				<key>GENERATE_INFOPLIST_FILE</key>
+				<string>NO</string>
+				<key>MACOSX_DEPLOYMENT_TARGET</key>
+				<string>14.0</string>
+				<key>MARKETING_VERSION</key>
+				<string>1.0.0</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>INCLUDE_SOURCE</string>
+				<key>MTL_FAST_MATH</key>
+				<string>YES</string>
+				<key>ONLY_ACTIVE_ARCH</key>
+				<string>YES</string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>macosx</string>
+				<key>SWIFT_ACTIVE_COMPILATION_CONDITIONS</key>
+				<string>DEBUG</string>
+				<key>SWIFT_OPTIMIZATION_LEVEL</key>
+				<string>-Onone</string>
+				<key>SWIFT_VERSION</key>
+				<string>5.9</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>90C8F793D447E3D2807E2B39</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>OutputFormat.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>94C4BB69E6D2053C0C2FDABF</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.application</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>ImageResizer.app</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>953528C7A4F3FBEB58A37497</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>StitchTheme.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D2EEFA5C6203DDE05FE6C01</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E1E54437F7EDC699F59BA6E1</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>9D894CEF0441161FE0DE05F4</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>38B0ACD7BD1ABDB40537D2FD</string>
+				<string>27B088B06D5F5C4F68684FDA</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Debug</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>A0B1C2D3E4F5061728394A5B</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputFileListPaths</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Stamp Incremented App Version</string>
+			<key>outputFileListPaths</key>
+			<array/>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>version=$(cat "${SRCROOT}/VERSION" | tr -d '[:space:]')
+major=${version%%.*}; rest=${version#*.}; minor=${rest%%.*}; patch=${rest#*.}
+build_number=$((major * 1000000 + minor * 1000 + patch))
+plist_path="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${build_number}" "${plist_path}"
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${version}" "${plist_path}"
+</string>
+		</dict>
+		<key>A1C2AFCD577C234BC9167B22</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>productRef</key>
+			<string>F3C4D2B4BBFCA625C0306B91</string>
+		</dict>
+		<key>A2F6FBE3E90C04CE9781F76B</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>441E83A6A6B81462DEB20FA8</string>
+				<string>0944CAAD24F0AED078FED9AF</string>
+				<string>019E80D3B1BED5DDAE811B2F</string>
+				<string>CDD098C4ADF4B1F0598DBBC9</string>
+				<string>0C7D46E204E9172F9567FA90</string>
+				<string>B60BAE2FE0AD5DAB7D86177E</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>ImageResizer</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A5BCAF3ED64BE14CE230BF47</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageResizerApp.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A888F4E4F5F468CE4606A47F</key>
+		<dict>
+			<key>containerPortal</key>
+			<string>174B0EF765EC9972B479D72D</string>
+			<key>isa</key>
+			<string>PBXContainerItemProxy</string>
+			<key>proxyType</key>
+			<string>1</string>
+			<key>remoteGlobalIDString</key>
+			<string>EA179E15EE389B92D1AAE3E2</string>
+			<key>remoteInfo</key>
+			<string>ImageResizer</string>
+		</dict>
+		<key>AA336B8E03589C595031889F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>553CF22645E62C9088112757</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ABC5819E0F4D39620B6D1F0F</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>OutputSettingsView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>B47185DD7426582AE2FA4B4D</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>MainView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>B60BAE2FE0AD5DAB7D86177E</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>8855A36DBDEFAF79D7E6C217</string>
+				<string>59AA711E64B40C10E024C868</string>
+				<string>D7D765AD452FC38A8E90612B</string>
+				<string>26F73296448AFDA083A3DE4C</string>
+				<string>568135CD1282FC80A9753F9F</string>
+				<string>B47185DD7426582AE2FA4B4D</string>
+				<string>ABC5819E0F4D39620B6D1F0F</string>
+				<string>7A981885A26C05A5981F86C8</string>
+				<string>41DFED34BE54C31A7DEBB910</string>
+				<string>F40AE1F9FB19061B574316D4</string>
+				<string>523B0957E553BECF556A2E94</string>
+				<string>953528C7A4F3FBEB58A37497</string>
+				<string>E1E54437F7EDC699F59BA6E1</string>
+				<string>04EBA10E0CFDD58DB9E712B8</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>Views</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>BA172C95712D8AC1DE4A7325</key>
+		<dict>
+			<key>fileRef</key>
+			<string>7E8B1A6397871B2DB3877C76</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>C1DEB12799F9CF436D7C1FD2</key>
+		<dict>
+			<key>fileRef</key>
+			<string>568135CD1282FC80A9753F9F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>C249E2241122022FDF2B9678</key>
+		<dict>
+			<key>fileRef</key>
+			<string>56BFCDFB273A2532D83288D4</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>C8AF13B63C94A16B18A883B8</key>
+		<dict>
+			<key>fileRef</key>
+			<string>8855A36DBDEFAF79D7E6C217</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>C91A11EAB2B53BF39C285229</key>
+		<dict>
+			<key>fileRef</key>
+			<string>FD14A36547AA508CBB25F54B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>CCB22035EBEB1888E9BA95FB</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>A2F6FBE3E90C04CE9781F76B</string>
+				<string>F7F79CBECDAB4CEF28C40CE2</string>
+				<string>3121268921290407C9CA106E</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>CDD098C4ADF4B1F0598DBBC9</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>5A0E8FA004D279E5C3BA3136</string>
+				<string>1E7FA2804DB748ADB0A10103</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>Resources</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>CDFED7E244E6B9FE61ED2ECC</key>
+		<dict>
+			<key>fileRef</key>
+			<string>26B59BD9962BFCCEC0CCEF64</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>D3C111D3D7DCE73DC1B806EE</key>
+		<dict>
+			<key>fileRef</key>
+			<string>57C61EA5C548FBB0E770CB9B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>D4A363A482B67E37BA97F2A9</key>
+		<dict>
+			<key>fileRef</key>
+			<string>F40AE1F9FB19061B574316D4</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>D7D765AD452FC38A8E90612B</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>EmptyDropZoneView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>DB9867B4ECE95AEA96AE572D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>51F47ED27D8C8DB60A19FE9C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>DDED76223A74A7751E0E9BAB</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D7D765AD452FC38A8E90612B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>E09218E4459CB8CE450CC2B0</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>A1C2AFCD577C234BC9167B22</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>E154740932A434BAADF00A68</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>UpdateManagerTests.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E1AE8DB9F3442C364391B01E</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>AspectRatioPreset.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E1E54437F7EDC699F59BA6E1</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>UpdateSettingsView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E20694B04B8A7BBEED4679C6</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist.entitlements</string>
+			<key>path</key>
+			<string>ImageResizer.entitlements</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E2257CD5C529FE9B76B77C1F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>953528C7A4F3FBEB58A37497</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>E935151E69DC2CD9D160EB8E</key>
+		<dict>
+			<key>fileRef</key>
+			<string>7A1D2E1407AC5D639126723C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>EA179E15EE389B92D1AAE3E2</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>6E612C9C95E4A5852F340AF6</string>
+			<key>buildPhases</key>
+			<array>
+				<string>F58E3FBE89AB33E2EE0E8354</string>
+				<string>356E4EF7682C6EF7FF8CF2F5</string>
+				<string>835BA78575A8CEEEB369A247</string>
+				<string>E09218E4459CB8CE450CC2B0</string>
+				<string>A0B1C2D3E4F5061728394A5B</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>ImageResizer</string>
+			<key>packageProductDependencies</key>
+			<array>
+				<string>F3C4D2B4BBFCA625C0306B91</string>
+			</array>
+			<key>productName</key>
+			<string>ImageResizer</string>
+			<key>productReference</key>
+			<string>94C4BB69E6D2053C0C2FDABF</string>
+			<key>productType</key>
+			<string>com.apple.product-type.application</string>
+		</dict>
+		<key>EE1FE904A162237412443BCF</key>
+		<dict>
+			<key>fileRef</key>
+			<string>5A0E8FA004D279E5C3BA3136</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>F004DCAA669B996AAFC5F81E</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>8E33F974480664802F8DC558</string>
+				<string>F65986758217508076FEE39C</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Debug</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>F0954331B7E6E2E67DBE96FF</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
+				<string>AppIcon</string>
+				<key>CODE_SIGN_ENTITLEMENTS</key>
+				<string>ImageResizer/Entitlements/ImageResizer.entitlements</string>
+				<key>CODE_SIGN_IDENTITY</key>
+				<string>-</string>
+				<key>COMBINE_HIDPI_IMAGES</key>
+				<string>YES</string>
+				<key>ENABLE_HARDENED_RUNTIME</key>
+				<string>NO</string>
+				<key>INFOPLIST_FILE</key>
+				<string>ImageResizer/Resources/Info.plist</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>@executable_path/../Frameworks</string>
+				</array>
+				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
+				<string>com.silverstonelabs.ImageResizer</string>
+				<key>PRODUCT_MODULE_NAME</key>
+				<string>ImageResizer</string>
+				<key>PRODUCT_NAME</key>
+				<string>Squishy</string>
+				<key>SDKROOT</key>
+				<string>macosx</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>F3C4D2B4BBFCA625C0306B91</key>
+		<dict>
+			<key>isa</key>
+			<string>XCSwiftPackageProductDependency</string>
+			<key>package</key>
+			<string>710631FA6AE9DF696C16782E</string>
+			<key>productName</key>
+			<string>Sparkle</string>
+		</dict>
+		<key>F40AE1F9FB19061B574316D4</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ResizeResultsView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F58D1764D9DA4ADEAEE92205</key>
+		<dict>
+			<key>fileRef</key>
+			<string>81BB1BC625CF06E7F5FFE92B</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>F58E3FBE89AB33E2EE0E8354</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputFileListPaths</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Bump Version Before Build and Stamp Auto Version and Git Feed to Plist</string>
+			<key>outputFileListPaths</key>
+			<array/>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/scripts/bump-version.sh"
+version=$(cat "${SRCROOT}/VERSION" | tr -d '[:space:]')
+/usr/libexec/PlistBuddy -c "Set :MARKETING_VERSION ${version}" "${SRCROOT}/ImageResizer.xcodeproj/project.pbxproj" 2&gt;/dev/null || true
+build_number=$(git -C "${SRCROOT}" rev-list --count HEAD 2&gt;/dev/null || echo "1")
+remote_url=$(git -C "${SRCROOT}" config --get remote.origin.url 2&gt;/dev/null || echo "")
+if [[ "${remote_url}" =~ github\.com[:/]([^/]+)/([^/.]+)(\.git)? ]]; then
+  owner="${BASH_REMATCH[1]}"
+  repo="${BASH_REMATCH[2]}"
+  branch=$(git -C "${SRCROOT}" branch --show-current 2&gt;/dev/null || echo "master")
+  feed_url="https://raw.githubusercontent.com/${owner}/${repo}/${branch}/appcast.xml"
+else
+  feed_url="https://raw.githubusercontent.com/bhooshanb/squishy-macos-app/master/appcast.xml"
+fi
+</string>
+		</dict>
+		<key>F65986758217508076FEE39C</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>CLANG_ANALYZER_NONNULL</key>
+				<string>YES</string>
+				<key>CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION</key>
+				<string>YES_AGGRESSIVE</string>
+				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
+				<string>gnu++14</string>
+				<key>CLANG_CXX_LIBRARY</key>
+				<string>libc++</string>
+				<key>CLANG_ENABLE_MODULES</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_WEAK</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BOOL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_COMMA</key>
+				<string>YES</string>
+				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
+				<string>YES_ERROR</string>
+				<key>CLANG_WARN_DOCUMENTATION_COMMENTS</key>
+				<string>YES</string>
+				<key>CLANG_WARN_EMPTY_BODY</key>
+				<string>YES</string>
+				<key>CLANG_WARN_ENUM_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INFINITE_RECURSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_NON_LITERAL_NULL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_LITERAL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
+				<string>YES_ERROR</string>
+				<key>CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER</key>
+				<string>YES</string>
+				<key>CLANG_WARN_RANGE_LOOP_ANALYSIS</key>
+				<string>YES</string>
+				<key>CLANG_WARN_STRICT_PROTOTYPES</key>
+				<string>YES</string>
+				<key>CLANG_WARN_SUSPICIOUS_MOVE</key>
+				<string>YES</string>
+				<key>CLANG_WARN_UNGUARDED_AVAILABILITY</key>
+				<string>YES_AGGRESSIVE</string>
+				<key>CLANG_WARN_UNREACHABLE_CODE</key>
+				<string>YES</string>
+				<key>CLANG_WARN__DUPLICATE_METHOD_MATCH</key>
+				<string>YES</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>CURRENT_PROJECT_VERSION</key>
+				<string>1</string>
+				<key>DEBUG_INFORMATION_FORMAT</key>
+				<string>dwarf-with-dsym</string>
+				<key>ENABLE_NS_ASSERTIONS</key>
+				<string>NO</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>GCC_C_LANGUAGE_STANDARD</key>
+				<string>gnu11</string>
+				<key>GCC_NO_COMMON_BLOCKS</key>
+				<string>YES</string>
+				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
+				<string>YES</string>
+				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
+				<string>YES_ERROR</string>
+				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
+				<string>YES_AGGRESSIVE</string>
+				<key>GCC_WARN_UNUSED_FUNCTION</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_VARIABLE</key>
+				<string>YES</string>
+				<key>GENERATE_INFOPLIST_FILE</key>
+				<string>NO</string>
+				<key>MACOSX_DEPLOYMENT_TARGET</key>
+				<string>14.0</string>
+				<key>MARKETING_VERSION</key>
+				<string>1.0.0</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>NO</string>
+				<key>MTL_FAST_MATH</key>
+				<string>YES</string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>macosx</string>
+				<key>SWIFT_COMPILATION_MODE</key>
+				<string>wholemodule</string>
+				<key>SWIFT_OPTIMIZATION_LEVEL</key>
+				<string>-O</string>
+				<key>SWIFT_VERSION</key>
+				<string>5.9</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>F7156E53A4C4B997232E37BE</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>DropOverlayView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F7F79CBECDAB4CEF28C40CE2</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>7A1D2E1407AC5D639126723C</string>
+				<string>7A2C269B6A40FE3D54C96D28</string>
+				<string>38EB2DE5626FC8D962BB8CA0</string>
+				<string>7E4ED0FB93F08702CD6DAEC4</string>
+				<string>57C61EA5C548FBB0E770CB9B</string>
+				<string>E154740932A434BAADF00A68</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>ImageResizerTests</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F8E227A854829AE0C88FFAFB</key>
+		<dict>
+			<key>fileRef</key>
+			<string>26F73296448AFDA083A3DE4C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>F907BF19A4022D51F2A72A69</key>
+		<dict>
+			<key>fileRef</key>
+			<string>FC5793DA52820B83A808A666</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>F907BF19A4022D51F2A72A70</key>
+		<dict>
+			<key>fileRef</key>
+			<string>FC5793DA52820B83A808A667</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FA6063864D902ECE5D8A0114</key>
+		<dict>
+			<key>fileRef</key>
+			<string>F7156E53A4C4B997232E37BE</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FBC88FE66E21E201D2B21EC6</key>
+		<dict>
+			<key>fileRef</key>
+			<string>38EB2DE5626FC8D962BB8CA0</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FC5793DA52820B83A808A666</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>ImageFileService.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FC5793DA52820B83A808A667</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>VideoCompressionEngine.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FD14A36547AA508CBB25F54B</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>OutputManager.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+	</dict>
+	<key>rootObject</key>
+	<string>174B0EF765EC9972B479D72D</string>
+</dict>
+</plist>
