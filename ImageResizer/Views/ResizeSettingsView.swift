@@ -16,6 +16,7 @@ public struct ResizeSettingsView: View {
     public let onResume: () -> Void
     public let onStop: () -> Void
     public let videoBitratePreset: Binding<VideoBitratePreset>?
+    @State private var showPresetManager = false
     @State private var areRatiosInverted: Bool = false
     private var hasVideo: Bool { sampleItem?.mediaKind == .video }
 
@@ -66,6 +67,7 @@ public struct ResizeSettingsView: View {
         }
         .frame(minWidth: 320, idealWidth: 360, maxWidth: .infinity)
         .background(PrecisionTheme.background)
+        .sheet(isPresented: $showPresetManager) { PresetManagerSheet() }
     }
 
     private var videoExportSettingsCard: some View {
@@ -94,26 +96,24 @@ public struct ResizeSettingsView: View {
     private var mainConfigurationCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             // Scaling Mode Header
-            Text("IMAGE SIZE")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundColor(PrecisionTheme.textTertiary)
+            HStack {
+                Text("IMAGE SIZE")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(PrecisionTheme.textTertiary)
+                Spacer()
+                Button("Edit Presets…") { showPresetManager = true }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(PrecisionTheme.blue)
+            }
 
             // Mode Selector Bar
             HStack(spacing: 2) {
                 modeButton(title: "Presets", mode: .preset)
                 modeButton(title: "Bounds", mode: .fit)
-                Menu {
-                    Button("% Scale") { selectMode(.percentage) }
-                    Button("Width only") { selectMode(.widthOnly) }
-                    Button("Height only") { selectMode(.heightOnly) }
-                } label: {
-                    Text([ResizeMode.percentage, .widthOnly, .heightOnly].contains(configuration.mode) ? modeTitle(configuration.mode) : "More")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(PrecisionTheme.textSecondary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 5)
-                }
-                .menuStyle(.borderlessButton)
+                modeButton(title: "% Scale", mode: .percentage)
+                modeButton(title: "Width", mode: .widthOnly)
+                modeButton(title: "Height", mode: .heightOnly)
             }
             .padding(2)
             .background(PrecisionTheme.recessedBackground)
@@ -176,15 +176,6 @@ public struct ResizeSettingsView: View {
                 .shadow(color: isSelected ? Color.black.opacity(0.06) : Color.clear, radius: 1, x: 0, y: 1)
         }
         .buttonStyle(.plain)
-    }
-
-    private func modeTitle(_ mode: ResizeMode) -> String {
-        switch mode {
-        case .percentage: "% Scale"
-        case .widthOnly: "Width"
-        case .heightOnly: "Height"
-        default: "More"
-        }
     }
 
     private func selectMode(_ mode: ResizeMode) {

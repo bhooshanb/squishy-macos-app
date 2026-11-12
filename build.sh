@@ -262,8 +262,29 @@ EOF
     print_success "Generated ${APPCAST_FILE} with version ${version} (build ${build_num})"
     print_info "Enclosure download URL: ${download_url} (${file_size} bytes)"
 
+    commit_release_metadata "${version}" "${build_num}"
+
     # Automatically synchronize the signed zip to the GitHub release asset
     upload_release_asset "${zip_file}"
+}
+
+commit_release_metadata() {
+    local version="$1"
+    local build_num="$2"
+
+    if ! git -C "${PROJECT_ROOT}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        print_warning "Not in a Git worktree; release metadata was generated but not committed."
+        return 0
+    fi
+
+    git -C "${PROJECT_ROOT}" add -- "${VERSION_FILE}" "${APPCAST_FILE}"
+    if git -C "${PROJECT_ROOT}" diff --cached --quiet -- "${VERSION_FILE}" "${APPCAST_FILE}"; then
+        print_info "Release metadata is already committed."
+        return 0
+    fi
+
+    git -C "${PROJECT_ROOT}" commit -m "Release v${version} (build ${build_num})" -- "${VERSION_FILE}" "${APPCAST_FILE}"
+    print_success "Committed VERSION and appcast.xml for v${version} (build ${build_num})."
 }
 
 upload_release_asset() {

@@ -4,7 +4,6 @@ import AppKit
 
 public enum NavigationTab: String, CaseIterable, Identifiable {
     case queue = "Queue & Resize"
-    case presets = "Batch Presets"
     case settings = "Settings"
     case history = "History"
 
@@ -115,9 +114,6 @@ public struct MainView: View {
                 case .queue:
                     mediaQueuesView
 
-                case .presets:
-                    PresetManagerView()
-
                 case .settings:
                     OutputSettingsView(configuration: $appSettings.configuration)
 
@@ -164,11 +160,12 @@ public struct MainView: View {
                     Text("Processing Queue · \(imageItems.count + videoItems.count)")
                         .font(.system(size: 14, weight: .semibold))
                     Spacer()
-                    Picker("Queue filter", selection: $queueFilter) {
+                    Picker("", selection: $queueFilter) {
                         ForEach(MediaQueueFilter.allCases) { filter in Text(filter.rawValue).tag(filter) }
                     }
                     .pickerStyle(.segmented)
-                    .frame(width: 210)
+                    .labelsHidden()
+                    .fixedSize(horizontal: true, vertical: false)
                     Menu {
                         Button("Add Images…", action: openImagePicker)
                         Button("Add Videos…", action: openVideoPicker)
@@ -551,17 +548,12 @@ public struct MainView: View {
             items: imageItems,
             configuration: appSettings.configuration,
             preset: selectedPreset
-        ) { result in
-            // When complete, switch to History tab to see results!
-            if !imageBatchService.wasStopped { self.selectedTab = .history }
-        }
+        ) { _ in }
     }
 
     private func startVideoBatch() {
         guard !videoItems.isEmpty else { return }
-        videoBatchService.resizeBatch(items: videoItems, configuration: appSettings.configuration, preset: nil) { _ in
-            if !videoBatchService.wasStopped { self.selectedTab = .history }
-        }
+        videoBatchService.resizeBatch(items: videoItems, configuration: appSettings.configuration, preset: nil) { _ in }
     }
 
     private func clearImageQueue() {
