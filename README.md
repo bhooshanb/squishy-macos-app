@@ -36,8 +36,8 @@ $$\text{scale} = \min(1.0, \text{scale})$$
 
 The final integer pixel dimensions are calculated using the identical scale factor:
 
-$$\text{Output Width} = \max\left(1, \operatorname{round}(W \times \text{scale})\right)$$
-$$\text{Output Height} = \max\left(1, \operatorname{round}(H \times \text{scale})\right)$$
+$$\text{Output Width} = \max\left(1, \mathrm{round}(W \times \text{scale})\right)$$
+$$\text{Output Height} = \max\left(1, \mathrm{round}(H \times \text{scale})\right)$$
 
 ### Example
 A $4000 \times 3000$ (4:3) image resized against the **Medium** preset ($1366 \times 768$) computes to **$1024 \times 768$**, perfectly fitting within the bounding box without cropping or horizontal stretching.
