@@ -8,7 +8,7 @@
     <item>
       <title>Squishy 1.0.23</title>
       <pubDate>Thu, 12 Nov 2026 12:17:37 +0000</pubDate>
-      <sparkle:version>25</sparkle:version>
+      <sparkle:version>1000023</sparkle:version>
       <sparkle:shortVersionString>1.0.23</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <description><![CDATA[
@@ -21,7 +21,7 @@
       ]]></description>
       <enclosure
         url="https://github.com/bhooshanb/squishy-macos-app/releases/download/release/Squishy.zip"
-        sparkle:version="25"
+        sparkle:version="1000023"
         sparkle:shortVersionString="1.0.23"
         length="3042740"
         type="application/octet-stream"

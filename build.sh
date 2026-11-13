@@ -62,7 +62,23 @@ get_version() {
 }
 
 get_build_number() {
-    git -C "${PROJECT_ROOT}" rev-list --count HEAD 2>/dev/null || echo "1"
+    local version major rest minor patch
+    version="$(get_version)"
+    major="${version%%.*}"
+    rest="${version#*.}"
+    minor="${rest%%.*}"
+    patch="${rest#*.}"
+
+    case "${major}:${minor}:${patch}" in
+        *[!0-9:]*|'')
+            print_error "VERSION must use numeric major.minor.patch format: ${version}"
+            return 1
+            ;;
+    esac
+
+    # Keep Sparkle's version in lockstep with CFBundleVersion, which the
+    # Xcode build phase derives from the same marketing version.
+    echo "$((major * 1000000 + minor * 1000 + patch))"
 }
 
 get_feed_url() {
