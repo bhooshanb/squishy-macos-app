@@ -3,8 +3,8 @@
 > **A fast, native macOS image resizer that never distorts your photos.**  
 > Inspired by Microsoft PowerToys Image Resizer, re-engineered as a first-class Mac utility.
 
-Created by **[Silverstone Labs](https://apps.silverstonelabs.in)**  
-- **Website**: [apps.silverstonelabs.in](https://apps.silverstonelabs.in)  
+Created by **Silverstone Labs**  
+- **Squishy website**: [squishy.silverstonelabs.in](https://squishy.silverstonelabs.in/)  
 - **Support**: [info@silverstonelabs.in](mailto:info@silverstonelabs.in)  
 
 ---
@@ -188,6 +188,6 @@ Squishy uses [Sparkle 2](https://github.com/sparkle-project/Sparkle) for seamles
 
 **Squishy** is developed and maintained by **Silverstone Labs**.
 
-- **Website**: [apps.silverstonelabs.in](https://apps.silverstonelabs.in)
+- **Squishy website**: [squishy.silverstonelabs.in](https://squishy.silverstonelabs.in/)
 - **Support & Inquiries**: [info@silverstonelabs.in](mailto:info@silverstonelabs.in)
 - **Copyright**: © 2026 Silverstone Labs. All rights reserved.
