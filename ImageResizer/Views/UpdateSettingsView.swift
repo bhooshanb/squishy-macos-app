@@ -93,7 +93,7 @@ public struct UpdateSettingsView: View {
                 }
 
                 LabeledContent("Website") {
-                    Link("apps.silverstonelabs.in", destination: URL(string: "https://apps.silverstonelabs.in")!)
+                    Link("squishy.silverstonelabs.in", destination: URL(string: "https://squishy.silverstonelabs.in/")!)
                 }
 
                 LabeledContent("Support") {

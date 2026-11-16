@@ -25,7 +25,7 @@ struct ImageResizerApp: App {
                             .applicationVersion: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1",
                             NSApplication.AboutPanelOptionKey(rawValue: "Copyright"): "Copyright © 2026 Silverstone Labs. All rights reserved.",
                             .credits: NSAttributedString(
-                                string: "Created by Silverstone Labs\nWebsite: apps.silverstonelabs.in\nSupport: info@silverstonelabs.in",
+                                string: "Created by Silverstone Labs\nWebsite: squishy.silverstonelabs.in\nSupport: info@silverstonelabs.in",
                                 attributes: [
                                     .foregroundColor: NSColor.secondaryLabelColor,
                                     .font: NSFont.systemFont(ofSize: 11)
@@ -51,12 +51,12 @@ struct ImageResizerApp: App {
 
             CommandGroup(replacing: .help) {
                 Button("Squishy Help") {
-                    if let url = URL(string: "https://apps.silverstonelabs.in") {
+                    if let url = URL(string: "https://squishy.silverstonelabs.in/") {
                         NSWorkspace.shared.open(url)
                     }
                 }
-                Button("Visit Silverstone Labs") {
-                    if let url = URL(string: "https://apps.silverstonelabs.in") {
+                Button("Visit Squishy Website") {
+                    if let url = URL(string: "https://squishy.silverstonelabs.in/") {
                         NSWorkspace.shared.open(url)
                     }
                 }

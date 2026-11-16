@@ -75,7 +75,7 @@ public struct EmptyDropZoneView: View {
             HStack(spacing: 4) {
                 Text("Created by")
                     .foregroundColor(PrecisionTheme.textTertiary)
-                Link("Silverstone Labs", destination: URL(string: "https://apps.silverstonelabs.in")!)
+                Link("Squishy Website", destination: URL(string: "https://squishy.silverstonelabs.in/")!)
                     .foregroundColor(PrecisionTheme.blue)
                     .underline()
             }
