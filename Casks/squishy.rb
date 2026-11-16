@@ -5,7 +5,7 @@ cask "squishy" do
   url "https://github.com/bhooshanb/squishy-macos-app/releases/download/release/Squishy.zip"
   name "Squishy"
   desc "Native macOS image resizer that preserves aspect ratio"
-  homepage "https://apps.silverstonelabs.in"
+  homepage "https://squishy.silverstonelabs.in/"
 
   depends_on macos: ">= :sonoma"
 
