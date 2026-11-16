@@ -180,7 +180,7 @@ public final class BatchResizeService: ObservableObject, @unchecked Sendable {
             // 1. Calculate dimensions for this individual image
             if item.mediaKind == .video {
                 let destinationURL = try outputManager.resolveDestinationURL(for: item.url, configuration: configuration, presetName: preset?.name, forceExtension: "mp4")
-                try await videoEngine.compress(from: item.url, to: destinationURL, outputBitrate: configuration.videoBitratePreset.bitsPerSecond, control: processingControl)
+                try await videoEngine.compress(from: item.url, to: destinationURL, outputBitrate: configuration.videoBitratePreset.bitsPerSecond, preserveFileTimestamps: configuration.preserveFileTimestamps, control: processingControl)
                 return .success(destinationURL)
             }
 

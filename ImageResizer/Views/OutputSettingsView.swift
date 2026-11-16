@@ -37,9 +37,6 @@ public struct OutputSettingsView: View {
                         .foregroundColor(PrecisionTheme.textTertiary)
                 }
 
-                // Group 0: Appearance / Theme
-                appearanceCard
-
                 // Group 1: Destination Folder & Collisions
                 destinationCard
 
@@ -58,79 +55,6 @@ public struct OutputSettingsView: View {
             .padding(20)
         }
         .background(PrecisionTheme.background)
-    }
-
-    // MARK: - Appearance Card
-    private var appearanceCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Image(systemName: "circle.lefthalf.filled")
-                    .foregroundColor(PrecisionTheme.blue)
-                Text("Appearance")
-                    .font(.system(size: 13, weight: .semibold))
-                Spacer()
-            }
-
-            HStack(spacing: 12) {
-                ForEach(AppAppearance.allCases) { mode in
-                    let isSelected = appSettings.appearance == mode
-                    Button(action: {
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            appSettings.appearance = mode
-                        }
-                    }) {
-                        HStack(spacing: 8) {
-                            Image(systemName: mode.iconName)
-                                .font(.system(size: 13, weight: .medium))
-                                .foregroundColor(isSelected ? PrecisionTheme.blue : PrecisionTheme.textSecondary)
-
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text(mode.rawValue)
-                                    .font(.system(size: 12.5, weight: isSelected ? .semibold : .medium))
-                                    .foregroundColor(isSelected ? PrecisionTheme.blue : PrecisionTheme.textPrimary)
-
-                                Text(appearanceSubtitle(for: mode))
-                                    .font(.system(size: 10))
-                                    .foregroundColor(PrecisionTheme.textTertiary)
-                            }
-
-                            Spacer()
-
-                            if isSelected {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .font(.system(size: 13))
-                                    .foregroundColor(PrecisionTheme.blue)
-                            }
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 10)
-                        .frame(maxWidth: .infinity)
-                        .background(isSelected ? PrecisionTheme.blueLight : PrecisionTheme.recessedBackground)
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(isSelected ? PrecisionTheme.blue.opacity(0.4) : PrecisionTheme.borderSubtle, lineWidth: 1)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-        }
-        .padding(16)
-        .background(PrecisionTheme.cardBackground)
-        .cornerRadius(12)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(PrecisionTheme.border, lineWidth: 1)
-        )
-    }
-
-    private func appearanceSubtitle(for mode: AppAppearance) -> String {
-        switch mode {
-        case .system: return "Match macOS"
-        case .light: return "Light theme"
-        case .dark: return "Dark theme"
-        }
     }
 
     // MARK: - Destination Folder Card

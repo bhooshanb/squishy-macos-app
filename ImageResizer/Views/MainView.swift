@@ -174,7 +174,7 @@ public struct MainView: View {
                     }
                     .menuStyle(.borderlessButton)
                     Button("Clear", action: clearAllQueues)
-                        .disabled(imageItems.isEmpty && videoItems.isEmpty)
+                        .disabled((imageItems.isEmpty && videoItems.isEmpty) || imageBatchService.isProcessing || videoBatchService.isProcessing)
                     if clearedQueueSnapshot != nil {
                         Button("Undo") { undoClearQueues() }
                     }
@@ -211,22 +211,33 @@ public struct MainView: View {
             .frame(minWidth: 420, maxWidth: .infinity)
 
             VStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Image settings")
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 12)
-                        .padding(.top, 10)
-                    ResizeSettingsView(configuration: $appSettings.configuration, sampleItem: imageItems.first, queueCount: imageItems.count, isProcessing: imageBatchService.isProcessing, onStartResize: startImageBatch, showsActionBar: false)
-                }
-                .frame(maxHeight: .infinity)
                 if !videoItems.isEmpty || videoBatchService.isProcessing {
-                    Divider()
-                    VStack(alignment: .leading, spacing: 0) {
+                    VSplitView {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("Image settings")
+                                .font(.system(size: 13, weight: .semibold))
+                                .padding(.horizontal, 12)
+                                .padding(.top, 10)
+                            ResizeSettingsView(configuration: $appSettings.configuration, sampleItem: imageItems.first, queueCount: imageItems.count, isProcessing: imageBatchService.isProcessing, onStartResize: startImageBatch, showsActionBar: false)
+                        }
+                        .frame(minHeight: 150)
+
+                        VStack(alignment: .leading, spacing: 0) {
                         Text("Video settings")
                             .font(.system(size: 13, weight: .semibold))
                             .padding(.horizontal, 12)
                             .padding(.top, 10)
                         ResizeSettingsView(configuration: $appSettings.configuration, sampleItem: videoItems.first, queueCount: videoItems.count, isProcessing: videoBatchService.isProcessing, onStartResize: startVideoBatch, showsActionBar: false, videoBitratePreset: $appSettings.configuration.videoBitratePreset)
+                        }
+                        .frame(minHeight: 150)
+                    }
+                } else {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Image settings")
+                            .font(.system(size: 13, weight: .semibold))
+                            .padding(.horizontal, 12)
+                            .padding(.top, 10)
+                        ResizeSettingsView(configuration: $appSettings.configuration, sampleItem: imageItems.first, queueCount: imageItems.count, isProcessing: imageBatchService.isProcessing, onStartResize: startImageBatch, showsActionBar: false)
                     }
                     .frame(maxHeight: .infinity)
                 }
@@ -443,9 +454,9 @@ public struct MainView: View {
 
             // Selection Stats
             HStack(spacing: 4) {
-                Text("Selected:")
+                Text("Items:")
                     .foregroundColor(PrecisionTheme.textTertiary)
-                Text("\(queueStats.count) files (\(queueStats.formattedOrig))")
+                Text("\(imageBatchService.processedItems + videoBatchService.processedItems) of \(imageBatchService.totalItems + videoBatchService.totalItems)")
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
                     .foregroundColor(PrecisionTheme.textPrimary)
             }

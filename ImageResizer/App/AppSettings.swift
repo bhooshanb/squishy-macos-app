@@ -74,10 +74,13 @@ public final class AppSettings: ObservableObject {
             switch self.appearance {
             case .system:
                 NSApp.appearance = nil
+                NSApp.windows.forEach { $0.appearance = nil }
             case .light:
                 NSApp.appearance = NSAppearance(named: .aqua)
+                NSApp.windows.forEach { $0.appearance = NSAppearance(named: .aqua) }
             case .dark:
                 NSApp.appearance = NSAppearance(named: .darkAqua)
+                NSApp.windows.forEach { $0.appearance = NSAppearance(named: .darkAqua) }
             }
         }
     }

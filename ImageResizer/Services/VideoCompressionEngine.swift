@@ -19,7 +19,7 @@ public final class VideoCompressionEngine: @unchecked Sendable {
     public static let shared = VideoCompressionEngine()
     private init() {}
 
-    public func compress(from source: URL, to destination: URL, outputBitrate: Int, control: BatchProcessingControl) async throws {
+    public func compress(from source: URL, to destination: URL, outputBitrate: Int, preserveFileTimestamps: Bool = true, control: BatchProcessingControl) async throws {
         let asset = AVURLAsset(url: source)
         let tracks = try await asset.loadTracks(withMediaType: .video)
         guard let videoTrack = tracks.first else { throw VideoCompressionError.exportUnavailable }
@@ -108,6 +108,10 @@ public final class VideoCompressionEngine: @unchecked Sendable {
         } catch {
             if control.isStopped() { try? FileManager.default.removeItem(at: destination) }
             throw error
+        }
+
+        if preserveFileTimestamps {
+            ImageResizeEngine.shared.copyFileTimestamps(from: source, to: destination)
         }
     }
 }
