@@ -51,7 +51,7 @@ final class UpdateManagerTests: XCTestCase {
         }
 
         if let website = info["SilverstoneWebsite"] as? String {
-            XCTAssertEqual(website, "https://apps.silverstonelabs.in")
+            XCTAssertEqual(website, "https://squishy.silverstonelabs.in/")
         }
     }
 
